@@ -1,0 +1,56 @@
+
+wages:
+  name: 工資
+  type: limit
+  logic: and
+  content:
+    - name: reasonable
+      rule: cannot
+      value: reduce_wages
+      detail:
+        - 雇主不得以第一項正常工作時間之修正，作為減少勞工工資之事由。
+  meta:
+    - article_id: 30
+      paragraph_id: 7
+
+flexible_work_time:
+  name: 彈性上下班
+  type: limit
+  logic: and
+  content:
+    - name: flexible_work_time
+      rule: less_than
+      value: 1
+      unit: hour
+      per:
+        value: 1
+        unit: day
+  meta:
+    - article_id: 30
+      paragraph_id: 8
+
+attendence_record:
+  name: 出勤紀錄
+  type: requirement
+  logic: and
+  content:
+    - attendance_record: true
+      detail:
+        - 保存五年
+        - 逐日記載勞工出勤情形至分鐘為止
+        - 勞工向雇主申請其出勤紀錄副本或影本時，雇主不得拒絕
+  meta:
+    - article_id: 30
+      paragraph_id: 5
+    - article_id: 30
+      paragraph_id: 6
+
+working_in_pit_tunnel:
+  name: 工時計算
+  type: settings
+  logic: and
+  content:
+    detail:
+      - 入坑口時起至出坑口時止
+  meta:
+    - article_id: 31

@@ -1,0 +1,100 @@
+name: 四週變形工時
+
+precondition:
+  name: 成立條件
+  type: precondition
+  logic: or
+  content:
+    - consent_of_labor_union: true
+      designated_industry: true
+    - consent_of_labor_union: false
+      labor_management_conference: true
+      designated_industry: true
+  meta:
+    - article_id: 30-1
+      paragraph_id: 1
+
+designated_industry:
+  name: 適用行業
+  type: precondition
+  logic: and
+  content:
+    detail:
+      - 農、林、漁、牧業外，均不適用
+  meta:
+    - article_id: 30-1
+      paragraph_id: 2
+    - article_id: 3
+      paragraph_id: 1
+
+regular_working_hour:
+  name: 正常工時
+  type: limit
+  logic: and
+  content:
+    - name: distributed_working_hour
+      rule: less_than
+      value: 2
+      unit: hour
+      per:
+        value: 1
+        unit: day
+  meta:
+    - article_id: 30-1
+      paragraph_id: 1
+      subparagraph_id: 1
+
+overtime_hour:
+  name: 延長工時
+  type: limit
+  logic: and
+  content:
+    - name: total_working_hour
+      rule: less_than
+      value: 12
+      unit: hour
+      per:
+        value: 1
+        unit: day
+  meta:
+    - article_id: 30-1
+      paragraph_id: 1
+      subparagraph_id: 2
+
+regular_day_off:
+  name: 例假日
+  type: limit
+  logic: and
+  content:
+    - name: regular_day_off
+      rule: greater_than
+      value: 2
+      unit: day
+      per:
+        value: 2
+        unit: week
+  meta:
+    - article_id: 30-1
+      paragraph_id: 1
+      subparagraph_id: 3
+
+ignore:
+  name: 不受限制
+  type: ignore
+  content:
+    - name: distributed_working_hour
+      article_id: 30
+      paragraph_id: 2
+    - name: distributed_working_hour
+      article_id: 30
+      paragraph_id: 3
+    - name: distributed_working_hour
+      article_id: 30
+      paragraph_id: 4
+    - name: regular_day_off
+      article_id: 36
+    - name: night_shift
+      article_id: 49
+      paragraph_id: 1
+
+

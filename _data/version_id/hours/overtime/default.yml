@@ -1,0 +1,40 @@
+name: 一般
+
+precondition:
+  name: 成立條件
+  type: precondition
+  logic: or
+  content:
+    - consent_of_labor_union: true
+      working_in_pit_tunnel: false
+    - consent_of_labor_union: false
+      labor_management_conference: true
+      working_in_pit_tunnel: false
+  meta:
+    - article_id: 32
+      paragraph_id: 1
+    - article_id: 32
+      paragraph_id: 4
+
+overtime_hour:
+  name: 延長工時
+  type: limit
+  logic: and
+  content:
+    - name: total_working_hour
+      rule: less_than
+      value: 12
+      unit: hour
+      per:
+        value: 1
+        unit: day
+    - name: overtime_hour
+      rule: less_than
+      value: 46
+      unit: hour
+      per:
+        value: 1
+        unit: month
+  meta:
+    - article_id: 32
+      paragraph_id: 2

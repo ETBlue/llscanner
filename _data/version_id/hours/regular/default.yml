@@ -1,0 +1,25 @@
+name: 一般
+
+regular_working_hour:
+  name: 正常工時
+  type: limit
+  logic: and
+  content:
+    - name: regular_working_hour
+      rule: less_than
+      value: 8
+      unit: hour
+      per:
+        value: 1
+        unit: day
+    - name: regular_working_hour
+      rule: less_than
+      value: 40
+      unit: hour
+      per:
+        value: 1
+        unit: week
+  meta:
+    - name: regular_working_hour
+      article_id: 30
+      paragraph_id: 1

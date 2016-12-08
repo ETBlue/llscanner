@@ -1,0 +1,38 @@
+name: 命令調整
+
+precondition:
+  name: 成立條件
+  type: precondition
+  logic: and
+  content:
+    - consult_labor_union: true
+      consult_comtetent_authority: true
+      designated_industry: true
+      local_authority_order_permit: true
+  meta:
+    - name: precondition
+      article_id: 33
+
+designated_industry:
+  name: 適用行業
+  type: precondition
+  logic: not
+  content:
+    detail:
+      - 第三條所列事業，除製造業及礦業外
+  meta:
+    - name: designated_industry
+      article_id: 33
+    - name: designated_industry
+      article_id: 3
+
+adjustable:
+  name: 命令調整
+  type: settings
+  logic: and
+  content:
+    - regular_working_hour: true
+      overtime_hour: true
+  meta:
+    - name: adjustable
+      article_id: 33

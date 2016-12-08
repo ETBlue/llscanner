@@ -1,0 +1,48 @@
+name: 八週變形工時
+
+precondition:
+  name: 成立條件
+  type: precondition
+  logic: or
+  content:
+    - consent_of_labor_union: true
+      designated_industry: true
+    - consent_of_labor_union: false
+      labor_management_conference: true
+      designated_industry: true
+  meta:
+    - name: regular_working_hour
+      article_id: 30
+      paragraph_id: 3
+    - name: designated_industry
+      article_id: 30
+      paragraph_id: 5
+
+regular_working_hour:
+  name: 正常工時
+  type: limit
+  logic: and
+  content:
+    - name: distributable_working_hour
+      rule: less_than
+      value: 8
+      unit: week
+    - name: regular_working_hour
+      rule: less_than
+      value: 8
+      unit: hour
+      per:
+        value: 1
+        unit: day
+    - name: regular_working_hour
+      rule: less_than
+      value: 48
+      unit: hour
+      per:
+        value: 1
+        unit: week
+  meta:
+    - name: regular_working_hour
+      article_id: 30
+      paragraph_id: 3
+

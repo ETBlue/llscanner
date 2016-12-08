@@ -1,0 +1,33 @@
+name: 天災、事變或突發事件
+
+precondition:
+  name: 成立條件
+  type: precondition
+  logic: or
+  content:
+    - consent_of_labor_union: true
+      consent_of_labor_union_within:
+        - value: 24
+          unit: hour
+      working_in_pit_tunnel: any
+    - consent_of_labor_union: false
+      report_to_local_authority: true
+      report_to_local_authority_within:
+        - value: 24
+          unit: hour
+      working_in_pit_tunnel: any
+  meta:
+    - article_id: 32
+      paragraph_id: 3
+    - article_id: 32
+      paragraph_id: 4
+
+postcondition:
+  name: 事後補償
+  type: postcondition
+  logic: and
+  content:
+    - overtime_hour_recess: true
+  meta:
+    - article_id: 32
+      paragraph_id: 3
