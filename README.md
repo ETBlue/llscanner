@@ -1,2 +1,3 @@
-# lslexplorer
-A web frontend visual presentation with structured data for Taiwanese Labor Standard Laws
+# Labor Laws Scanner
+
+A web application which examines user input data and check up if an employer is breaking laws or not.
