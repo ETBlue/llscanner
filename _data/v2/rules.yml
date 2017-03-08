@@ -1,0 +1,75 @@
+default_regular_working_hour_per_day:
+  target: regular_working_hour_per_day
+  logic: less_than
+  value: 8
+  unit: hour
+  source:
+    - law: lsa
+      article: 30
+      paragraph: 1
+      subparagraph:
+
+default_regular_working_hour_per_week:
+  target: regular_working_hour_per_week
+  logic: less_than
+  value: 40
+  unit: hour
+  source:
+    - law: lsa
+      article: 30
+      paragraph: 1
+      subparagraph:
+
+is_OOO_industry:
+  target: industry
+  logic: belongs_to
+  value: aaa, bbb, ccc
+  source:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+
+has_consent_of_labor_union:
+  target: consent_of_labor_union
+  logic: is
+  value: true
+  source:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+
+has_labor_management_conference:
+  target: labor_management_conference
+  logic: is
+  value: true
+  source:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+    - law: lsa
+      article:
+      paragraph:
+      subparagraph:
+
+has_consult_labor_union: 
+
+has_consult_comtetent_authority: 
+
+has_local_authority_order_permit: 
+
+

@@ -1,18 +1,3 @@
-
-wages:
-  name: 工資
-  type: limit
-  logic: and
-  content:
-    - name: reasonable
-      rule: cannot
-      value: reduce_wages
-      detail:
-        - 雇主不得以第一項正常工作時間之修正，作為減少勞工工資之事由。
-  meta:
-    - article_id: 30
-      paragraph_id: 7
-
 flexible_work_time:
   name: 彈性上下班
   type: limit

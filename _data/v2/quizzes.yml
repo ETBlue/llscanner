@@ -1,0 +1,103 @@
+quiz_id:
+  title: 有勞資會議嗎？
+  description: OOO 的決定過程，是否有經過勞資會議討論、取得勞工同意
+  answer:
+    - title: 是
+      description: (string)
+      setup:
+        - name: labor_management_conference
+          value: true
+      next:
+        type: quiz / branch
+        id: id
+    - title: 不是
+      description: (string)
+      setup:
+        - name: labor_management_conference
+          value: false
+      next:
+        type: quiz / branch
+        id: id
+    - title: 不知道
+      description: (string)
+      setup:
+        - name: labor_management_conference
+          value: unknown
+      next:
+        type: quiz / branch
+        id: id
+  hint:
+
+0.1 全職 / 兼職
+
+- working time type: full time / part time
+full time -> 月薪
+part time -> 時薪
+
+2.1 月薪
+
+- wages: _
+小於最低工資 -> flag
+
+2.2 時薪
+
+- wages per hour: _
+小於最低工資 -> flag
+
+0.2 在職時間
+
+- working ?? : _ y _ m
+
+1.1 表定上下班時間
+
+- data range: _ week(s)
+- regular working hour per day: _ hrs
+- regular working hour per week: _ hrs
+
+1.2 實際上下班時間
+
+- total working hour per day: _ hrs
+- overtime working hour per week: _ hrs
+
+1.3 採用工時
+
+- regular working hour type: default / 2w / 4w / 8w / duty / unknown
+default -> 加班費, 假日
+others -> 所屬產業, 工會同意
+duty -> +主管機關報備
+
+1.4 所屬產業
+
+- industry: _
+合法產業 -> 1.5
+違法產業 -> flag
+
+1.5 工會同意
+
+- consent of labor union: true / false / unknown
+true -> 加班費, 假日
+false -> 勞資會議
+
+1.6 勞資會議
+
+- labor management conference: true / false
+true -> 加班費, 假日
+false -> flag
+
+1.7 主管機關報備
+
+- local authority order permit: true / false / unknown
+true -> 加班費, 假日
+false -> flag
+
+1.8 國定假日
+
+- national holiday: true / false
+false -> 判定
+
+1.9 特休
+
+
+9. 加班費計算方式
+
+- overtime hour wages: _ x

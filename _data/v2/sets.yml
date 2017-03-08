@@ -1,0 +1,15 @@
+default_working_hour:
+  - rule_id
+
+2_week_transformed_working_hour:
+  - rule_id
+
+4_week_transformed_working_hour:
+  - rule_id
+
+8_week_transformed_working_hour:
+  - rule_id
+
+duty_working_hour:
+  - rule_id
+

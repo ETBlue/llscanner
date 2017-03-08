@@ -1,0 +1,83 @@
+definition:
+
+  law:
+    lsa: 勞動基準法
+
+  rwh:
+    default: 一般工時
+    2w: 兩週變形工時
+    4w: 四周變形工時
+    8w: 八週變形工時
+    duty: 責任制
+
+  leave:
+    # 表格內的 http://www.mol.gov.tw/topic/3067/14530/19538/
+    regular: 例假
+    national: 國定假
+    annual: 特休假
+
+    wedding: 婚假
+    funeral: 喪假
+    sick: 普通傷病假
+    occupational_sick: 公傷病假
+    normal: 事假
+    public: 公假
+    # 不在表格內的
+    deferred: 補休假
+    menstrual: 生理假
+    maternity: 產假
+    paternity: 陪產假
+    miscarriage: 流產假
+    pre_maternity: 產前假
+
+  role:
+    child: 童工
+    female: 女工
+    apprentice: 技術生
+
+version:
+  lsa:
+
+labor: # user generated content
+
+  status: hired / retired / unemployed
+
+  role: # default: false
+    child: true / false / unknown
+    female: true / false / unknown
+    apprentice: true / false / unknown
+
+  accidental: # default: false
+    dead: true / false / unknown
+    sick: true / false / unknown
+    injured: true / false / unknown
+    incapacitated: true / false / unknown
+
+employer: # user generated content
+
+  size:
+  status:
+
+work: # user generated content
+
+  industry:
+
+  place:
+    pit_tunnel:
+
+  rwh:
+    type:
+    consent_of_labor_union:
+    labor_management_conference:
+
+calendar: # user generated content
+
+
+law: # editor generated content
+
+  law_id:
+    name:
+    version:
+    rules:
+      
+
