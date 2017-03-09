@@ -51,7 +51,7 @@ class App extends Component {
           </h2>
         </header>
         {this._getQuiz()}
-        <div className="auth"></div>
+        {/*'<div className="auth"></div>'*/}
       </div>
     );
   }
