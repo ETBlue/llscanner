@@ -13,7 +13,7 @@ class Quiz extends Component {
       viewmode: "visible", 
       editmode: "hidden",
       formdata: {},
-      newAnswer: [],
+      newAnswer: {},
       target: ""
     };
     this._initialState = {};
