@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Answer from './Answer';
 import Button from './Button';
+import Input from './Input';
 import './Quiz.css';
 import firebase from 'firebase';
 
@@ -17,19 +18,22 @@ class Quiz extends Component {
       newAnswer: {},
       target: ""
     };
-    this._initialState = {};
-    this._getAnswer = this._getAnswer.bind(this);
-    this._getAnswerForm = this._getAnswerForm.bind(this);
     this._setAnswer = this._setAnswer.bind(this);
+    this._renderOption = this._renderOption.bind(this);
+    this._renderOptionForm = this._renderOptionForm.bind(this);
+    this._renderNewOptionForm = this._renderNewOptionForm.bind(this);
+    this._addNewOption = this._addNewOption.bind(this);
+    this._inputRef = this._inputRef.bind(this);
+
     this._toggle = this._toggle.bind(this);
     this._save = this._save.bind(this);
     this._refresh = this._refresh.bind(this);
     this._delete = this._delete.bind(this);
-    this._addAnswer = this._addAnswer.bind(this);
-    this._getNewAnswer = this._getNewAnswer.bind(this);
+
+    this._initialState = {};
     this._formdata = {};
-    this._formdataAnswer = {};
-    this._formdataNewAnswer = {};
+    this._formdataOption = {};
+    this._formdataNewOption = {};
   }
 
   componentWillMount() {
@@ -47,7 +51,7 @@ class Quiz extends Component {
     });
   }
 
-  _getAnswer() {
+  _renderOption() {
     const answer = this.state.formdata.answer;
     if (answer) {
       return (
@@ -61,43 +65,35 @@ class Quiz extends Component {
     }
   }
 
-  _getAnswerForm() {
+  _inputRef(target, id, key, value) {
+    this[target][id][key] = value;
+  }
+
+  _renderOptionForm() {
     const answer = this.state.formdata.answer;
     if (answer) {
       return (
         Object.keys(answer).map( (answerItem) => {
           const item = answer[answerItem];
-          this._formdataAnswer[answerItem] = {};
+          this._formdataOption[answerItem] = {};
           return (
-          <div key={answerItem}>
-            <h4 className="ui header">編輯選項</h4>
-            <div className="field">
-              <label>排序</label>
-              <input ref={(input) => this._formdataAnswer[answerItem].id = input} placeholder={item.id} name="id" type="text" defaultValue={item.id} />
+            <div key={answerItem}>
+              <h4 className="ui header">編輯選項</h4>
+              <Input label="排序" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.id} name="id" default={item.id} />
+              <Input label="顯示文字" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.title} name="title" default={item.title} />
+              <Input label="目標代號" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.target} name="target" default={item.target} />
+              <Input label="設定值" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.value} name="value" default={item.value} />
+              <hr className="ui divider" />
             </div>
-            <div className="field">
-              <label>顯示文字</label>
-              <input ref={(input) => this._formdataAnswer[answerItem].title = input} placeholder={item.title} name="title" type="text" defaultValue={item.title} />
-            </div>
-            <div className="field">
-              <label>設定目標</label>
-              <input ref={(input) => this._formdataAnswer[answerItem].target = input} placeholder={item.target} name="target" type="text" defaultValue={item.target} />
-            </div>
-            <div className="field">
-              <label>設定值</label>
-              <input ref={(input) => this._formdataAnswer[answerItem].value = input} placeholder={item.value} name="value" type="text" defaultValue={item.value} />
-            </div>
-            <hr className="ui divider" />
-          </div>
           )
         })
       );
     }
   }
 
-  _addAnswer() {
+  _addNewOption() {
     const id = Object.keys(this.state.formdata.answer).length + Object.keys(this.state.newAnswer).length + 1;
-    this._formdataNewAnswer[id] = {};
+    this._formdataNewOption[id] = {};
     let newAnswerData = Object.assign({}, this.state.newAnswer);
     newAnswerData[id] = {
       id: id,
@@ -108,29 +104,17 @@ class Quiz extends Component {
     this.setState({newAnswer: newAnswerData});
   }
 
-  _getNewAnswer() {
+  _renderNewOptionForm() {
     return (
       Object.keys(this.state.newAnswer).map((key) => {
         const item = this.state.newAnswer[key];
         return (
           <div key={"newAnswer" + key}>
             <h4 className="ui header">新增選項</h4>
-            <div className="field">
-              <label>排序</label>
-              <input ref={(input) => this._formdataNewAnswer[key].id = input} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" type="text" defaultValue={item.id} />
-            </div>
-            <div className="field">
-              <label>顯示文字</label>
-              <input ref={(input) => this._formdataNewAnswer[key].title = input} placeholder="請輸入字串" name="title" type="text" defaultValue={item.title} />
-            </div>
-            <div className="field">
-              <label>設定目標</label>
-              <input ref={(input) => this._formdataNewAnswer[key].target = input} placeholder="請輸入此選項針對的目標的 unique id" name="target" type="text" defaultValue={item.target} />
-            </div>
-            <div className="field">
-              <label>設定值</label>
-              <input ref={(input) => this._formdataNewAnswer[key].value = input} placeholder="請輸入此選項代表的值" name="value" type="text" defaultValue={item.value} />
-            </div>
+            <Input label="排序" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={item.id} />
+            <Input label="顯示文字" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入字串" name="title" default={item.title} />
+            <Input label="目標代號" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入此選項針對的目標的 unique id" name="target" default={item.target} />
+            <Input label="設定值" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入此選項代表的值" name="value" default={item.value} />
             <hr className="ui divider" />
           </div>
         )
@@ -157,23 +141,19 @@ class Quiz extends Component {
   _save() {
 
     let answerData ={};
-    Object.keys(this._formdataAnswer).forEach((key) => {
+    Object.keys(this._formdataOption).forEach((key) => {
       answerData[key] = {};
-      Object.keys(this._formdataAnswer[key]).forEach((index) =>{
-        answerData[key][index] = this._formdataAnswer[key][index].value;
+      Object.keys(this._formdataOption[key]).forEach((index) =>{
+        answerData[key][index] = this._formdataOption[key][index].value;
       });
     });
 
-    console.log(this._formdataNewAnswer);
-
-    Object.keys(this._formdataNewAnswer).forEach((key) => {
+    Object.keys(this._formdataNewOption).forEach((key) => {
       answerData[key] = {};
-      Object.keys(this._formdataNewAnswer[key]).forEach((index) =>{
-        answerData[key][index] = this._formdataNewAnswer[key][index].value;
+      Object.keys(this._formdataNewOption[key]).forEach((index) =>{
+        answerData[key][index] = this._formdataNewOption[key][index].value;
       });
     });
-
-    console.log(answerData);
 
     firebase.database().ref('quiz/' + this.props.id).set({
       id: this._formdata.id.value,
@@ -197,11 +177,10 @@ class Quiz extends Component {
       target: answerData[Object.keys(answerData)[0]].target
     },
     () => {
-      this._toggle();
       this._initialState = Object.assign({}, this.state);
       this._formdata = {};
-      this._formdataAnswer = {};
-      this._formdataNewAnswer = {};
+      this._formdataOption = {};
+      this._formdataNewOption = {};
     });
 
   }
@@ -215,8 +194,8 @@ class Quiz extends Component {
     this.setState(this._initialState, () => {
       this._toggle();
       this._formdata = {};
-      this._formdataAnswer = {};
-      this._formdataNewAnswer = Object.assign({}, this.state.newAnswer);
+      this._formdataOption = {};
+      this._formdataNewOption = Object.assign({}, this.state.newAnswer);
     });
   }
 
@@ -230,7 +209,7 @@ class Quiz extends Component {
           <p>
             {this.props.description}
           </p>
-          {this._getAnswer()}
+          {this._renderOption()}
           <hr className="ui hidden divider" />
           <div className="action">
             <div className={"ui mini buttons " + this.state.viewmode}>
@@ -263,9 +242,9 @@ class Quiz extends Component {
                 </div>
               </div>
               <div className="column">
-                {this._getAnswerForm()}
-                {this._getNewAnswer()}
-                <a onClick={this._addAnswer} className="ui green icon labeled button">
+                {this._renderOptionForm()}
+                {this._renderNewOptionForm()}
+                <a onClick={this._addNewOption} className="ui green icon labeled button">
                   <i className="icon add" />
                   新增選項
                 </a>
