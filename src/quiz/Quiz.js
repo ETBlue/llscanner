@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Answer from './Answer';
 import Button from './Button';
 import './Quiz.css';
+import firebase from 'firebase';
 
 class Quiz extends Component {
 
@@ -28,7 +29,7 @@ class Quiz extends Component {
     this._getNewAnswer = this._getNewAnswer.bind(this);
     this._formdata = {};
     this._formdataAnswer = {};
-    this._newAnswer = {};
+    this._formdataNewAnswer = {};
   }
 
   componentWillMount() {
@@ -39,7 +40,7 @@ class Quiz extends Component {
         description: this.props.description,
         answer: this.props.answer
       },
-      target: this.props.answer[this.props.answer.length-1].target
+      target: this.props.answer[Object.keys(this.props.answer)[0]].target
     },
     () => {
       this._initialState = Object.assign({}, this.state);
@@ -86,6 +87,7 @@ class Quiz extends Component {
               <label>設定值</label>
               <input ref={(input) => this._formdataAnswer[answerItem].value = input} placeholder={item.value} name="value" type="text" defaultValue={item.value} />
             </div>
+            <hr className="ui divider" />
           </div>
           )
         })
@@ -95,6 +97,7 @@ class Quiz extends Component {
 
   _addAnswer() {
     const id = Object.keys(this.state.formdata.answer).length + Object.keys(this.state.newAnswer).length + 1;
+    this._formdataNewAnswer[id] = {};
     let newAnswerData = Object.assign({}, this.state.newAnswer);
     newAnswerData[id] = {
       id: id,
@@ -102,36 +105,33 @@ class Quiz extends Component {
       target: this.state.target,
       value: null
     };
-    this.setState({newAnswer: newAnswerData}, () => {
-      this._newAnswer = Object.assign({}, this.state.newAnswer);
-    });
+    this.setState({newAnswer: newAnswerData});
   }
 
   _getNewAnswer() {
     return (
       Object.keys(this.state.newAnswer).map((key) => {
         const item = this.state.newAnswer[key];
-        this._newAnswer[key] = {};
         return (
           <div key={"newAnswer" + key}>
-            <hr className="ui divider" />
             <h4 className="ui header">新增選項</h4>
             <div className="field">
               <label>排序</label>
-              <input ref={(input) => this._newAnswer[key].id = input} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" type="text" defaultValue={item.id} />
+              <input ref={(input) => this._formdataNewAnswer[key].id = input} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" type="text" defaultValue={item.id} />
             </div>
             <div className="field">
               <label>顯示文字</label>
-              <input ref={(input) => this._newAnswer[key].title = input} placeholder="請輸入字串" name="title" type="text" defaultValue={item.title} />
+              <input ref={(input) => this._formdataNewAnswer[key].title = input} placeholder="請輸入字串" name="title" type="text" defaultValue={item.title} />
             </div>
             <div className="field">
               <label>設定目標</label>
-              <input ref={(input) => this._newAnswer[key].target = input} placeholder="請輸入此選項針對的目標的 unique id" name="target" type="text" defaultValue={item.target} />
+              <input ref={(input) => this._formdataNewAnswer[key].target = input} placeholder="請輸入此選項針對的目標的 unique id" name="target" type="text" defaultValue={item.target} />
             </div>
             <div className="field">
               <label>設定值</label>
-              <input ref={(input) => this._newAnswer[key].value = input} placeholder="請輸入此選項代表的值" name="value" type="text" defaultValue={item.value} />
+              <input ref={(input) => this._formdataNewAnswer[key].value = input} placeholder="請輸入此選項代表的值" name="value" type="text" defaultValue={item.value} />
             </div>
+            <hr className="ui divider" />
           </div>
         )
       })
@@ -154,9 +154,7 @@ class Quiz extends Component {
     }
   }
 
-  _save(event) {
-    event.preventDefault();
-    // TODO: firebase write
+  _save() {
 
     let answerData ={};
     Object.keys(this._formdataAnswer).forEach((key) => {
@@ -166,18 +164,46 @@ class Quiz extends Component {
       });
     });
 
+    console.log(this._formdataNewAnswer);
+
+    Object.keys(this._formdataNewAnswer).forEach((key) => {
+      answerData[key] = {};
+      Object.keys(this._formdataNewAnswer[key]).forEach((index) =>{
+        answerData[key][index] = this._formdataNewAnswer[key][index].value;
+      });
+    });
+
+    console.log(answerData);
+
+    firebase.database().ref('quiz/' + this.props.id).set({
+      id: this._formdata.id.value,
+      title: this._formdata.title.value,
+      description: this._formdata.description.value,
+      answer: answerData
+    });
+
     this.setState({
+      answer: null,
+      mode: "view",
+      viewmode: "visible", 
+      editmode: "hidden",
       formdata: {
         id: this._formdata.id.value,
         title: this._formdata.title.value,
         description: this._formdata.description.value,
         answer: answerData
-      }
-    }, () => {
+      },
+      newAnswer: {},
+      target: answerData[Object.keys(answerData)[0]].target
+    },
+    () => {
+      this._toggle();
+      this._initialState = Object.assign({}, this.state);
+      this._formdata = {};
       this._formdataAnswer = {};
+      this._formdataNewAnswer = {};
     });
 
-    this._toggle();
   }
 
   _delete(data) {
@@ -188,10 +214,10 @@ class Quiz extends Component {
   _refresh() {
     this.setState(this._initialState, () => {
       this._toggle();
+      this._formdata = {};
+      this._formdataAnswer = {};
+      this._formdataNewAnswer = Object.assign({}, this.state.newAnswer);
     });
-    this._formdata = {};
-    this._formdataAnswer = {};
-    this._newAnswer = Object.assign({}, this.state.newAnswer);
   }
 
   render() {
@@ -240,7 +266,6 @@ class Quiz extends Component {
               <div className="column">
                 {this._getAnswerForm()}
                 {this._getNewAnswer()}
-                <hr className="ui divider" />
                 <a onClick={this._addAnswer} className="ui green icon labeled button">
                   <i className="icon add" />
                   新增選項
