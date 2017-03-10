@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import firebase from 'firebase';
-import Quiz from './components/Quiz';
+import Quiz from './quiz/Quiz';
 
 class App extends Component {
 
