@@ -223,8 +223,7 @@ class Quiz extends Component {
   render() {
     return (
       <section className="Quiz">
-      <div className="ui segments">
-        <div className="Question ui center aligned segment">
+        <div className="Question ui center aligned basic segment">
           <h3 className="ui header">
             {this.props.title}
           </h3>
@@ -245,7 +244,7 @@ class Quiz extends Component {
             </div>
           </div>
         </div>
-        <div className={"edit ui segment " + this.state.editmode}>
+        <div className={"edit ui basic bottom attached segment " + this.state.editmode}>
           <form className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
@@ -274,7 +273,6 @@ class Quiz extends Component {
             </div>
           </form>
         </div>
-      </div>
       </section>
     );
   }
