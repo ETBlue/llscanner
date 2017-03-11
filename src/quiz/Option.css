@@ -1,0 +1,9 @@
+.Option {
+  display: block!important;
+}
+
+.ui.basic.buttons .Option.ui.button.teal {
+  background: #00b5ad!important;
+  color: #fff!important;
+  font-weight: bold;
+}

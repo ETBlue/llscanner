@@ -69,7 +69,9 @@ class Quiz extends Component {
           <p>
             {this.props.description}
           </p>
+          <div className="ui vertical fluid basic buttons">
           {this._renderOption()}
+          </div>
           <hr className="ui hidden divider" />
           <div className="action">
             <div className={"ui mini buttons " + this.state.viewMode}>
@@ -114,10 +116,10 @@ class Quiz extends Component {
         Object.keys(option).map( (optionItem) => {
           const item = option[optionItem];
           let className = "";
-          if (this.state.option === item.id) {
+          if (this.state.answer === item.id) {
             className = "teal";
           } else {
-            className = "basic";
+            className = "";
           }
           return (
             <Option className={className} onClick={this._setAnswer} key={item.id} {...item} />

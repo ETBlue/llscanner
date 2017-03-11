@@ -1,5 +1,5 @@
 .Quiz {
-  margin: 0 auto;
+  margin: 0 auto 1rem auto;
   max-width: 1200px;
 }
 
@@ -17,7 +17,7 @@
   height: 2rem;
 }
 
-.ui.buttons {
+.action .ui.buttons {
   transition: all 0.3s;
   display: block!important;
   text-align: center;
@@ -29,7 +29,7 @@
   bottom: 0;
 }
 
-.ui.buttons.hidden {
+.action .ui.buttons.hidden {
   opacity: 0;
   visibility: hidden;
 }
@@ -40,12 +40,9 @@
   background: #fffaf3!important;
 }
 
-.edit.visible {
-
-}
-
 .edit.hidden {
   margin-top: -1rem!important;
   transform: scaleY(0);
   height: 0;
 }
+
