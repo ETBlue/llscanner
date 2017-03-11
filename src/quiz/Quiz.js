@@ -181,6 +181,7 @@ class Quiz extends Component {
   }
 
   _deleteOption(event) {
+    event.preventDefault();
 
     const id = event.currentTarget.getAttribute("data-optionid");
 
@@ -199,6 +200,7 @@ class Quiz extends Component {
     event.preventDefault();
 
     const id = event.currentTarget.getAttribute("data-answer");
+
     if (this.state.answer === id) {
       this.setState({answer: null});
     } else {
@@ -207,6 +209,7 @@ class Quiz extends Component {
   }
 
   _toggle() {
+
     if (this.state.mode === "view") {
       this.setState({mode: "edit", viewMode: "hidden", editMode: "visible"});
     } else if (this.state.mode === "edit") {
@@ -268,7 +271,6 @@ class Quiz extends Component {
       this._formDataOption = {};
       this._formDataNewOption = {};
     });
-
   }
 
 //  _delete(event) {
@@ -279,7 +281,7 @@ class Quiz extends Component {
 //  }
 
   _refresh() {
-    console.log(this._initialState);
+
     ReactDOM.findDOMNode(this.refs.form).reset();
     this.setState(this._initialState, () => {
       this._toggle();
@@ -288,7 +290,6 @@ class Quiz extends Component {
       this._formDataNewOption = {};
     });
   }
-
 }
 
 export default Quiz;
