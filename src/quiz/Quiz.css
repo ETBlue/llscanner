@@ -3,44 +3,22 @@
   max-width: 1200px;
 }
 
-.ui.segments {
+.Quiz .ui.segments {
   transition: all 0.3s;
 }
 
-.Question {
+.Quiz .Question {
   position: relative;
   z-index: 100;
 }
 
-.action {
-  position: relative;
-  height: 2rem;
-}
-
-.action .ui.buttons {
-  transition: all 0.3s;
-  display: block!important;
-  text-align: center;
-  margin: 0 auto;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.action .ui.buttons.hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.edit {
+.Quiz .edit {
   transition: all 0.3s;
   transform-origin: top center;
   background: #fffaf3!important;
 }
 
-.edit.hidden {
+.Quiz .edit.hidden {
   margin-top: -1rem!important;
   transform: scaleY(0);
   height: 0;

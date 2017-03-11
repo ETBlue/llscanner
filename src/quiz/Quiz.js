@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Option from './Option';
+import Action from './Action';
 import OptionForm from './OptionForm';
-import Button from './Button';
 import Input from './Input';
 import firebase from 'firebase';
 import './Quiz.css';
@@ -73,17 +73,7 @@ class Quiz extends Component {
           {this._renderOption()}
           </div>
           <hr className="ui hidden divider" />
-          <div className="action">
-            <div className={"ui mini buttons " + this.state.viewMode}>
-              <Button onClick={this._toggle} icon="pencil" color=""  />
-            </div>
-            <div className={"ui mini buttons " + this.state.editMode}>
-              <Button onClick={this._save} icon="checkmark" color="olive" />
-              <Button onClick={this._toggle} icon="cancel" color=""  />
-              <Button onClick={this._refresh} icon="refresh" color="yellow"  />
-              {/*<Button onClick={this._delete} icon="trash" color="orange" />*/}
-            </div>
-          </div>
+          <Action viewMode={this.state.viewMode} editMode={this.state.editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         <div className={"edit ui basic bottom attached segment " + this.state.editMode}>
           <form ref="form" className="Form ui form">
@@ -97,13 +87,15 @@ class Quiz extends Component {
               <div className="column">
                 {this._renderOptionForm()}
                 {this._renderNewOptionForm()}
-                <a onClick={this._addNewOption} className="ui green icon labeled button">
+                <a onClick={this._addNewOption} className="ui green icon mini labeled button">
                   <i className="icon add" />
                   新增選項
                 </a>
               </div>
             </div>
           </form>
+          <hr className="ui divider" />
+          <Action viewMode={this.state.viewMode} editMode={this.state.editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
       </section>
     );
