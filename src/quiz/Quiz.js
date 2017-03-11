@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Option from './Option';
 import Action from './Action';
+import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
-import Input from './Input';
 import firebase from 'firebase';
 import './Quiz.css';
 
@@ -79,11 +79,7 @@ class Quiz extends Component {
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
-                <h4 className="ui header">編輯問題</h4>
-                <Input label="ID" reference={this._inputRefQuiz} target="_formDataQuiz" id="id" placeholder="本題的代號" name="id" default={this.props.id} />
-                <Input label="標題" reference={this._inputRefQuiz} target="_formDataQuiz" id="title" placeholder="要讀者回答的問題" name="title" default={this.props.title} />
-                <Input label="描述" reference={this._inputRefQuiz} target="_formDataQuiz" id="description" placeholder="問題的補充說明" name="description" default={this.props.description} />
-                <Input label="目標代號" reference={this._inputRefQuiz} target="_formDataQuiz" id="target" placeholder="本題設定項目的代號" name="target" default={this.props.target} />
+                <QuizForm header="編輯問題" reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
               </div>
               <div className="column">
                 {this._renderOptionForm()}
