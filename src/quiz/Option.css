@@ -7,3 +7,9 @@
   color: #fff!important;
   font-weight: bold;
 }
+
+.ui.basic.buttons .Option.ui.button.active {
+  background: #333!important;
+  color: #fff!important;
+  font-weight: bold;
+}

@@ -74,7 +74,8 @@ class Quiz extends Component {
           <hr className="ui hidden divider" />
           <Action viewMode={this.state.viewMode} editMode={this.state.editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
-        <div className={"edit ui basic bottom attached segment " + this.state.editMode}>
+        <div className="FormWrapper basic ui segment">
+        <div className={"edit ui bottom attached segment " + this.state.editMode}>
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
@@ -97,6 +98,7 @@ class Quiz extends Component {
           <hr className="ui divider" />
           <Action viewMode={this.state.viewMode} editMode={this.state.editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
+        </div>
       </section>
     );
   }
@@ -109,7 +111,7 @@ class Quiz extends Component {
           const item = option[optionItem];
           let className = "";
           if (this.state.answer === item.id) {
-            className = "teal";
+            className = "active";
           } else {
             className = "";
           }

@@ -1,15 +1,20 @@
 .Quiz {
-  margin: 0 auto 1rem auto;
+  margin: 0 auto;
   max-width: 1200px;
 }
 
-.Quiz .ui.segments {
+.Quiz .ui.segment {
   transition: all 0.3s;
 }
 
 .Quiz .Question {
   position: relative;
   z-index: 100;
+  margin-bottom: 0!important;
+}
+
+.Quiz .FormWrapper {
+  margin-top: 0!important;
 }
 
 .Quiz .edit {
