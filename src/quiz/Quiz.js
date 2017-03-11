@@ -149,47 +149,53 @@ class Quiz extends Component {
 
   _save() {
 
-    let answerData ={};
-    Object.keys(this._formdataOption).forEach((key) => {
-      answerData[key] = {};
-      Object.keys(this._formdataOption[key]).forEach((index) =>{
-        answerData[key][index] = this._formdataOption[key][index].value;
+    let quizData = {};
+    let optionData = {};
+
+    Object.keys(this._formDataQuiz).forEach((key) => {
+      quizData[key] = this._formDataQuiz[key].value;
+    });
+
+    Object.keys(this._formDataOption).forEach((key) => {
+      optionData[key] = {};
+      Object.keys(this._formDataOption[key]).forEach((index) => {
+        optionData[key][index] = this._formDataOption[key][index].value;
       });
     });
 
-    Object.keys(this._formdataNewOption).forEach((key) => {
-      answerData[key] = {};
-      Object.keys(this._formdataNewOption[key]).forEach((index) =>{
-        answerData[key][index] = this._formdataNewOption[key][index].value;
+    Object.keys(this._formDataNewOption).forEach((key) => {
+      optionData[key] = {};
+      Object.keys(this._formDataNewOption[key]).forEach((index) =>{
+        optionData[key][index] = this._formDataNewOption[key][index].value;
       });
     });
 
     firebase.database().ref('quiz/' + this.props.id).set({
-      id: this._formdata.id.value,
-      title: this._formdata.title.value,
-      description: this._formdata.description.value,
-      answer: answerData
+      id: quizData.id,
+      title: quizData.title,
+      description: quizData.description,
+      answer: optionData
     });
 
     this.setState({
       answer: null,
       mode: "view",
-      viewmode: "visible", 
-      editmode: "hidden",
-      formdata: {
-        id: this._formdata.id.value,
-        title: this._formdata.title.value,
-        description: this._formdata.description.value,
-        answer: answerData
+      viewMode: "visible", 
+      editMode: "hidden",
+      formData: {
+        id: quizData.id,
+        title: quizData.title,
+        description: quizData.description,
+        answer: optionData
       },
-      newAnswer: {},
-      target: answerData[Object.keys(answerData)[0]].target
+      newOption: {},
+      target: optionData[Object.keys(optionData)[0]].target
     },
     () => {
       this._initialState = Object.assign({}, this.state);
-      this._formdata = {};
-      this._formdataOption = {};
-      this._formdataNewOption = {};
+      this._formDataQuiz = {};
+      this._formDataOption = {};
+      this._formDataNewOption = {};
     });
 
   }
