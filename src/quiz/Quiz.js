@@ -273,12 +273,12 @@ class Quiz extends Component {
     });
   }
 
-//  _delete(event) {
+  _delete(event) {
 //    event.preventDefault();
 //
 //    // TODO: firebase delete
 //    this._toggle();
-//  }
+  }
 
   _refresh() {
 
