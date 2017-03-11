@@ -157,6 +157,9 @@ class Quiz extends Component {
         const item = this.state.newOption[key];
         return (
           <div key={"newOption" + key}>
+            <a className="ui right floated orange icon mini button" onClick={this._deleteOption} data-optionid={key} >
+             <i className="icon trash" />
+            </a>
             <h4 className="ui header">新增選項</h4>
             <Input label="排序" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={item.id} />
             <Input label="顯示文字" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入字串" name="title" default={item.title} />
