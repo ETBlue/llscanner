@@ -45,7 +45,7 @@ class App extends Component {
           <h2 className="ui inverted header">
           <img src={logo} className="App-logo ui image" alt="logo" />
           <div className="content">
-            Labor Law Scanner 
+            Labor Laws Scanner 
             <span className="ui horizontal black label">alpha</span>
           </div>
           </h2>
