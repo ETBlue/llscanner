@@ -52,13 +52,19 @@ class Quiz extends Component {
   }
 
   _renderOption() {
-    const answer = this.state.formdata.answer;
+    const answer = this.state.formData.answer;
     if (answer) {
       return (
         Object.keys(answer).map( (answerItem) => {
           const item = answer[answerItem];
+          let className = "";
+          if (this.state.answer === item.id) {
+            className = "teal";
+          } else {
+            className = "basic";
+          }
           return (
-            <Answer current={this.state.answer} onClick={this._setAnswer} key={item.id} {...item} />
+            <Answer className={className} onClick={this._setAnswer} key={item.id} {...item} />
           )
         })
       );
@@ -122,7 +128,10 @@ class Quiz extends Component {
     )
   }
 
-  _setAnswer(id) {
+  _setAnswer(event) {
+    event.preventDefault();
+
+    const id = event.currentTarget.getAttribute("data-answer");
     if (this.state.answer === id) {
       this.setState({answer: null});
     } else {
