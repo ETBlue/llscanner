@@ -2,43 +2,47 @@ import React, { Component } from 'react';
 import Answer from './Answer';
 import Button from './Button';
 import Input from './Input';
-import './Quiz.css';
 import firebase from 'firebase';
+import './Quiz.css';
 
 class Quiz extends Component {
 
   constructor() {
+
     super();
     this.state = {
-      answer: null,
-      mode: "view",
-      viewmode: "visible", 
-      editmode: "hidden",
-      formdata: {},
-      newAnswer: {},
-      target: ""
+      target: "", // 這則題目的目標設定項目代號
+      answer: null, // 使用者選擇的答案
+      mode: "view", // 一開始的顯示模式
+      viewMode: "visible", // 是否顯示瀏覽模式
+      editMode: "hidden", // 是否顯示編輯模式
+      formData: {}, // 準備送出的表單資料
+      newOption: {}, // 準備送出的表單資料中的新增部分
     };
-    this._setAnswer = this._setAnswer.bind(this);
-    this._renderOption = this._renderOption.bind(this);
-    this._renderOptionForm = this._renderOptionForm.bind(this);
-    this._renderNewOptionForm = this._renderNewOptionForm.bind(this);
-    this._addNewOption = this._addNewOption.bind(this);
-    this._inputRef = this._inputRef.bind(this);
 
-    this._toggle = this._toggle.bind(this);
-    this._save = this._save.bind(this);
-    this._refresh = this._refresh.bind(this);
-    this._delete = this._delete.bind(this);
+    this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
+    this._renderOption = this._renderOption.bind(this); // 選項介面
 
-    this._initialState = {};
-    this._formdata = {};
-    this._formdataOption = {};
-    this._formdataNewOption = {};
+    this._renderOptionForm = this._renderOptionForm.bind(this); // 選項的編輯表單介面
+    this._renderNewOptionForm = this._renderNewOptionForm.bind(this); // 新增選項的編輯表單介面
+    this._addNewOption = this._addNewOption.bind(this); // 新增選項
+    this._deleteOption = this._deleteOption.bind(this); // 刪除選項
+    this._inputRefQuiz = this._inputRefQuiz.bind(this); // 將編輯人員填入的表單資料放到暫存區
+    this._inputRefOption = this._inputRefOption.bind(this); // 將編輯人員填入的表單資料放到暫存區
+    this._toggle = this._toggle.bind(this); // 切換編輯模式
+    this._refresh = this._refresh.bind(this); // 取消編輯到一半的資料
+    this._save = this._save.bind(this); // 將編輯的資料送出到 server
+    this._delete = this._delete.bind(this); // 刪除本題
+
+    this._initialState = {}; // 本題的初始狀態
+    this._formDataQuiz = {}; // 從表單讀入的資料暫存區，第一層
+    this._formDataOption = {}; // 從表單讀入的資料暫存區，第二層，原本的選項
+    this._formDataNewOption = {}; // 從表單讀入的資料暫存區，第二層，新增的選項
   }
 
   componentWillMount() {
     this.setState({
-      formdata: {
+      formData: {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
@@ -49,6 +53,54 @@ class Quiz extends Component {
     () => {
       this._initialState = Object.assign({}, this.state);
     });
+  }
+
+  render() {
+    return (
+      <section className="Quiz">
+        <div className="Question ui center aligned basic segment">
+          <h3 className="ui header">
+            {this.props.title}
+          </h3>
+          <p>
+            {this.props.description}
+          </p>
+          {this._renderOption()}
+          <hr className="ui hidden divider" />
+          <div className="action">
+            <div className={"ui mini buttons " + this.state.viewMode}>
+              <Button onClick={this._toggle} icon="pencil" color=""  />
+            </div>
+            <div className={"ui mini buttons " + this.state.editMode}>
+              <Button onClick={this._save} icon="checkmark" color="olive" />
+              <Button onClick={this._toggle} icon="cancel" color=""  />
+              <Button onClick={this._refresh} icon="refresh" color="yellow"  />
+              <Button onClick={this._delete} icon="trash" color="orange" />
+            </div>
+          </div>
+        </div>
+        <div className={"edit ui basic bottom attached segment " + this.state.editMode}>
+          <form className="Form ui form">
+            <div className="ui two column divided stackable grid">
+              <div className="column">
+                <h4 className="ui header">編輯問題</h4>
+                <Input label="ID" reference={this._inputRefQuiz} target="_formDataQuiz" id="id" placeholder={this.props.id} name="id" default={this.props.id} />
+                <Input label="標題" reference={this._inputRefQuiz} target="_formDataQuiz" id="title" placeholder={this.props.title} name="title" default={this.props.title} />
+                <Input label="描述" reference={this._inputRefQuiz} target="_formDataQuiz" id="description" placeholder={this.props.description} name="description" default={this.props.description} />
+              </div>
+              <div className="column">
+                {this._renderOptionForm()}
+                {this._renderNewOptionForm()}
+                <a onClick={this._addNewOption} className="ui green icon labeled button">
+                  <i className="icon add" />
+                  新增選項
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    );
   }
 
   _renderOption() {
@@ -71,24 +123,23 @@ class Quiz extends Component {
     }
   }
 
-  _inputRef(target, id, key, value) {
-    this[target][id][key] = value;
-  }
-
   _renderOptionForm() {
-    const answer = this.state.formdata.answer;
+    const answer = this.state.formData.answer;
     if (answer) {
       return (
         Object.keys(answer).map( (answerItem) => {
           const item = answer[answerItem];
-          this._formdataOption[answerItem] = {};
+          this._formDataOption[answerItem] = {};
           return (
             <div key={answerItem}>
+              <a className="ui right floated orange icon button" onClick={this._deleteOption} data-optionid={answerItem} >
+               <i className="icon trash" />
+              </a>
               <h4 className="ui header">編輯選項</h4>
-              <Input label="排序" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.id} name="id" default={item.id} />
-              <Input label="顯示文字" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.title} name="title" default={item.title} />
-              <Input label="目標代號" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.target} name="target" default={item.target} />
-              <Input label="設定值" reference={this._inputRef} target="_formdataOption" id={answerItem} placeholder={item.value} name="value" default={item.value} />
+              <Input label="排序" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.id} name="id" default={item.id} />
+              <Input label="顯示文字" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.title} name="title" default={item.title} />
+              <Input label="目標代號" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.target} name="target" default={item.target} />
+              <Input label="設定值" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.value} name="value" default={item.value} />
               <hr className="ui divider" />
             </div>
           )
@@ -97,35 +148,62 @@ class Quiz extends Component {
     }
   }
 
-  _addNewOption() {
-    const id = Object.keys(this.state.formdata.answer).length + Object.keys(this.state.newAnswer).length + 1;
-    this._formdataNewOption[id] = {};
-    let newAnswerData = Object.assign({}, this.state.newAnswer);
-    newAnswerData[id] = {
-      id: id,
-      title: null,
-      target: this.state.target,
-      value: null
-    };
-    this.setState({newAnswer: newAnswerData});
-  }
-
   _renderNewOptionForm() {
     return (
-      Object.keys(this.state.newAnswer).map((key) => {
-        const item = this.state.newAnswer[key];
+      Object.keys(this.state.newOption).map((key) => {
+        const item = this.state.newOption[key];
         return (
-          <div key={"newAnswer" + key}>
+          <div key={"newOption" + key}>
             <h4 className="ui header">新增選項</h4>
-            <Input label="排序" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={item.id} />
-            <Input label="顯示文字" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入字串" name="title" default={item.title} />
-            <Input label="目標代號" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入此選項針對的目標的 unique id" name="target" default={item.target} />
-            <Input label="設定值" reference={this._inputRef} target="_formdataNewOption" id={key} placeholder="請輸入此選項代表的值" name="value" default={item.value} />
+            <Input label="排序" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={item.id} />
+            <Input label="顯示文字" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入字串" name="title" default={item.title} />
+            <Input label="目標代號" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入此選項針對的目標的 unique id" name="target" default={item.target} />
+            <Input label="設定值" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入此選項代表的值" name="value" default={item.value} />
             <hr className="ui divider" />
           </div>
         )
       })
     )
+  }
+
+  _inputRefQuiz(target, id, key, value) {
+    this[target][key] = value;
+  }
+
+  _inputRefOption(target, id, key, value) {
+    if (this[target][id]) {
+      this[target][id][key] = value;
+    }
+  }
+
+  _addNewOption() {
+    const id = Object.keys(this.state.formData.answer).length + Object.keys(this.state.newOption).length + 1;
+    this._formDataNewOption[id] = {};
+    let newOptionData = Object.assign({}, this.state.newOption);
+    newOptionData[id] = {
+      id: id,
+      title: null,
+      target: this.state.target,
+      value: null
+    };
+    this.setState({newOption: newOptionData});
+  }
+
+  _deleteOption(event) {
+
+    const id = event.currentTarget.getAttribute("data-optionid");
+
+    let formData = this.state.formData;
+    delete formData.answer[id];
+    delete this._formDataOption[id];
+    console.log(formData.answer);
+    console.log(this._formDataOption);
+    this.setState({formData: formData});
+
+    let newOptionData = Object.assign({}, this.state.newOption);
+    delete newOptionData[id];
+    delete this._formDataNewOption[id];
+    this.setState({newOption: newOptionData});
   }
 
   _setAnswer(event) {
@@ -141,9 +219,9 @@ class Quiz extends Component {
 
   _toggle() {
     if (this.state.mode === "view") {
-      this.setState({mode: "edit", viewmode: "hidden", editmode: "visible"});
+      this.setState({mode: "edit", viewMode: "hidden", editMode: "visible"});
     } else if (this.state.mode === "edit") {
-      this.setState({mode: "view", viewmode: "visible", editmode: "hidden"});
+      this.setState({mode: "view", viewMode: "visible", editMode: "hidden"});
     }
   }
 
@@ -200,7 +278,7 @@ class Quiz extends Component {
 
   }
 
-  _delete(data) {
+  _delete(event) {
     // TODO: firebase delete
     this._toggle();
   }
@@ -208,67 +286,10 @@ class Quiz extends Component {
   _refresh() {
     this.setState(this._initialState, () => {
       this._toggle();
-      this._formdata = {};
-      this._formdataOption = {};
-      this._formdataNewOption = Object.assign({}, this.state.newAnswer);
+      this._formDataQuiz = {};
+      this._formDataOption = {};
+      this._formDataNewOption = {};
     });
-  }
-
-  render() {
-    return (
-      <section className="Quiz">
-        <div className="Question ui center aligned basic segment">
-          <h3 className="ui header">
-            {this.props.title}
-          </h3>
-          <p>
-            {this.props.description}
-          </p>
-          {this._renderOption()}
-          <hr className="ui hidden divider" />
-          <div className="action">
-            <div className={"ui mini buttons " + this.state.viewmode}>
-              <Button onClick={this._toggle} icon="pencil" color=""  />
-            </div>
-            <div className={"ui mini buttons " + this.state.editmode}>
-              <Button onClick={this._save} icon="checkmark" color="olive" />
-              <Button onClick={this._toggle} icon="cancel" color=""  />
-              <Button onClick={this._refresh} icon="refresh" color="yellow"  />
-              <Button onClick={this._delete} icon="trash" color="orange" />
-            </div>
-          </div>
-        </div>
-        <div className={"edit ui basic bottom attached segment " + this.state.editmode}>
-          <form className="Form ui form">
-            <div className="ui two column divided stackable grid">
-              <div className="column">
-                <h4 className="ui header">編輯問題</h4>
-                <div className="field">
-                  <label>ID</label>
-                  <input ref={(input) => this._formdata.id = input} placeholder={this.props.id} name="id" type="text" defaultValue={this.props.id} />
-                </div>
-                <div className="field">
-                  <label>標題</label>
-                  <input ref={(input) => this._formdata.title = input} placeholder={this.props.title} name="title" type="text" defaultValue={this.props.title} />
-                </div>
-                <div className="field">
-                  <label>描述</label>
-                  <input ref={(input) => this._formdata.description = input} placeholder={this.props.description} name="description" type="text" defaultValue={this.props.description} />
-                </div>
-              </div>
-              <div className="column">
-                {this._renderOptionForm()}
-                {this._renderNewOptionForm()}
-                <a onClick={this._addNewOption} className="ui green icon labeled button">
-                  <i className="icon add" />
-                  新增選項
-                </a>
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
-    );
   }
 
 }
