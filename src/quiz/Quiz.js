@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Answer from './Answer';
+import ReactDOM from 'react-dom';
 import Button from './Button';
 import Input from './Input';
 import firebase from 'firebase';
@@ -80,7 +80,7 @@ class Quiz extends Component {
           </div>
         </div>
         <div className={"edit ui basic bottom attached segment " + this.state.editMode}>
-          <form className="Form ui form">
+          <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
                 <h4 className="ui header">編輯問題</h4>
@@ -284,6 +284,8 @@ class Quiz extends Component {
   }
 
   _refresh() {
+    console.log(this._initialState);
+    ReactDOM.findDOMNode(this.refs.form).reset();
     this.setState(this._initialState, () => {
       this._toggle();
       this._formDataQuiz = {};
