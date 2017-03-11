@@ -241,16 +241,18 @@ class Quiz extends Component {
     });
 
     Object.keys(this._formDataOption).forEach((key) => {
-      optionData[key] = {};
-      Object.keys(this._formDataOption[key]).forEach((index) => {
-        optionData[key][index] = this._formDataOption[key][index].value;
+      const option = this._formDataOption[key];
+      optionData[option.id.value] = {};
+      Object.keys(option).forEach((index) => {
+        optionData[option.id.value][index] = option[index].value;
       });
     });
 
     Object.keys(this._formDataNewOption).forEach((key) => {
-      optionData[key] = {};
-      Object.keys(this._formDataNewOption[key]).forEach((index) =>{
-        optionData[key][index] = this._formDataNewOption[key][index].value;
+      const option = this._formDataNewOption[key];
+      optionData[option.id.value] = {};
+      Object.keys(option).forEach((index) =>{
+        optionData[option.id.value][index] = option[index].value;
       });
     });
 
