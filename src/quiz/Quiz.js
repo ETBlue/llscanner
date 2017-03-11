@@ -53,6 +53,8 @@ class Quiz extends Component {
     },
     () => {
       this._initialState = Object.assign({}, this.state);
+      this._initialState.formData = Object.assign({}, this.state.formData);
+      this._initialState.formData.option = Object.assign({}, this.state.formData.option);
     });
   }
 
@@ -270,6 +272,8 @@ class Quiz extends Component {
     },
     () => {
       this._initialState = Object.assign({}, this.state);
+      this._initialState.formData = Object.assign({}, this.state.formData);
+      this._initialState.formData.option = Object.assign({}, this.state.formData.option);
       this._formDataQuiz = {};
       this._formDataOption = {};
       this._formDataNewOption = {};
