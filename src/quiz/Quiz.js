@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Option from './Option';
+import OptionForm from './OptionForm';
 import Button from './Button';
 import Input from './Input';
 import firebase from 'firebase';
@@ -134,17 +135,7 @@ class Quiz extends Component {
           const item = option[key];
           this._formDataOption[key] = {};
           return (
-            <div key={key}>
-              <a className="ui right floated orange icon mini button" onClick={this._deleteOption} data-optionid={key} >
-               <i className="icon trash" />
-              </a>
-              <h4 className="ui header">編輯選項</h4>
-              <Input label="排序" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.id} name="id" default={item.id} />
-              <Input label="顯示文字" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.title} name="title" default={item.title} />
-              <Input label="目標代號" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.target} name="target" default={item.target} />
-              <Input label="設定值" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.value} name="value" default={item.value} />
-              <hr className="ui divider" />
-            </div>
+            <OptionForm key={key} header="編輯選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataOption" id={key} item={item} />
           )
         })
       );
@@ -156,17 +147,7 @@ class Quiz extends Component {
       Object.keys(this.state.newOption).map((key) => {
         const item = this.state.newOption[key];
         return (
-          <div key={"newOption" + key}>
-            <a className="ui right floated orange icon mini button" onClick={this._deleteOption} data-optionid={key} >
-             <i className="icon trash" />
-            </a>
-            <h4 className="ui header">新增選項</h4>
-            <Input label="排序" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={item.id} />
-            <Input label="顯示文字" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入字串" name="title" default={item.title} />
-            <Input label="目標代號" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入此選項針對的目標的 unique id" name="target" default={item.target} />
-            <Input label="設定值" reference={this._inputRefOption} target="_formDataNewOption" id={key} placeholder="請輸入此選項代表的值" name="value" default={item.value} />
-            <hr className="ui divider" />
-          </div>
+          <OptionForm key={key} header="新增選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataNewOption" id={key} item={item} />
         )
       })
     )

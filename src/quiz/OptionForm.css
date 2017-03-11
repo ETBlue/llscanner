@@ -1,0 +1,9 @@
+.OptionForm {
+  position: relative;
+}
+
+.right.top.floated {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
