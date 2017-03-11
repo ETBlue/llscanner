@@ -81,7 +81,7 @@ class Quiz extends Component {
               <Button onClick={this._save} icon="checkmark" color="olive" />
               <Button onClick={this._toggle} icon="cancel" color=""  />
               <Button onClick={this._refresh} icon="refresh" color="yellow"  />
-              <Button onClick={this._delete} icon="trash" color="orange" />
+              {/*<Button onClick={this._delete} icon="trash" color="orange" />*/}
             </div>
           </div>
         </div>
@@ -271,10 +271,12 @@ class Quiz extends Component {
 
   }
 
-  _delete(event) {
-    // TODO: firebase delete
-    this._toggle();
-  }
+//  _delete(event) {
+//    event.preventDefault();
+//
+//    // TODO: firebase delete
+//    this._toggle();
+//  }
 
   _refresh() {
     console.log(this._initialState);
