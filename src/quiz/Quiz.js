@@ -183,7 +183,9 @@ class Quiz extends Component {
   }
 
   _addNewOption() {
-    const id = Object.keys(this.state.formData.answer).length + Object.keys(this.state.newOption).length + 1;
+    const oldOptionIDs = Object.keys(this.state.formData.option);
+    const newOptionIDs = Object.keys(this.state.newOption);
+    const id = Math.max(Math.max(...oldOptionIDs), Math.max(...newOptionIDs)) + 1;
     let newOptionData = Object.assign({}, this.state.newOption);
     newOptionData[id] = {
       id: id,
