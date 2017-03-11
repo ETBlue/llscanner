@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Option from './Option';
 import Button from './Button';
 import Input from './Input';
 import firebase from 'firebase';
@@ -46,9 +47,9 @@ class Quiz extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
-        answer: this.props.answer
+        option: this.props.option
       },
-      target: this.props.answer[Object.keys(this.props.answer)[0]].target
+      target: this.props.option[Object.keys(this.props.option)[0]].target
     },
     () => {
       this._initialState = Object.assign({}, this.state);
@@ -104,19 +105,19 @@ class Quiz extends Component {
   }
 
   _renderOption() {
-    const answer = this.state.formData.answer;
-    if (answer) {
+    const option = this.state.formData.option;
+    if (option) {
       return (
-        Object.keys(answer).map( (answerItem) => {
-          const item = answer[answerItem];
+        Object.keys(option).map( (optionItem) => {
+          const item = option[optionItem];
           let className = "";
-          if (this.state.answer === item.id) {
+          if (this.state.option === item.id) {
             className = "teal";
           } else {
             className = "basic";
           }
           return (
-            <Answer className={className} onClick={this._setAnswer} key={item.id} {...item} />
+            <Option className={className} onClick={this._setAnswer} key={item.id} {...item} />
           )
         })
       );
@@ -124,22 +125,22 @@ class Quiz extends Component {
   }
 
   _renderOptionForm() {
-    const answer = this.state.formData.answer;
-    if (answer) {
+    const option = this.state.formData.option;
+    if (option) {
       return (
-        Object.keys(answer).map( (answerItem) => {
-          const item = answer[answerItem];
-          this._formDataOption[answerItem] = {};
+        Object.keys(option).map( (key) => {
+          const item = option[key];
+          this._formDataOption[key] = {};
           return (
-            <div key={answerItem}>
-              <a className="ui right floated orange icon button" onClick={this._deleteOption} data-optionid={answerItem} >
+            <div key={key}>
+              <a className="ui right floated orange icon mini button" onClick={this._deleteOption} data-optionid={key} >
                <i className="icon trash" />
               </a>
               <h4 className="ui header">編輯選項</h4>
-              <Input label="排序" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.id} name="id" default={item.id} />
-              <Input label="顯示文字" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.title} name="title" default={item.title} />
-              <Input label="目標代號" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.target} name="target" default={item.target} />
-              <Input label="設定值" reference={this._inputRefOption} target="_formDataOption" id={answerItem} placeholder={item.value} name="value" default={item.value} />
+              <Input label="排序" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.id} name="id" default={item.id} />
+              <Input label="顯示文字" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.title} name="title" default={item.title} />
+              <Input label="目標代號" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.target} name="target" default={item.target} />
+              <Input label="設定值" reference={this._inputRefOption} target="_formDataOption" id={key} placeholder={item.value} name="value" default={item.value} />
               <hr className="ui divider" />
             </div>
           )
@@ -178,7 +179,6 @@ class Quiz extends Component {
 
   _addNewOption() {
     const id = Object.keys(this.state.formData.answer).length + Object.keys(this.state.newOption).length + 1;
-    this._formDataNewOption[id] = {};
     let newOptionData = Object.assign({}, this.state.newOption);
     newOptionData[id] = {
       id: id,
@@ -187,6 +187,7 @@ class Quiz extends Component {
       value: null
     };
     this.setState({newOption: newOptionData});
+    this._formDataNewOption[id] = {};
   }
 
   _deleteOption(event) {
@@ -194,16 +195,14 @@ class Quiz extends Component {
     const id = event.currentTarget.getAttribute("data-optionid");
 
     let formData = this.state.formData;
-    delete formData.answer[id];
-    delete this._formDataOption[id];
-    console.log(formData.answer);
-    console.log(this._formDataOption);
+    delete formData.option[id];
     this.setState({formData: formData});
+    delete this._formDataOption[id];
 
     let newOptionData = Object.assign({}, this.state.newOption);
     delete newOptionData[id];
-    delete this._formDataNewOption[id];
     this.setState({newOption: newOptionData});
+    delete this._formDataNewOption[id];
   }
 
   _setAnswer(event) {
@@ -252,7 +251,7 @@ class Quiz extends Component {
       id: quizData.id,
       title: quizData.title,
       description: quizData.description,
-      answer: optionData
+      option: optionData
     });
 
     this.setState({
@@ -264,7 +263,7 @@ class Quiz extends Component {
         id: quizData.id,
         title: quizData.title,
         description: quizData.description,
-        answer: optionData
+        option: optionData
       },
       newOption: {},
       target: optionData[Object.keys(optionData)[0]].target
