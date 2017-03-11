@@ -13,7 +13,6 @@ class Quiz extends Component {
 
     super();
     this.state = {
-      target: "", // 這則題目的目標設定項目代號
       answer: null, // 使用者選擇的答案
       mode: "view", // 一開始的顯示模式
       viewMode: "visible", // 是否顯示瀏覽模式
@@ -48,9 +47,9 @@ class Quiz extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
+        target: this.props.target,
         option: this.props.option
-      },
-      target: this.props.option[Object.keys(this.props.option)[0]].target
+      }
     },
     () => {
       this._initialState = Object.assign({}, this.state);
@@ -80,9 +79,10 @@ class Quiz extends Component {
             <div className="ui two column divided stackable grid">
               <div className="column">
                 <h4 className="ui header">編輯問題</h4>
-                <Input label="ID" reference={this._inputRefQuiz} target="_formDataQuiz" id="id" placeholder={this.props.id} name="id" default={this.props.id} />
-                <Input label="標題" reference={this._inputRefQuiz} target="_formDataQuiz" id="title" placeholder={this.props.title} name="title" default={this.props.title} />
-                <Input label="描述" reference={this._inputRefQuiz} target="_formDataQuiz" id="description" placeholder={this.props.description} name="description" default={this.props.description} />
+                <Input label="ID" reference={this._inputRefQuiz} target="_formDataQuiz" id="id" placeholder="本題的代號" name="id" default={this.props.id} />
+                <Input label="標題" reference={this._inputRefQuiz} target="_formDataQuiz" id="title" placeholder="要讀者回答的問題" name="title" default={this.props.title} />
+                <Input label="描述" reference={this._inputRefQuiz} target="_formDataQuiz" id="description" placeholder="問題的補充說明" name="description" default={this.props.description} />
+                <Input label="目標代號" reference={this._inputRefQuiz} target="_formDataQuiz" id="target" placeholder="本題設定項目的代號" name="target" default={this.props.target} />
               </div>
               <div className="column">
                 {this._renderOptionForm()}
@@ -165,7 +165,6 @@ class Quiz extends Component {
     newOptionData[id] = {
       id: id,
       title: null,
-      target: this.state.target,
       value: null
     };
     this.setState({newOption: newOptionData});
@@ -238,6 +237,7 @@ class Quiz extends Component {
       id: quizData.id,
       title: quizData.title,
       description: quizData.description,
+      target: quizData.target,
       option: optionData
     });
 
@@ -250,10 +250,10 @@ class Quiz extends Component {
         id: quizData.id,
         title: quizData.title,
         description: quizData.description,
+        target: quizData.target,
         option: optionData
       },
       newOption: {},
-      target: optionData[Object.keys(optionData)[0]].target
     },
     () => {
       this._initialState = Object.assign({}, this.state);
