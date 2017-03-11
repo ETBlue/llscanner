@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Option from './Option';
 import Action from './Action';
+import Button from './Button';
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
 import firebase from 'firebase';
@@ -84,10 +85,7 @@ class Quiz extends Component {
               <div className="column">
                 {this._renderOptionForm()}
                 {this._renderNewOptionForm()}
-                <a onClick={this._addNewOption} className="ui green icon mini labeled button">
-                  <i className="icon add" />
-                  新增選項
-                </a>
+                <Button onClick={this._addNewOption} icon="add" color="green" className="mini labeled" title="新增選項" />
               </div>
             </div>
           </form>
