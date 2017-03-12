@@ -15,8 +15,8 @@ class OptionForm extends Component {
         </a>
         <Input label="顯示文字" reference={this.props.reference} target={this.props.target} id={this.props.id} placeholder="請輸入字串" name="title" default={this.props.item.title} />
         <div className="two fields">
-        <Input label="排序" reference={this.props.reference} target={this.props.target} id={this.props.id} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={this.props.item.id} />
-        <Input label="設定值" reference={this.props.reference} target={this.props.target} id={this.props.id} placeholder="請輸入此選項代表的值" name="value" default={this.props.item.value} />
+          <Input label="排序" reference={this.props.reference} target={this.props.target} id={this.props.id} placeholder="請輸入數字，注意不可以跟其他選項重複喔" name="id" default={this.props.item.id} />
+          <Input label="設定值" reference={this.props.reference} target={this.props.target} id={this.props.id} placeholder="請輸入此選項代表的值" name="value" default={this.props.item.value} />
         </div>
         <hr className="ui divider" />
       </div>
