@@ -8,6 +8,27 @@
 .App-header {
 }
 
+.App-body {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.App-body .toggleAppMode {
+  transition: all 0.3s;
+  transform-origin: top center;
+}
+
+.App-body .toggleAppMode.hidden {
+  margin-top: -1rem!important;
+  transform: scaleY(0);
+  height: 0;
+}
+
+.App .NewQuiz .new {
+  background: #fffaf3!important;
+}
+
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

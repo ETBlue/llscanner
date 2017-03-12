@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import ReactDOM from 'react-dom';
 import Option from './Option';
 import Action from './Action';
 import Button from './Button';
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
-import firebase from 'firebase';
 import './Quiz.css';
 
 class Quiz extends Component {
@@ -15,11 +15,17 @@ class Quiz extends Component {
     super();
     this.state = {
       answer: null, // 使用者選擇的答案
-      mode: "view", // 一開始的顯示模式
-      viewMode: "visible", // 是否顯示瀏覽模式
-      editMode: "hidden", // 是否顯示編輯模式
+      mode: "viewQuizMode", // 一開始的顯示模式
+      visibility: {
+        viewQuiz: "visible", // 瀏覽模式元件的顯示狀態
+        editQuiz: "hidden" // 編輯模式元件的顯示狀態
+      },
       formData: {}, // 準備送出的表單資料
       newOption: {}, // 準備送出的表單資料中的新增部分
+    };
+    this._modeSettings = {
+      viewQuizMode: ["viewQuiz"],
+      editQuizMode: ["editQuiz"]
     };
 
     this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
@@ -40,6 +46,8 @@ class Quiz extends Component {
     this._formDataQuiz = {}; // 從表單讀入的資料暫存區，第一層
     this._formDataOption = {}; // 從表單讀入的資料暫存區，第二層，原本的選項
     this._formDataNewOption = {}; // 從表單讀入的資料暫存區，第二層，新增的選項
+    this._currentMode = "";
+    this._currentVisibility = {};
   }
 
   componentWillMount() {
@@ -56,6 +64,8 @@ class Quiz extends Component {
       this._initialState = Object.assign({}, this.state);
       this._initialState.formData = Object.assign({}, this.state.formData);
       this._initialState.formData.option = Object.assign({}, this.state.formData.option);
+      this._currentMode = this.state.mode;
+      this._currentVisibility = Object.assign({}, this.state.visibility);
     });
   }
 
@@ -73,10 +83,10 @@ class Quiz extends Component {
           {this._renderOption()}
           </div>
           <hr className="ui hidden divider" />
-          <Action viewMode={this.state.viewMode} editMode={this.state.editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
+          <Action viewQuiz={this.state.visibility.viewQuiz} editQuiz={this.state.visibility.editQuiz} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         <div className="FormWrapper basic ui segment">
-        <div className={"edit ui bottom attached segment " + this.state.editMode}>
+        <div className={"edit ui bottom attached segment " + this.state.visibility.editQuiz}>
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
@@ -90,7 +100,7 @@ class Quiz extends Component {
             </div>
           </form>
           <hr className="ui divider" />
-          <Action viewMode={this.state.viewMode} editMode={this.state.editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
+          <Action viewQuiz={this.state.visibility.viewQuiz} editQuiz={this.state.visibility.editQuiz} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         </div>
       </section>
@@ -137,7 +147,7 @@ class Quiz extends Component {
       Object.keys(this.state.newOption).map((key) => {
         const item = this.state.newOption[key];
         return (
-          <OptionForm key={key} header="新增選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataNewOption" id={key} item={item} />
+          <OptionForm key={key} header="新選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataNewOption" id={key} item={item} />
         )
       })
     )
@@ -196,12 +206,28 @@ class Quiz extends Component {
   }
 
   _toggle() {
+    if (this._currentMode === "viewQuizMode") {
+      this._currentMode = "editQuizMode";
+    } else {
+      this._currentMode = "viewQuizMode";
+    };
+    this._renderMode();
+  }
 
-    if (this.state.mode === "view") {
-      this.setState({mode: "edit", viewMode: "hidden", editMode: "visible"});
-    } else if (this.state.mode === "edit") {
-      this.setState({mode: "view", viewMode: "visible", editMode: "hidden"});
+  _renderMode() {
+    if (this._currentMode !== this.state.mode ) {
+      Object.keys(this._currentVisibility).forEach((key) => {
+        this._currentVisibility[key] = "hidden";
+      });
+      this._modeSettings[this._currentMode].forEach((item) => {
+        this._currentVisibility[item] = "visible";
+      });
+      this.setState({
+        mode: this._currentMode,
+        visibility: this._currentVisibility
+      });
     }
+
   }
 
   _save() {
@@ -239,9 +265,11 @@ class Quiz extends Component {
 
     this.setState({
       answer: null,
-      mode: "view",
-      viewMode: "visible", 
-      editMode: "hidden",
+      mode: "viewQuizMode", // 一開始的顯示模式
+      visibility: {
+        viewQuiz: "visible", // 瀏覽模式元件的顯示狀態
+        editQuiz: "hidden" // 編輯模式元件的顯示狀態
+      },
       formData: {
         id: quizData.id,
         title: quizData.title,
@@ -258,6 +286,8 @@ class Quiz extends Component {
       this._formDataQuiz = {};
       this._formDataOption = {};
       this._formDataNewOption = {};
+      this._currentMode = this.state.mode;
+      this._currentVisibility = Object.assign({}, this.state.visibility);
     });
   }
 
@@ -276,6 +306,8 @@ class Quiz extends Component {
       this._formDataQuiz = {};
       this._formDataOption = {};
       this._formDataNewOption = {};
+      this._currentMode = this.state.mode;
+      this._currentVisibility = Object.assign({}, this.state.visibility);
     });
   }
 }

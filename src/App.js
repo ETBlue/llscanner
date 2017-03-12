@@ -3,12 +3,43 @@ import logo from './logo.svg';
 import './App.css';
 import firebase from 'firebase';
 import Quiz from './quiz/Quiz';
+import QuizForm from './quiz/QuizForm';
+import Button from './quiz/Button';
 
 class App extends Component {
 
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      quiz: {},
+      mode: "currentQuizMode",
+      visibility: {
+        currentQuiz: "visible",
+        newQuiz: "hidden"
+      }
+    };
+    this._modeSettings = {
+      currentQuizMode: ["currentQuiz"],
+      newQuizMode: ["newQuiz"]
+    };
+    this._quizDefault = {
+      id: "",
+      title: "",
+      description: "",
+      target: "",
+      option: {}
+    };
+    this._renderCurrentQuiz = this._renderCurrentQuiz.bind(this);
+    this._addNewQuiz = this._addNewQuiz.bind(this);
+    this._renderNewQuiz = this._renderNewQuiz.bind(this);
+    this._inputRefQuiz = this._inputRefQuiz.bind(this); // 將編輯人員填入的表單資料放到暫存區
+    this._renderMode = this._renderMode.bind(this); // 切換編輯模式
+    this._toggle = this._toggle.bind(this); // 切換編輯模式
+    this._save = this._save.bind(this); // 將編輯的資料送出到 server
+
+    this._formDataQuiz = {}; // 從表單讀入的資料暫存區，第一層
+    this._currentMode = "";
+    this._currentVisibility = {};
   }
 
   componentWillMount() {
@@ -18,24 +49,8 @@ class App extends Component {
         quiz: snapshot.val()
       });
     });
-  }
-
-  componentWillUnmount() {
-    this.firebaseData.off();
-  }
-
-  _getQuiz() {
-    const quiz = this.state.quiz;
-    if (quiz) {
-      return (
-        Object.keys(quiz).map( (quizitem) => {
-          const item = quiz[quizitem];
-          return (
-            <Quiz key={item.id} {...item} />
-          )
-        })
-      );
-    }
+    this._currentMode = this.state.mode;
+    this._currentVisibility = Object.assign({}, this.state.visibility);
   }
 
   render() {
@@ -50,10 +65,81 @@ class App extends Component {
           </div>
           </h2>
         </header>
-        {this._getQuiz()}
-        {/*'<div className="auth"></div>'*/}
+        <section className="App-body">
+          <Button onClick={this._toggle} icon="add" color="" className="" title="" />
+          <div className={this.state.visibility.currentQuiz + " toggleAppMode"}>
+            {this._renderCurrentQuiz()}
+          </div>
+          <div className={this.state.visibility.newQuiz + " toggleAppMode"}>
+            {this._renderNewQuiz()}
+          </div>
+          {/*'<div className="auth"></div>'*/}
+        </section>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    this.firebaseData.off();
+  }
+
+  _renderCurrentQuiz() {
+    const quiz = this.state.quiz;
+    if (quiz) {
+      return (
+        Object.keys(quiz).map( (quizitem) => {
+          const item = quiz[quizitem];
+          return (
+            <Quiz key={item.id} {...item} />
+          )
+        })
+      );
+    }
+  }
+
+  _addNewQuiz() {
+    this._currentMode = "newQuizMode";
+    this._renderMode();
+  }
+
+  _renderNewQuiz() {
+    return(
+      <div className="NewQuiz ui basic segment">
+        <div className="new ui segment">
+          <form ref="form" className="Form ui form">
+            <QuizForm header="新問題" reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  _inputRefQuiz(target, id, key, value) {
+    this[target][key] = value;
+  }
+
+  _toggle() {
+    if (this._currentMode === "currentQuizMode") {
+      this._currentMode = "newQuizMode";
+    } else {
+      this._currentMode = "currentQuizMode";
+    };
+    this._renderMode();
+  }
+
+  _renderMode() {
+    if (this._currentMode !== this.state.mode ) {
+      Object.keys(this._currentVisibility).forEach((key) => {
+        this._currentVisibility[key] = "hidden";
+      });
+      this._modeSettings[this._currentMode].forEach((item) => {
+        this._currentVisibility[item] = "visible";
+      });
+      this.setState({
+        mode: this._currentMode,
+        visibility: this._currentVisibility
+      });
+    }
   }
 }
 
