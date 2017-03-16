@@ -11,9 +11,9 @@ import './Quiz.css';
 
 class Quiz extends Component {
 
-  constructor() {
+  constructor(props) {
 
-    super();
+    super(props);
     this.state = {
       answer: null, // 使用者選擇的答案
       mode: "viewQuizMode", // 一開始的顯示模式
@@ -21,7 +21,13 @@ class Quiz extends Component {
         viewQuiz: "visible", // 瀏覽模式元件的顯示狀態
         editQuiz: "hidden" // 編輯模式元件的顯示狀態
       },
-      formData: {}, // 準備送出的表單資料
+      formData: { // 準備送出的表單資料
+        id: this.props.id,
+        title: this.props.title,
+        description: this.props.description,
+        target: this.props.target,
+        option: this.props.option
+      },
       newOption: {}, // 準備送出的表單資料中的新增部分
     };
     this._modeSettings = {
@@ -43,31 +49,19 @@ class Quiz extends Component {
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
     this._delete = this._delete.bind(this); // 刪除本題
 
-    this._initialState = {}; // 本題的初始狀態
     this._formDataQuiz = {}; // 從表單讀入的資料暫存區，第一層
     this._formDataOption = {}; // 從表單讀入的資料暫存區，第二層，原本的選項
     this._formDataNewOption = {}; // 從表單讀入的資料暫存區，第二層，新增的選項
-    this._currentMode = "";
-    this._currentVisibility = {};
+
+    this._initialState = Object.assign({}, this.state);
+    this._initialState.formData = Object.assign({}, this.state.formData);
+    this._initialState.formData.option = Object.assign({}, this.state.formData.option);
+    this._initialFormState = Object.assign({}, this.state);
+    this._currentVisibility = Object.assign({}, this.state.visibility);
+    this._currentMode = this.state.mode;
   }
 
   componentWillMount() {
-    this.setState({
-      formData: {
-        id: this.props.id,
-        title: this.props.title,
-        description: this.props.description,
-        target: this.props.target,
-        option: this.props.option
-      }
-    },
-    () => {
-      this._initialState = Object.assign({}, this.state);
-      this._initialState.formData = Object.assign({}, this.state.formData);
-      this._initialState.formData.option = Object.assign({}, this.state.formData.option);
-      this._currentMode = this.state.mode;
-      this._currentVisibility = Object.assign({}, this.state.visibility);
-    });
   }
 
   render() {
