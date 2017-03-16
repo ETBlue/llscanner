@@ -31,9 +31,7 @@ class App extends Component {
       target: "",
       option: {}
     };
-    this._renderCurrentQuiz = this._renderCurrentQuiz.bind(this);
     this._addNewQuiz = this._addNewQuiz.bind(this);
-    this._renderNewQuiz = this._renderNewQuiz.bind(this);
     this._inputRefQuiz = this._inputRefQuiz.bind(this); // 將編輯人員填入的表單資料放到暫存區
     this._renderMode = this._renderMode.bind(this); // 切換編輯模式
     this._toggle = this._toggle.bind(this); // 切換編輯模式
@@ -59,6 +57,28 @@ class App extends Component {
   }
 
   render() {
+
+    let currentQuizJSX;
+    const quiz = this.state.quiz;
+    if (quiz) {
+      currentQuizJSX = Object.keys(quiz).map( (quizitem) => {
+        const item = quiz[quizitem];
+        return (
+          <Quiz key={item.id} {...item} />
+        )
+      })
+    }
+
+    let newQuizJSX = (
+      <div className="NewQuiz ui basic segment">
+        <div className="new ui segment">
+          <form ref="form" className="Form ui form">
+            <QuizForm header="新問題" reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
+          </form>
+        </div>
+      </div>
+    );
+
     return (
       <div className="App">
         <header className="App-header ui center aligned basic inverted segment">
@@ -73,10 +93,10 @@ class App extends Component {
         <section className="App-body">
           <Button onClick={this._toggle} icon="add" color="" className="" title="" />
           <div className={this.state.visibility.currentQuiz + " toggleAppMode"}>
-            {this._renderCurrentQuiz()}
+            { currentQuizJSX }
           </div>
           <div className={this.state.visibility.newQuiz + " toggleAppMode"}>
-            {this._renderNewQuiz()}
+            { newQuizJSX }
           </div>
           {/*'<div className="auth"></div>'*/}
         </section>
@@ -88,35 +108,9 @@ class App extends Component {
     this.firebaseData.off();
   }
 
-  _renderCurrentQuiz() {
-    const quiz = this.state.quiz;
-    if (quiz) {
-      return (
-        Object.keys(quiz).map( (quizitem) => {
-          const item = quiz[quizitem];
-          return (
-            <Quiz key={item.id} {...item} />
-          )
-        })
-      );
-    }
-  }
-
   _addNewQuiz() {
     this._currentMode = "newQuizMode";
     this._renderMode();
-  }
-
-  _renderNewQuiz() {
-    return(
-      <div className="NewQuiz ui basic segment">
-        <div className="new ui segment">
-          <form ref="form" className="Form ui form">
-            <QuizForm header="新問題" reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
-          </form>
-        </div>
-      </div>
-    )
   }
 
   _inputRefQuiz(target, id, key, value) {

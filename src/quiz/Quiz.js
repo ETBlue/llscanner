@@ -36,10 +36,6 @@ class Quiz extends Component {
     };
 
     this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
-    this._renderOption = this._renderOption.bind(this); // 選項介面
-
-    this._renderOptionForm = this._renderOptionForm.bind(this); // 選項的編輯表單介面
-    this._renderNewOptionForm = this._renderNewOptionForm.bind(this); // 新增選項的編輯表單介面
     this._addNewOption = this._addNewOption.bind(this); // 新增選項
     this._deleteOption = this._deleteOption.bind(this); // 刪除選項
     this._inputRefQuiz = this._inputRefQuiz.bind(this); // 將編輯人員填入的表單資料放到暫存區
@@ -65,6 +61,45 @@ class Quiz extends Component {
   }
 
   render() {
+
+    let currentOptionJSX;
+    let currentOptionFormJSX;
+
+    const option = this.state.formData.option;
+    if (option) {
+
+      currentOptionJSX = Object.keys(option).map( (optionItem) => {
+        const item = option[optionItem];
+        let className = "";
+        if (this.state.answer === item.id) {
+          className = "active";
+        } else {
+          className = "";
+        }
+        return (
+          <Option className={className} onClick={this._setAnswer} key={item.id} {...item} />
+        )
+      });
+
+      currentOptionFormJSX = Object.keys(option).map( (key) => {
+        const item = option[key];
+        this._formDataOption[key] = {};
+        return (
+          <OptionForm key={key} header="編輯選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataOption" id={key} item={item} />
+        )
+      })
+
+    }
+
+    let newOptionFormJSX = (
+      Object.keys(this.state.newOption).map((key) => {
+        const item = this.state.newOption[key];
+        return (
+          <OptionForm key={key} header="新選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataNewOption" id={key} item={item} />
+        )
+      })
+    );
+
     return (
       <section className="Quiz">
         <div className="Question ui center aligned basic segment">
@@ -75,7 +110,7 @@ class Quiz extends Component {
             {this.props.description}
           </p>
           <div className="ui vertical fluid basic buttons">
-          {this._renderOption()}
+          { currentOptionJSX }
           </div>
           <hr className="ui hidden divider" />
           <Action viewQuiz={this.state.visibility.viewQuiz} editQuiz={this.state.visibility.editQuiz} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
@@ -88,8 +123,8 @@ class Quiz extends Component {
                 <QuizForm header="編輯問題" reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
               </div>
               <div className="column">
-                {this._renderOptionForm()}
-                {this._renderNewOptionForm()}
+                { currentOptionFormJSX }
+                { newOptionFormJSX }
                 <Button onClick={this._addNewOption} icon="add" color="green" className="mini labeled" title="新增選項" />
               </div>
             </div>
@@ -100,52 +135,6 @@ class Quiz extends Component {
         </div>
       </section>
     );
-  }
-
-  _renderOption() {
-    const option = this.state.formData.option;
-    if (option) {
-      return (
-        Object.keys(option).map( (optionItem) => {
-          const item = option[optionItem];
-          let className = "";
-          if (this.state.answer === item.id) {
-            className = "active";
-          } else {
-            className = "";
-          }
-          return (
-            <Option className={className} onClick={this._setAnswer} key={item.id} {...item} />
-          )
-        })
-      );
-    }
-  }
-
-  _renderOptionForm() {
-    const option = this.state.formData.option;
-    if (option) {
-      return (
-        Object.keys(option).map( (key) => {
-          const item = option[key];
-          this._formDataOption[key] = {};
-          return (
-            <OptionForm key={key} header="編輯選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataOption" id={key} item={item} />
-          )
-        })
-      );
-    }
-  }
-
-  _renderNewOptionForm() {
-    return (
-      Object.keys(this.state.newOption).map((key) => {
-        const item = this.state.newOption[key];
-        return (
-          <OptionForm key={key} header="新選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataNewOption" id={key} item={item} />
-        )
-      })
-    )
   }
 
   _inputRefQuiz(target, id, key, value) {
