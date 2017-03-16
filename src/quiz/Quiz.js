@@ -6,6 +6,7 @@ import Action from './Action';
 import Button from './Button';
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
+import toggleMode from '../_toggleMode';
 import './Quiz.css';
 
 class Quiz extends Component {
@@ -206,11 +207,8 @@ class Quiz extends Component {
   }
 
   _toggle() {
-    if (this._currentMode === "viewQuizMode") {
-      this._currentMode = "editQuizMode";
-    } else {
-      this._currentMode = "viewQuizMode";
-    };
+
+    this._currentMode = toggleMode(this._currentMode, "viewQuizMode", "editQuizMode");
     this._renderMode();
   }
 

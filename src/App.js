@@ -5,6 +5,8 @@ import firebase from 'firebase';
 import Quiz from './quiz/Quiz';
 import QuizForm from './quiz/QuizForm';
 import Button from './quiz/Button';
+import toggleMode from './_toggleMode';
+import './App.css';
 
 class App extends Component {
 
@@ -119,11 +121,7 @@ class App extends Component {
   }
 
   _toggle() {
-    if (this._currentMode === "currentQuizMode") {
-      this._currentMode = "newQuizMode";
-    } else {
-      this._currentMode = "currentQuizMode";
-    };
+    this._currentMode = toggleMode(this._currentMode, "currentQuizMode", "newQuizMode");
     this._renderMode();
   }
 
