@@ -7,6 +7,7 @@ import Button from './Button';
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
 import toggleMode from '../_toggleMode';
+import setModeToState from '../_setModeToState';
 import './Quiz.css';
 
 class Quiz extends Component {
@@ -202,25 +203,10 @@ class Quiz extends Component {
   _toggle() {
 
     this._currentMode = toggleMode(this._currentMode, "viewQuizMode", "editQuizMode");
-    this._renderMode();
-  }
 
-  _renderMode() {
-    if (this._currentMode !== this.state.mode ) {
-      Object.keys(this._currentVisibility).forEach((key) => {
-        this._currentVisibility[key] = "hidden";
-      });
-      this._modeSettings[this._currentMode].forEach((item) => {
-        this._currentVisibility[item] = "visible";
-      });
-      this.setState((prevState, props) => {
-        return {
-          mode: this._currentMode,
-          visibility: this._currentVisibility
-        };
-      });
-    }
-
+    this.setState((prevState, props) => {
+      return setModeToState(this._currentMode, this.state.mode, this._currentVisibility, this._modeSettings);
+    });
   }
 
   _save() {

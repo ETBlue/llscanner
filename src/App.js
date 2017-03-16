@@ -6,6 +6,7 @@ import Quiz from './quiz/Quiz';
 import QuizForm from './quiz/QuizForm';
 import Button from './quiz/Button';
 import toggleMode from './_toggleMode';
+import setModeToState from './_setModeToState';
 import './App.css';
 
 class App extends Component {
@@ -33,7 +34,6 @@ class App extends Component {
     };
     this._addNewQuiz = this._addNewQuiz.bind(this);
     this._inputRefQuiz = this._inputRefQuiz.bind(this); // 將編輯人員填入的表單資料放到暫存區
-    this._renderMode = this._renderMode.bind(this); // 切換編輯模式
     this._toggle = this._toggle.bind(this); // 切換編輯模式
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
 
@@ -110,7 +110,9 @@ class App extends Component {
 
   _addNewQuiz() {
     this._currentMode = "newQuizMode";
-    this._renderMode();
+    this.setState((prevState, props) => {
+      return setModeToState(this._currentMode, this.state.mode, this._currentVisibility, this._modeSettings);
+    });
   }
 
   _inputRefQuiz(target, id, key, value) {
@@ -119,16 +121,11 @@ class App extends Component {
 
   _toggle() {
     this._currentMode = toggleMode(this._currentMode, "currentQuizMode", "newQuizMode");
-    this._renderMode();
+    this.setState((prevState, props) => {
+      return setModeToState(this._currentMode, this.state.mode, this._currentVisibility, this._modeSettings);
+    });
   }
 
-  _renderMode() {
-    if (this._currentMode !== this.state.mode ) {
-      Object.keys(this._currentVisibility).forEach((key) => {
-        this._currentVisibility[key] = "hidden";
-      });
-      this._modeSettings[this._currentMode].forEach((item) => {
-        this._currentVisibility[item] = "visible";
       });
       this.setState((prevState, props) => {
         return {
