@@ -47,8 +47,11 @@ class App extends Component {
   componentWillMount() {
     const data = firebase.database().ref().child('quiz');
     data.on('value', snapshot => {
-      this.setState({
-        quiz: snapshot.val()
+      this.setState((prevState, props) => {
+        return { quiz: snapshot.val() };
+      }, () => {
+        console.log(this.state);
+        this.render();
       });
     });
     this._currentMode = this.state.mode;
@@ -133,12 +136,40 @@ class App extends Component {
       this._modeSettings[this._currentMode].forEach((item) => {
         this._currentVisibility[item] = "visible";
       });
-      this.setState({
-        mode: this._currentMode,
-        visibility: this._currentVisibility
+      this.setState((prevState, props) => {
+        return {
+          mode: this._currentMode,
+          visibility: this._currentVisibility
+        };
       });
     }
   }
+    this.setState((prevState, props) => {
+      return {
+        answer: null,
+        mode: "view",
+        viewMode: "visible", 
+        editMode: "hidden",
+        formData: {
+          id: quizData.id,
+          title: quizData.title,
+          description: quizData.description,
+          target: quizData.target,
+          option: optionData
+        },
+        newOption: {},
+      };
+    },
+    () => {
+      this._initialState = Object.assign({}, this.state);
+      this._initialState.formData = Object.assign({}, this.state.formData);
+      this._initialState.formData.option = Object.assign({}, this.state.formData.option);
+      this._formDataQuiz = {};
+      this._formDataOption = {};
+      this._formDataNewOption = {};
+    });
+  }
+
 }
 
 export default App;

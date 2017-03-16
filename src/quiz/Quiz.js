@@ -168,7 +168,9 @@ class Quiz extends Component {
       title: null,
       value: null
     };
-    this.setState({newOption: newOptionData});
+    this.setState((prevState, props) => {
+      return {newOption: newOptionData};
+    });
     this._formDataNewOption[id] = {};
   }
 
@@ -179,12 +181,16 @@ class Quiz extends Component {
 
     let formData = this.state.formData;
     delete formData.option[id];
-    this.setState({formData: formData});
+    this.setState((prevState, props) => {
+      return {formData: formData};
+    });
     delete this._formDataOption[id];
 
     let newOptionData = Object.assign({}, this.state.newOption);
     delete newOptionData[id];
-    this.setState({newOption: newOptionData});
+    this.setState((prevState, props) => {
+      return {newOption: newOptionData};
+    });
     delete this._formDataNewOption[id];
   }
 
@@ -194,9 +200,13 @@ class Quiz extends Component {
     const id = event.currentTarget.getAttribute("data-answer");
 
     if (this.state.answer === id) {
-      this.setState({answer: null});
+      this.setState((prevState, props) => {
+        return {answer: null};
+      });
     } else {
-      this.setState({answer: id});
+      this.setState((prevState, props) => {
+        return {answer: id};
+      });
     }
   }
 
@@ -214,9 +224,11 @@ class Quiz extends Component {
       this._modeSettings[this._currentMode].forEach((item) => {
         this._currentVisibility[item] = "visible";
       });
-      this.setState({
-        mode: this._currentMode,
-        visibility: this._currentVisibility
+      this.setState((prevState, props) => {
+        return {
+          mode: this._currentMode,
+          visibility: this._currentVisibility
+        };
       });
     }
 
@@ -293,7 +305,9 @@ class Quiz extends Component {
   _refresh() {
 
     ReactDOM.findDOMNode(this.refs.form).reset();
-    this.setState(this._initialState, () => {
+    this.setState((prevState, props) => {
+      return this._initialState;
+    }, () => {
       this._toggle();
       this._formDataQuiz = {};
       this._formDataOption = {};
