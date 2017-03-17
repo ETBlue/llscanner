@@ -7,7 +7,7 @@ import Button from './Button';
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
 import toggleMode from '../_toggleMode';
-import setModeToState from '../_setModeToState';
+
 import './Quiz.css';
 
 class Quiz extends Component {
@@ -35,6 +35,8 @@ class Quiz extends Component {
       viewQuizMode: ["viewQuiz"],
       editQuizMode: ["editQuiz"]
     };
+
+    this._modes = ["view", "edit"];
 
     this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
     this._addNewOption = this._addNewOption.bind(this); // 新增選項
@@ -117,7 +119,7 @@ class Quiz extends Component {
           <Action viewQuiz={this.state.visibility.viewQuiz} editQuiz={this.state.visibility.editQuiz} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         <div className="FormWrapper basic ui segment">
-        <div className={"edit ui bottom attached segment " + this.state.visibility.editQuiz}>
+        <div className={"edit ui bottom attached segment " + (editMode)}>
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
@@ -131,7 +133,7 @@ class Quiz extends Component {
             </div>
           </form>
           <hr className="ui divider" />
-          <Action viewQuiz={this.state.visibility.viewQuiz} editQuiz={this.state.visibility.editQuiz} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
+          <Action view={viewMode} edit={editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         </div>
       </section>
@@ -202,10 +204,8 @@ class Quiz extends Component {
 
   _toggle() {
 
-    this._currentMode = toggleMode(this._currentMode, "viewQuizMode", "editQuizMode");
-
     this.setState((prevState, props) => {
-      return setModeToState(this._currentMode, this.state.mode, this._currentVisibility, this._modeSettings);
+      return {mode: toggleMode(prevState.mode, ...this._modes)};
     });
   }
 
@@ -233,6 +233,7 @@ class Quiz extends Component {
         optionData[option.id.value][index] = option[index].value;
       });
     });
+    this._toggle();
 
     firebase.database().ref('quiz/' + this.props.id).set({
       id: quizData.id,

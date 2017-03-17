@@ -6,7 +6,6 @@ import Quiz from './quiz/Quiz';
 import QuizForm from './quiz/QuizForm';
 import Button from './quiz/Button';
 import toggleMode from './_toggleMode';
-import setModeToState from './_setModeToState';
 import './App.css';
 
 class App extends Component {
@@ -111,7 +110,7 @@ class App extends Component {
   _addNewQuiz() {
     this._currentMode = "newQuizMode";
     this.setState((prevState, props) => {
-      return setModeToState(this._currentMode, this.state.mode, this._currentVisibility, this._modeSettings);
+      return {mode: this._currentMode};
     });
   }
 
@@ -122,7 +121,7 @@ class App extends Component {
   _toggle() {
     this._currentMode = toggleMode(this._currentMode, "currentQuizMode", "newQuizMode");
     this.setState((prevState, props) => {
-      return setModeToState(this._currentMode, this.state.mode, this._currentVisibility, this._modeSettings);
+      return {mode: this._currentMode};
     });
   }
 
