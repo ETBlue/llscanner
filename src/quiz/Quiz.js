@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import ReactDOM from 'react-dom';
+
 import Option from './Option';
 import Action from './Action';
 import Button from './Button';
