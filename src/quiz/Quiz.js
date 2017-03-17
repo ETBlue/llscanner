@@ -6,6 +6,7 @@ import Action from './Action';
 import Button from './Button';
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
+
 import toggleMode from '../_toggleMode';
 
 import './Quiz.css';
@@ -15,93 +16,80 @@ class Quiz extends Component {
   constructor(props) {
 
     super(props);
+
     this.state = {
       answer: null, // 使用者選擇的答案
-      mode: "viewQuizMode", // 一開始的顯示模式
-      visibility: {
-        viewQuiz: "visible", // 瀏覽模式元件的顯示狀態
-        editQuiz: "hidden" // 編輯模式元件的顯示狀態
-      },
-      formData: { // 準備送出的表單資料
+      mode: "view", // 一開始的顯示模式
+      quizData: { // 準備送出的表單資料
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
-        target: this.props.target,
-        option: this.props.option
+        target: this.props.target
       },
-      newOption: {}, // 準備送出的表單資料中的新增部分
-    };
-    this._modeSettings = {
-      viewQuizMode: ["viewQuiz"],
-      editQuizMode: ["editQuiz"]
+      optionData: this.props.option
     };
 
     this._modes = ["view", "edit"];
 
     this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
-    this._addNewOption = this._addNewOption.bind(this); // 新增選項
-    this._deleteOption = this._deleteOption.bind(this); // 刪除選項
-    this._inputRefQuiz = this._inputRefQuiz.bind(this); // 將編輯人員填入的表單資料放到暫存區
-    this._inputRefOption = this._inputRefOption.bind(this); // 將編輯人員填入的表單資料放到暫存區
+
+    this._onInputChange = this._onInputChange.bind(this); // 刪除本題
+    this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
+    this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
     this._toggle = this._toggle.bind(this); // 切換編輯模式
     this._refresh = this._refresh.bind(this); // 取消編輯到一半的資料
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
-    this._delete = this._delete.bind(this); // 刪除本題
 
-    this._formDataQuiz = {}; // 從表單讀入的資料暫存區，第一層
-    this._formDataOption = {}; // 從表單讀入的資料暫存區，第二層，原本的選項
-    this._formDataNewOption = {}; // 從表單讀入的資料暫存區，第二層，新增的選項
+    this._initialQuizData = {
+        id: this.props.id,
+        title: this.props.title,
+        description: this.props.description,
+        target: this.props.target
+    };
+    this._initialOptionData = this._compileOption(this.props.option);
 
-    this._initialState = Object.assign({}, this.state);
-    this._initialState.formData = Object.assign({}, this.state.formData);
-    this._initialState.formData.option = Object.assign({}, this.state.formData.option);
-    this._initialFormState = Object.assign({}, this.state);
-    this._currentVisibility = Object.assign({}, this.state.visibility);
-    this._currentMode = this.state.mode;
   }
 
   componentWillMount() {
   }
 
+  componentWillReceiveProps(nextProps) {
+    this._initialQuizData = {
+        id: nextProps.id,
+        title: nextProps.title,
+        description: nextProps.description,
+        target: nextProps.target
+    };
+    this._initialOptionData = this._compileOption(nextProps.option);
+  }
+
   render() {
 
-    let currentOptionJSX;
-    let currentOptionFormJSX;
+    const viewMode = this.state.mode === "view" ? "visible" : "hidden";
+    const editMode = this.state.mode === "edit" ? "visible" : "hidden";
+    
+    let optionListJSX;
+    let optionFormJSX;
+    const option = this.state.optionData;
 
-    const option = this.state.formData.option;
     if (option) {
 
-      currentOptionJSX = Object.keys(option).map( (optionItem) => {
-        const item = option[optionItem];
-        let className = "";
-        if (this.state.answer === item.id) {
-          className = "active";
-        } else {
-          className = "";
-        }
+      optionListJSX = Object.keys(option).map( (key) => {
+        const item = option[key];
+        const className = this.state.answer === key ? "active" : "";
         return (
-          <Option className={className} onClick={this._setAnswer} key={item.id} {...item} />
+          <Option key={key} className={className} {...item} onClick={this._setAnswer} />
         )
       });
 
-      currentOptionFormJSX = Object.keys(option).map( (key) => {
+      optionFormJSX = Object.keys(option).map( (key) => {
         const item = option[key];
-        this._formDataOption[key] = {};
         return (
-          <OptionForm key={key} header="編輯選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataOption" id={key} item={item} />
+          <OptionForm key={key} number={key} {...item} header="編輯選項" onDelete={this._onOptionDelete} onChange={this._onInputChange} />
         )
       })
 
     }
-
-    let newOptionFormJSX = (
-      Object.keys(this.state.newOption).map((key) => {
-        const item = this.state.newOption[key];
-        return (
-          <OptionForm key={key} header="新選項" onDelete={this._deleteOption} reference={this._inputRefOption} target="_formDataNewOption" id={key} item={item} />
-        )
-      })
-    );
 
     return (
       <section className="Quiz">
@@ -113,22 +101,21 @@ class Quiz extends Component {
             {this.props.description}
           </p>
           <div className="ui vertical fluid basic buttons">
-          { currentOptionJSX }
+          { optionListJSX }
           </div>
           <hr className="ui hidden divider" />
-          <Action viewQuiz={this.state.visibility.viewQuiz} editQuiz={this.state.visibility.editQuiz} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
+          <Action view={viewMode} edit={editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         <div className="FormWrapper basic ui segment">
         <div className={"edit ui bottom attached segment " + (editMode)}>
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
-                <QuizForm header="編輯問題" reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
+                <QuizForm {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
               </div>
               <div className="column">
-                { currentOptionFormJSX }
-                { newOptionFormJSX }
-                <Button onClick={this._addNewOption} icon="add" color="green" className="mini labeled" title="新增選項" />
+                { optionFormJSX }
+                <Button onClick={this._onOptionAdd} icon="add" color="green" className="mini labeled" title="新增選項" />
               </div>
             </div>
           </form>
@@ -140,66 +127,104 @@ class Quiz extends Component {
     );
   }
 
-  _inputRefQuiz(target, id, key, value) {
-    this[target][key] = value;
+  _compileOption(optionData) {
+    let data = Object.assign({}, optionData);
+    Object.keys(optionData).forEach((key) => {
+      data[key] = {};
+      Object.keys(optionData[key]).forEach((field) => {
+        data[key][field] = optionData[key][field];
+      });
+    });
+    return data;
   }
 
-  _inputRefOption(target, id, key, value) {
-    if (this[target][id]) {
-      this[target][id][key] = value;
+  _onInputChange(event) {
+
+    const target = event.target;
+
+    const title = target.title;
+    const id = target.id;
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
+
+    if (title === "quiz") {
+      this.setState((prevState, props) => {
+        prevState.quizData[name] = value;
+        return {quizData: prevState.quizData};
+      });
     }
+
+    if (title === "option") {
+
+      if (name === "id" ) {
+        if (!value) { // id 欄位清空時，不動 key
+          this.setState((prevState, props) => {
+            const data = this._compileOption(prevState.optionData);
+
+            data[number].id = value;
+            return {optionData: data};
+          });
+        } else {
+          this.setState((prevState, props) => {
+            const data = this._compileOption(prevState.optionData);
+
+            if ( data[value] ) { // id 欄位與其他 option 重複時，不動 key
+              data[number].id = id;
+              return {optionData: data};
+
+            } else { // id 欄位合法變更時，改 key
+              const optionOrphan = Object.assign({}, data[number]);
+              delete data[number];
+              data[value] = optionOrphan;
+              data[value].id = value;
+              return {optionData: data};
+            }
+          });
+        }
+
+      } else {
+        this.setState((prevState, props) => {
+          const data = this._compileOption(prevState.optionData);
+
+          data[id][name] = value;
+          return {optionData: data};
+        });
+      }
+    }
+
   }
 
-  _addNewOption() {
-    const oldOptionIDs = Object.keys(this.state.formData.option);
-    const newOptionIDs = Object.keys(this.state.newOption);
-    const id = Math.max(Math.max(...oldOptionIDs), Math.max(...newOptionIDs)) + 1;
-    let newOptionData = Object.assign({}, this.state.newOption);
-    newOptionData[id] = {
-      id: id,
-      title: null,
-      value: null
-    };
+  _onOptionDelete(event) {
+
+    const id = event.target.id;
+
     this.setState((prevState, props) => {
-      return {newOption: newOptionData};
+      delete prevState.optionData[id];
+      return {optionData: prevState.optionData};
     });
-    this._formDataNewOption[id] = {};
+
   }
 
-  _deleteOption(event) {
-    event.preventDefault();
+  _onOptionAdd() {
 
-    const id = event.currentTarget.getAttribute("data-optionid");
-
-    let formData = this.state.formData;
-    delete formData.option[id];
     this.setState((prevState, props) => {
-      return {formData: formData};
+      let optionData = prevState.optionData;
+      const id = Math.max(...Object.keys(optionData)) + 1;
+      optionData[id] = {id: id, title: "", value: ""};
+      return {optionData: optionData};
     });
-    delete this._formDataOption[id];
 
-    let newOptionData = Object.assign({}, this.state.newOption);
-    delete newOptionData[id];
-    this.setState((prevState, props) => {
-      return {newOption: newOptionData};
-    });
-    delete this._formDataNewOption[id];
   }
 
   _setAnswer(event) {
-    event.preventDefault();
 
-    const id = event.currentTarget.getAttribute("data-answer");
+    const id = event.target.getAttribute("data-answer");
 
-    if (this.state.answer === id) {
-      this.setState((prevState, props) => {
-        return {answer: null};
-      });
-    } else {
-      this.setState((prevState, props) => {
-        return {answer: id};
-      });
-    }
+    this.setState((prevState, props) => {
+      console.log(id);
+      return prevState.answer === id ? {answer: null} : {answer: id};
+    });
   }
 
   _toggle() {
@@ -211,85 +236,25 @@ class Quiz extends Component {
 
   _save() {
 
-    let quizData = {};
-    let optionData = {};
-
-    Object.keys(this._formDataQuiz).forEach((key) => {
-      quizData[key] = this._formDataQuiz[key].value;
-    });
-
-    Object.keys(this._formDataOption).forEach((key) => {
-      const option = this._formDataOption[key];
-      optionData[option.id.value] = {};
-      Object.keys(option).forEach((index) => {
-        optionData[option.id.value][index] = option[index].value;
-      });
-    });
-
-    Object.keys(this._formDataNewOption).forEach((key) => {
-      const option = this._formDataNewOption[key];
-      optionData[option.id.value] = {};
-      Object.keys(option).forEach((index) =>{
-        optionData[option.id.value][index] = option[index].value;
-      });
-    });
     this._toggle();
 
     firebase.database().ref('quiz/' + this.props.id).set({
-      id: quizData.id,
-      title: quizData.title,
-      description: quizData.description,
-      target: quizData.target,
-      option: optionData
+      id: this.state.quizData.id,
+      title: this.state.quizData.title,
+      description: this.state.quizData.description,
+      target: this.state.quizData.target,
+      option: this.state.optionData
     });
-
-    this.setState({
-      answer: null,
-      mode: "viewQuizMode", // 一開始的顯示模式
-      visibility: {
-        viewQuiz: "visible", // 瀏覽模式元件的顯示狀態
-        editQuiz: "hidden" // 編輯模式元件的顯示狀態
-      },
-      formData: {
-        id: quizData.id,
-        title: quizData.title,
-        description: quizData.description,
-        target: quizData.target,
-        option: optionData
-      },
-      newOption: {},
-    },
-    () => {
-      this._initialState = Object.assign({}, this.state);
-      this._initialState.formData = Object.assign({}, this.state.formData);
-      this._initialState.formData.option = Object.assign({}, this.state.formData.option);
-      this._formDataQuiz = {};
-      this._formDataOption = {};
-      this._formDataNewOption = {};
-      this._currentMode = this.state.mode;
-      this._currentVisibility = Object.assign({}, this.state.visibility);
-    });
-  }
-
-  _delete(event) {
-//    event.preventDefault();
-//
-//    // TODO: firebase delete
-//    this._toggle();
   }
 
   _refresh() {
 
-    ReactDOM.findDOMNode(this.refs.form).reset();
     this.setState((prevState, props) => {
-      return this._initialState;
-    }, () => {
-      this._toggle();
-      this._formDataQuiz = {};
-      this._formDataOption = {};
-      this._formDataNewOption = {};
-      this._currentMode = this.state.mode;
-      this._currentVisibility = Object.assign({}, this.state.visibility);
+      const data = this._compileOption(this._initialOptionData);
+      return {
+        quizData: Object.assign({} , this._initialQuizData),
+        optionData: data
+      };
     });
   }
 }
