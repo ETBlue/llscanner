@@ -19,7 +19,7 @@ class Quiz extends Component {
 
     this.state = {
       answer: this.props.answer, // 使用者選擇的答案
-      mode: "view", // 一開始的顯示模式
+      mode: this.props.mode, // 一開始的顯示模式
       quizData: { // 準備送出的表單資料
         id: this.props.id,
         title: this.props.title,

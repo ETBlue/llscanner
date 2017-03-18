@@ -1,5 +1,6 @@
 .OptionForm {
   position: relative;
+  text-align: left;
 }
 
 .OptionForm .right.top.floated.icon.labeled {

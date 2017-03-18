@@ -26,20 +26,18 @@ class App extends Component {
       quiz: {},
       answer: {},
       mode: "view",
-      new: {}
+      new: {
+        id: "",
+        title: "",
+        description: "",
+        target: ""
+      }
     };
 
     this._modes = ["view", "new"];
 
-    this._quizDefault = {
-      id: "",
-      title: "",
-      description: "",
-      target: "",
-      option: {}
-    };
-
     this._onQuizAdd = this._onQuizAdd.bind(this);
+    this._onInputChange = this._onInputChange.bind(this); // 切換編輯模式
     this._toggle = this._toggle.bind(this); // 切換編輯模式
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
 
@@ -61,47 +59,85 @@ class App extends Component {
 
   render() {
 
+    const HomePage = () => {
+      return (
+        <p>wahahahaha</p>
+        );
+    }
+
     const QuizListPage = () => {
 
-      let currentQuizJSX;
+      let quizListJSX;
 
       const quiz = this.state.quiz;
-      const answer = this.state.answer;
 
       if (quiz) {
-        currentQuizJSX = Object.keys(quiz).map( (id) => {
+        quizListJSX = Object.keys(quiz).map( (id) => {
           const item = quiz[id];
           return (
-            <Quiz key={item.id} answer={answer[item.id]} {...item} />
+            <tr key={id}>
+              <td>{id}</td>
+              <td>
+                <Link key={id} to={"/quiz/" + id}>{item.title}</Link>
+              </td>
+              <td>{item.target}</td>
+            </tr>
           )
         })
       }
 
       return (
-        <div>
-          <Link to="/quiz/new" className="ui icon button" >
-            <i className="icon add" />
-          </Link>
-          { currentQuizJSX }
+        <div className="QuizListPage ui basic segment">
+          <table className="ui striped table">
+            <thead>
+              <tr>
+                <th>編號</th>
+                <th>問題</th>
+                <th>標的</th>
+              </tr>
+            </thead>
+            <tbody>
+            { quizListJSX }
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colSpan={3} className="right aligned">
+                  <Link to="/quiz/new" className="ui icon labeled button" >
+                    <i className="icon add" />
+                    New Quiz
+                  </Link>
+                </th>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       );
     }
 
-    const QuizPage = (match) => {
+    const QuizPage = (params) => {
 
-      const id = match.params.id;
+      const id = params.id;
+      const action = params.action;
       const quiz = this.state.quiz;
       const answer = this.state.answer;
 
-      console.log(quiz[id]);
-
       if (quiz[id]) {
-        return (
-          <Quiz key={id} answer={answer[id]} {...quiz[id]} />
-        );
+
+        if (action) {
+          return (
+            <Quiz key={id} answer={answer[id]} mode="edit" {...quiz[id]} />
+          );
+        } else {
+          return (
+            <Quiz key={id} answer={answer[id]} mode="view" {...quiz[id]} />
+          );
+        }
       } else {
-        return (<div></div>);
+        return (
+          <QuizListPage />
+        );
       }
+
     }
 
     const NewQuizPage = () => {
@@ -109,7 +145,12 @@ class App extends Component {
         <div className="NewQuiz ui basic segment">
           <div className="new ui segment">
             <form ref="form" className="Form ui form">
-              <QuizForm header="新問題" onChange={this._onInputChange} reference={this._inputRefQuiz} target="_formDataQuiz" data={this.props} />
+              <QuizForm {...this.state.new} header="新問題" onChange={this._onInputChange} />
+              <hr className="ui divider" />
+              <Link to="/quiz" onClick={this._save} className="ui icon labeled olive button">
+                <i className="icon checkmark" />
+                送出
+              </Link>
             </form>
           </div>
         </div>
@@ -135,9 +176,8 @@ class App extends Component {
             </nav>
           </header>
           <section className="App-body">
-            <Route exact path="/" render={QuizPage} />
-            <Route exact path="/quiz" render={QuizListPage} />
-            <Route exact path="/quiz/:id" render={({match}) => (QuizPage(match) || QuizListPage)} />
+            <Route exact path="/" render={HomePage} />
+            <Route path="/quiz/:id?/:action?" render={({match}) => (QuizPage(match.params) || QuizListPage)} />
             <Route path="/quiz/new" render={NewQuizPage} />
             <Route path="/answer" render={() => <p>answer</p>} />
 
@@ -149,7 +189,20 @@ class App extends Component {
     );
   }
 
-  _onInputChange(){
+  _onInputChange(event) {
+
+    const target = event.target;
+
+    const name = target.name;
+    let value = target.type === 'checkbox' ? target.checked : target.value;
+
+    this.setState((prevState, props) => {
+      if (name === "id" && prevState.quiz[name]){
+        value = "";
+      }
+      prevState.new[name] = value;
+      return {new: prevState.new};
+    });
 
   }
 
@@ -170,10 +223,28 @@ class App extends Component {
     });
   }
 
-  _save(event) {
+  _save() {
 
-    firebase.database().ref('quiz/' + this.props.id).set(this.state.new, () => {
-      this.setState({new: {}});
+
+    this.setState((prevState, props) => {
+      let quiz = prevState.quiz;
+      quiz[prevState.new.id] = {
+        id: prevState.new.id,
+        title: prevState.new.title,
+        description: prevState.new.description,
+        target: prevState.new.target,
+      };
+      console.log(quiz);
+      firebase.database().ref('quiz').set(quiz);
+      return {
+        quiz: quiz,
+        new: {
+          id: "",
+          title: "",
+          description: "",
+          target: ""
+        }
+      }
     });
 
   }

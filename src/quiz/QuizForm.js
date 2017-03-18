@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import Input from './Input';
+import './QuizForm.css';
 
 class QuizForm extends Component {
 
   render() {
     let inputJSX;
     if (this.props.lockID) {
-      inputJSX = <Input label="ID" title="quiz" disabled id={this.props.id} name="id" onChange={this.props.onChange} placeholder="本題的代號" default={this.props.id} />;
+      inputJSX = <Input label="ID" title="quiz" disabled id={this.props.id} name="id" onChange={this.props.onChange} placeholder="本題的編號" default={this.props.id} />;
     } else {
-      inputJSX = <Input label="ID" title="quiz" id={this.props.id} name="id" onChange={this.props.onChange} placeholder="本題的代號" default={this.props.id} />;
+      inputJSX = <Input label="ID" title="quiz" id={this.props.id} name="id" onChange={this.props.onChange} placeholder="本題的編號" default={this.props.id} />;
     }
     return (
       <div className="QuizForm">
