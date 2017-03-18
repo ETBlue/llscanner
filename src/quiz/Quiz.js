@@ -18,7 +18,7 @@ class Quiz extends Component {
     super(props);
 
     this.state = {
-      answer: null, // 使用者選擇的答案
+      answer: this.props.answer, // 使用者選擇的答案
       mode: "view", // 一開始的顯示模式
       quizData: { // 準備送出的表單資料
         id: this.props.id,
@@ -41,10 +41,10 @@ class Quiz extends Component {
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
 
     this._initialQuizData = {
-        id: this.props.id,
-        title: this.props.title,
-        description: this.props.description,
-        target: this.props.target
+      id: this.props.id,
+      title: this.props.title,
+      description: this.props.description,
+      target: this.props.target
     };
     this._initialOptionData = this._compileOption(this.props.option);
 
@@ -76,7 +76,7 @@ class Quiz extends Component {
 
       optionListJSX = Object.keys(option).map( (key) => {
         const item = option[key];
-        const className = this.state.answer === key ? "active" : "";
+        const className = this.state.answer === item.value ? "active" : "";
         return (
           <Option key={key} className={className} {...item} onClick={this._setAnswer} />
         )
@@ -111,7 +111,7 @@ class Quiz extends Component {
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
-                <QuizForm {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
+                <QuizForm lockID="true" {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
               </div>
               <div className="column">
                 { optionFormJSX }
@@ -128,6 +128,7 @@ class Quiz extends Component {
   }
 
   _compileOption(optionData) {
+    if (optionData) {
     let data = Object.assign({}, optionData);
     Object.keys(optionData).forEach((key) => {
       data[key] = {};
@@ -136,6 +137,7 @@ class Quiz extends Component {
       });
     });
     return data;
+    }
   }
 
   _onInputChange(event) {
@@ -149,25 +151,26 @@ class Quiz extends Component {
     const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
 
     if (title === "quiz") {
+
       this.setState((prevState, props) => {
         prevState.quizData[name] = value;
         return {quizData: prevState.quizData};
       });
+
     }
 
     if (title === "option") {
 
-      if (name === "id" ) {
-        if (!value) { // id 欄位清空時，不動 key
-          this.setState((prevState, props) => {
-            const data = this._compileOption(prevState.optionData);
+      this.setState((prevState, props) => {
+        const data = this._compileOption(prevState.optionData);
 
+        if (name === "id" ) {
+  
+          if (!value) { // id 欄位清空時，不動 key
             data[number].id = value;
             return {optionData: data};
-          });
-        } else {
-          this.setState((prevState, props) => {
-            const data = this._compileOption(prevState.optionData);
+
+          } else {
 
             if ( data[value] ) { // id 欄位與其他 option 重複時，不動 key
               data[number].id = id;
@@ -180,17 +183,14 @@ class Quiz extends Component {
               data[value].id = value;
               return {optionData: data};
             }
-          });
-        }
+          }
 
-      } else {
-        this.setState((prevState, props) => {
-          const data = this._compileOption(prevState.optionData);
-
+        } else {
           data[id][name] = value;
           return {optionData: data};
-        });
-      }
+
+        }
+      });
     }
 
   }
@@ -219,11 +219,12 @@ class Quiz extends Component {
 
   _setAnswer(event) {
 
-    const id = event.target.getAttribute("data-answer");
+    let answer = event.target.getAttribute("data-value");
 
     this.setState((prevState, props) => {
-      console.log(id);
-      return prevState.answer === id ? {answer: null} : {answer: id};
+      answer = prevState.answer === answer ? "unknown" : answer;
+      firebase.database().ref('answer/' + this.props.target).set(answer);
+      return {answer: answer};
     });
   }
 
