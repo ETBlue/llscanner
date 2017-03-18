@@ -159,7 +159,7 @@ class App extends Component {
 
     return (
 
-      <Router>
+      <Router basename="/llscanner">
         <div className="App">
           <header className="App-header ui center aligned basic inverted segment">
             <h1 className="ui inverted header">
