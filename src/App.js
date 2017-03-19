@@ -4,7 +4,7 @@ import {
   Route,
   Link,
   NavLink
-} from 'react-router-dom'
+} from 'react-router-dom';
 import firebase from 'firebase';
 
 import Quiz from './quiz/Quiz';
@@ -26,11 +26,19 @@ class App extends Component {
       quiz: {},
       answer: {},
       mode: "view",
+      valid: false,
       new: {
-        id: "",
-        title: "",
+        id: "quiz_id",
+        title: "問題",
         description: "",
-        target: ""
+        target: "",
+        option: {
+          1: {
+            id: 1,
+            title: "選項一",
+            value: ""
+          }
+        }
       }
     };
 
@@ -141,13 +149,14 @@ class App extends Component {
     }
 
     const NewQuizPage = () => {
+      const valid = this.state.valid ? "" : "disabled";
       return (
         <div className="NewQuiz ui basic segment">
           <div className="new ui segment">
             <form ref="form" className="Form ui form">
               <QuizForm {...this.state.new} header="新問題" onChange={this._onInputChange} />
               <hr className="ui divider" />
-              <Link to="/quiz" onClick={this._save} className="ui icon labeled olive button">
+              <Link to="/quiz" onClick={this._save} className={"ui icon labeled olive button " + valid}>
                 <i className="icon checkmark" />
                 送出
               </Link>
@@ -197,11 +206,25 @@ class App extends Component {
     let value = target.type === 'checkbox' ? target.checked : target.value;
 
     this.setState((prevState, props) => {
-      if (name === "id" && prevState.quiz[name]){
-        value = "";
+
+      if (name === "id" && prevState.quiz[value]){
+        prevState.valid = false;
+      } else {
+        if (name === "id" || name === "title") {
+          if (value.length === 0) {
+            prevState.valid = false;
+          } else {
+            if (prevState.new.id && prevState.new.title) {
+              prevState.valid = true;
+            }
+          }
+        }
       }
       prevState.new[name] = value;
-      return {new: prevState.new};
+      return {
+        new: prevState.new,
+        valid: prevState.valid
+      };
     });
 
   }
@@ -225,26 +248,20 @@ class App extends Component {
 
   _save() {
 
-
+    // TODO: redirect on success
     this.setState((prevState, props) => {
-      let quiz = prevState.quiz;
-      quiz[prevState.new.id] = {
-        id: prevState.new.id,
-        title: prevState.new.title,
-        description: prevState.new.description,
-        target: prevState.new.target,
-      };
-      console.log(quiz);
-      firebase.database().ref('quiz').set(quiz);
-      return {
-        quiz: quiz,
-        new: {
-          id: "",
-          title: "",
-          description: "",
-          target: ""
-        }
+
+      if (prevState.valid) {
+        prevState.quiz[prevState.new.id] = {
+          id: prevState.new.id,
+          title: prevState.new.title,
+          description: prevState.new.description,
+          target: prevState.new.target,
+          option: prevState.new.option
+        };
+        firebase.database().ref('quiz').set(prevState.quiz);
       }
+      return null;
     });
 
   }

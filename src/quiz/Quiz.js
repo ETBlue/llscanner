@@ -17,22 +17,35 @@ class Quiz extends Component {
 
     super(props);
 
+    this._modes = ["view", "edit"];
+    this._basicOptionData = {
+      1: {
+        id: 1,
+        title: "選項",
+        value: ""
+      }
+    };
+
     this.state = {
       answer: this.props.answer, // 使用者選擇的答案
       mode: this.props.mode, // 一開始的顯示模式
+      valid: true,
+      focus: {
+        manual: false,
+        id: ""
+      },
       quizData: { // 準備送出的表單資料
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
         target: this.props.target
       },
-      optionData: this.props.option
+      optionData: this.props.option || this._basicOptionData
     };
-
-    this._modes = ["view", "edit"];
 
     this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
 
+    this._validation = this._validation.bind(this);
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
     this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
     this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
@@ -44,9 +57,9 @@ class Quiz extends Component {
       id: this.props.id,
       title: this.props.title,
       description: this.props.description,
-      target: this.props.target
+      target: this.props.target,
     };
-    this._initialOptionData = this._compileOption(this.props.option);
+    this._initialOptionData = this._compileOption(this.props.option) || this._basicOptionData;
 
   }
 
@@ -60,7 +73,7 @@ class Quiz extends Component {
         description: nextProps.description,
         target: nextProps.target
     };
-    this._initialOptionData = this._compileOption(nextProps.option);
+    this._initialOptionData = this._compileOption(nextProps.option) || this._basicOptionData;
   }
 
   render() {
@@ -84,8 +97,12 @@ class Quiz extends Component {
 
       optionFormJSX = Object.keys(option).map( (key) => {
         const item = option[key];
+        let focus = false;
+        if (this.state.focus.manual && this.state.focus.id === key.toString(10)) {
+          focus = true;
+        }
         return (
-          <OptionForm key={key} number={key} {...item} header="編輯選項" onDelete={this._onOptionDelete} onChange={this._onInputChange} />
+          <OptionForm key={key} number={key} {...item} focus={focus} header="編輯選項" onDelete={this._onOptionDelete} onChange={this._onInputChange} />
         )
       })
 
@@ -104,7 +121,7 @@ class Quiz extends Component {
           { optionListJSX }
           </div>
           <hr className="ui hidden divider" />
-          <Action view={viewMode} edit={editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
+          <Action valid={this.state.valid} view={viewMode} edit={editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         <div className="FormWrapper basic ui segment">
         <div className={"edit ui bottom attached segment " + (editMode)}>
@@ -120,7 +137,7 @@ class Quiz extends Component {
             </div>
           </form>
           <hr className="ui divider" />
-          <Action view={viewMode} edit={editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
+          <Action valid={this.state.valid} view={viewMode} edit={editMode} onToggle={this._toggle} onSave={this._save} onRefresh={this._refresh} />
         </div>
         </div>
       </section>
@@ -140,6 +157,20 @@ class Quiz extends Component {
     }
   }
 
+  _validation(prevState) {
+    let valid = true;
+    if (prevState.quizData.title.length === 0) {
+      valid = false;
+    } else {
+      Object.keys(prevState.optionData).forEach((key) => {
+        if (prevState.optionData[key].id.length === 0 || !prevState.optionData[key].title.length === 0) {
+          valid = false;
+        }
+      });
+    }
+    return valid;
+  }
+
   _onInputChange(event) {
 
     const target = event.target;
@@ -153,8 +184,15 @@ class Quiz extends Component {
     if (title === "quiz") {
 
       this.setState((prevState, props) => {
+
+        prevState.focus.manual = false;
         prevState.quizData[name] = value;
-        return {quizData: prevState.quizData};
+        prevState.valid = this._validation(prevState);
+
+        return {
+          quizData: prevState.quizData,
+          valid: prevState.valid
+        };
       });
 
     }
@@ -162,34 +200,33 @@ class Quiz extends Component {
     if (title === "option") {
 
       this.setState((prevState, props) => {
-        const data = this._compileOption(prevState.optionData);
 
         if (name === "id" ) {
-  
-          if (!value) { // id 欄位清空時，不動 key
-            data[number].id = value;
-            return {optionData: data};
+          prevState.focus.manual = true;
 
-          } else {
+          if ( prevState.optionData[value] ) { // id 欄位與其他 option 重複時，不動 key
+            prevState.valid = false;
+            prevState.focus.id = number;
 
-            if ( data[value] ) { // id 欄位與其他 option 重複時，不動 key
-              data[number].id = id;
-              return {optionData: data};
-
-            } else { // id 欄位合法變更時，改 key
-              const optionOrphan = Object.assign({}, data[number]);
-              delete data[number];
-              data[value] = optionOrphan;
-              data[value].id = value;
-              return {optionData: data};
-            }
+          } else { // id 欄位合法變更時，改 key
+            const optionOrphan = Object.assign({}, prevState.optionData[number]);
+            delete prevState.optionData[number];
+            prevState.optionData[value] = optionOrphan;
+            prevState.optionData[value].id = value;
+            prevState.valid = this._validation(prevState);
+            prevState.focus.id = value;
           }
 
         } else {
-          data[id][name] = value;
-          return {optionData: data};
-
+          prevState.focus.manual = false;
+          prevState.optionData[id][name] = value;
+          prevState.valid = this._validation(prevState);
         }
+
+        return {
+          optionData: prevState.optionData,
+          valid: prevState.valid
+        };
       });
     }
 
@@ -211,7 +248,7 @@ class Quiz extends Component {
     this.setState((prevState, props) => {
       let optionData = prevState.optionData;
       const id = Math.max(...Object.keys(optionData)) + 1;
-      optionData[id] = {id: id, title: "", value: ""};
+      optionData[id] = {id: id, title: "選項", value: ""};
       return {optionData: optionData};
     });
 
@@ -237,21 +274,38 @@ class Quiz extends Component {
 
   _save() {
 
-    this._toggle();
+    this.setState((prevState, props) => {
 
-    firebase.database().ref('quiz/' + this.props.id).set({
-      id: this.state.quizData.id,
-      title: this.state.quizData.title,
-      description: this.state.quizData.description,
-      target: this.state.quizData.target,
-      option: this.state.optionData
+      if (this._validation(prevState)) {
+        if (Object.keys(prevState.optionData).length === 0) {
+          prevState.optionData = {
+            1: {
+              id: 1,
+              title: "選項",
+              value: ""
+            }
+          };
+        } else {
+          prevState.mode = "view";
+        }
+        firebase.database().ref('quiz/' + this.props.id).set({
+          id: prevState.quizData.id,
+          title: prevState.quizData.title,
+          description: prevState.quizData.description,
+          target: prevState.quizData.target,
+          option: prevState.optionData
+        });
+        return prevState;
+      }
+      return null;
     });
+
   }
 
   _refresh() {
 
     this.setState((prevState, props) => {
-      const data = this._compileOption(this._initialOptionData);
+      const data = this._compileOption(this._initialOptionData) || this._basicOptionData;
       return {
         quizData: Object.assign({} , this._initialQuizData),
         optionData: data
