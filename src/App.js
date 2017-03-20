@@ -8,10 +8,9 @@ import {
 import firebase from 'firebase';
 
 import Quiz from './quiz/Quiz';
+import QuizView from './quiz/QuizView';
+import QuizEdit from './quiz/QuizEdit';
 import QuizForm from './quiz/QuizForm';
-import Button from './quiz/Button';
-
-import toggleMode from './_toggleMode';
 
 import logo from './logo.svg';
 import './App.css';
@@ -46,7 +45,6 @@ class App extends Component {
 
     this._onQuizAdd = this._onQuizAdd.bind(this);
     this._onInputChange = this._onInputChange.bind(this); // 切換編輯模式
-    this._toggle = this._toggle.bind(this); // 切換編輯模式
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
 
   }
@@ -131,13 +129,16 @@ class App extends Component {
 
       if (quiz[id]) {
 
-        if (action) {
+        if (action === "edit") {
           return (
-            <Quiz key={id} answer={answer[id]} mode="edit" {...quiz[id]} />
+            <div>
+            <QuizView answer={answer[id]} {...quiz[id]} />
+            <QuizEdit answer={answer[id]} {...quiz[id]} />
+            </div>
           );
         } else {
           return (
-            <Quiz key={id} answer={answer[id]} mode="view" {...quiz[id]} />
+            <Quiz key={id} answer={answer[id]} quiz={quiz[id]} />
           );
         }
       } else {
@@ -236,13 +237,6 @@ class App extends Component {
   _onQuizAdd() {
     this.setState((prevState, props) => {
       return {};
-    });
-  }
-
-  _toggle() {
-
-    this.setState((prevState, props) => {
-      return {mode: toggleMode(prevState.mode, ...this._modes)};
     });
   }
 

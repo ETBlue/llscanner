@@ -11,19 +11,3 @@
   margin-bottom: 0!important;
 }
 
-.Quiz .FormWrapper {
-  margin-top: 0!important;
-}
-
-.Quiz .edit {
-  transition: all 0.3s;
-  transform-origin: top center;
-  background: #fffaf3!important;
-}
-
-.Quiz .edit.hidden {
-  margin-top: -1rem!important;
-  transform: scaleY(0);
-  height: 0;
-}
-
