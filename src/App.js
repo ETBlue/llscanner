@@ -10,7 +10,7 @@ import firebase from 'firebase';
 import Quiz from './quiz/Quiz';
 import QuizView from './quiz/QuizView';
 import QuizEdit from './quiz/QuizEdit';
-import QuizForm from './quiz/QuizForm';
+import QuizAdd from './quiz/QuizAdd';
 
 import logo from './logo.svg';
 import './App.css';
@@ -24,29 +24,7 @@ class App extends Component {
     this.state = {
       quiz: {},
       answer: {},
-      mode: "view",
-      valid: false,
-      new: {
-        id: "quiz_id",
-        title: "問題",
-        description: "",
-        target: "",
-        option: {
-          1: {
-            id: 1,
-            title: "選項一",
-            value: ""
-          }
-        }
-      }
     };
-
-    this._modes = ["view", "new"];
-
-    this._onQuizAdd = this._onQuizAdd.bind(this);
-    this._onInputChange = this._onInputChange.bind(this); // 切換編輯模式
-    this._save = this._save.bind(this); // 將編輯的資料送出到 server
-
   }
 
   componentWillMount() {
@@ -150,20 +128,8 @@ class App extends Component {
     }
 
     const NewQuizPage = () => {
-      const valid = this.state.valid ? "" : "disabled";
       return (
-        <div className="NewQuiz ui basic segment">
-          <div className="new ui segment">
-            <form ref="form" className="Form ui form">
-              <QuizForm {...this.state.new} header="新問題" onChange={this._onInputChange} />
-              <hr className="ui divider" />
-              <Link to="/quiz" onClick={this._save} className={"ui icon labeled olive button " + valid}>
-                <i className="icon checkmark" />
-                送出
-              </Link>
-            </form>
-          </div>
-        </div>
+        <QuizAdd quiz={this.state.quiz} />
       );
     }
 
@@ -199,65 +165,8 @@ class App extends Component {
     );
   }
 
-  _onInputChange(event) {
-
-    const target = event.target;
-
-    const name = target.name;
-    let value = target.type === 'checkbox' ? target.checked : target.value;
-
-    this.setState((prevState, props) => {
-
-      if (name === "id" && prevState.quiz[value]){
-        prevState.valid = false;
-      } else {
-        if (name === "id" || name === "title") {
-          if (value.length === 0) {
-            prevState.valid = false;
-          } else {
-            if (prevState.new.id && prevState.new.title) {
-              prevState.valid = true;
-            }
-          }
-        }
-      }
-      prevState.new[name] = value;
-      return {
-        new: prevState.new,
-        valid: prevState.valid
-      };
-    });
-
-  }
-
   componentWillUnmount() {
     this.firebaseData.off();
-  }
-
-  _onQuizAdd() {
-    this.setState((prevState, props) => {
-      return {};
-    });
-  }
-
-  _save() {
-
-    // TODO: redirect on success
-    this.setState((prevState, props) => {
-
-      if (prevState.valid) {
-        prevState.quiz[prevState.new.id] = {
-          id: prevState.new.id,
-          title: prevState.new.title,
-          description: prevState.new.description,
-          target: prevState.new.target,
-          option: prevState.new.option
-        };
-        firebase.database().ref('quiz').set(prevState.quiz);
-      }
-      return null;
-    });
-
   }
 
 }

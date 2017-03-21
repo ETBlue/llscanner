@@ -246,12 +246,10 @@ class QuizEdit extends Component {
   _save() {
 
     if (this._validation(this.state)) {
-      let optionData;
-      if (Object.keys(this.state.optionData).length === 0) {
-        optionData = this._basicOptionData;
-      } else {
-        optionData = this.state.optionData;
-      }
+
+      const optionData = Object.keys(this.state.optionData).length === 0 ? 
+        this._basicOptionData : this.state.optionData;
+
       firebase.database().ref('quiz/' + this.state.quizData.id).set({
         id: this.state.quizData.id,
         title: this.state.quizData.title,
