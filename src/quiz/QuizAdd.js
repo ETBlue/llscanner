@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
 import QuizForm from './QuizForm';
+import './QuizAdd.css';
 
 class QuizAdd extends Component {
 
@@ -19,7 +20,6 @@ class QuizAdd extends Component {
         id: "quiz_id",
         title: "問題",
         description: "",
-        target: ""
       },
       optionData: {
         1: {
@@ -30,44 +30,9 @@ class QuizAdd extends Component {
       }
     };
 
-    this._validation = this._validation.bind(this);
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
+    this._vlidate = this._vlidate.bind(this);
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
-  }
-
-  render() {
-
-    const valid = this.state.valid ? "" : " disabled";
-
-    return (
-        <div className="NewQuiz ui basic segment">
-          <div className="new ui segment">
-            <form ref="form" className="Form ui form">
-              <QuizForm {...this.state.quizData} header="新問題" onChange={this._onInputChange} />
-              <hr className="ui divider" />
-              <Link to={"/quiz/" + this.state.quizData.id + "/edit" } onClick={this._save} className={"ui icon labeled olive button " + valid}>
-                <i className="icon checkmark" />
-                送出
-              </Link>
-            </form>
-          </div>
-        </div>
-    );
-  }
-
-
-  _validation(prevState) {
-    console.log(this.props.quiz);
-    let valid = true;
-    if (prevState.quizData.title.length === 0 || 
-      prevState.quizData.id.length === 0 ||
-      this.props.quiz[prevState.quizData.id] !== undefined ||
-      prevState.quizData.id === "new" ||
-      prevState.quizData.id === "quiz_id" )
-    {
-      valid = false;
-    }
-    return valid;
   }
 
   _onInputChange(event) {
@@ -81,7 +46,7 @@ class QuizAdd extends Component {
 
       prevState.quizData[name] = value;
       prevState.focus.manual = name === "id" ? true : false;
-      prevState.valid = this._validation(prevState);
+      prevState.valid = this._vlidate(prevState);
 
       return {
         quizData: prevState.quizData,
@@ -92,6 +57,20 @@ class QuizAdd extends Component {
 
   }
 
+  _vlidate(prevState) {
+
+    let valid = true;
+    if (prevState.quizData.title.length === 0 || 
+      prevState.quizData.id.length === 0 ||
+      this.props.quiz[prevState.quizData.id] !== undefined ||
+      prevState.quizData.id === "new" ||
+      prevState.quizData.id === "quiz_id" )
+    {
+      valid = false;
+    }
+    return valid;
+  }
+
   _save() {
 
     if (this.state.valid) {
@@ -99,12 +78,37 @@ class QuizAdd extends Component {
         id: this.state.quizData.id,
         title: this.state.quizData.title,
         description: this.state.quizData.description,
-        target: this.state.quizData.target,
         option: this.state.optionData
       });
     }
   }
 
+  render() {
+
+    const valid = this.state.valid ? "" : " disabled";
+
+    return (
+        <div className="NewQuiz ui basic segment">
+          <h2 className="ui header">新增測驗題</h2>
+          <div className="new ui segment">
+            <form ref="form" className="Form ui form">
+              <QuizForm {...this.state.quizData} header="新問題" onChange={this._onInputChange} />
+              <hr className="ui divider" />
+              <div className="ui mini buttons">
+                <Link to={"/quiz/" + this.state.quizData.id + "/edit" } onClick={this._save} className={"ui icon labeled olive button " + valid}>
+                  <i className="icon checkmark" />
+                  送出
+                </Link>
+                <Link to="/quiz" className="ui icon labeled button">
+                  <i className="icon cancel" />
+                  取消
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
+    );
+  }
 }
 
 export default QuizAdd;

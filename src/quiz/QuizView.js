@@ -16,7 +16,6 @@ class Quiz extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
-        target: this.props.target
       },
       optionData: this.props.option || this._basicOptionData
     };
@@ -64,7 +63,7 @@ class Quiz extends Component {
 
     this.setState((prevState, props) => {
       answer = prevState.answer === answer ? "unknown" : answer;
-      firebase.database().ref('answer/' + this.props.target).set(answer);
+      firebase.database().ref('answer/' + this.props.id).set(answer);
       return {answer: answer};
     });
   }

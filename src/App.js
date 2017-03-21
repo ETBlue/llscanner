@@ -8,6 +8,7 @@ import {
 import firebase from 'firebase';
 
 import Quiz from './quiz/Quiz';
+import QuizList from './quiz/QuizList';
 import QuizView from './quiz/QuizView';
 import QuizEdit from './quiz/QuizEdit';
 import QuizAdd from './quiz/QuizAdd';
@@ -51,50 +52,8 @@ class App extends Component {
 
     const QuizListPage = () => {
 
-      let quizListJSX;
-
-      const quiz = this.state.quiz;
-
-      if (quiz) {
-        quizListJSX = Object.keys(quiz).map( (id) => {
-          const item = quiz[id];
-          return (
-            <tr key={id}>
-              <td>{id}</td>
-              <td>
-                <Link key={id} to={"/quiz/" + id}>{item.title}</Link>
-              </td>
-              <td>{item.target}</td>
-            </tr>
-          )
-        })
-      }
-
       return (
-        <div className="QuizListPage ui basic segment">
-          <table className="ui striped table">
-            <thead>
-              <tr>
-                <th>編號</th>
-                <th>問題</th>
-                <th>標的</th>
-              </tr>
-            </thead>
-            <tbody>
-            { quizListJSX }
-            </tbody>
-            <tfoot>
-              <tr>
-                <th colSpan={3} className="right aligned">
-                  <Link to="/quiz/new" className="ui icon labeled button" >
-                    <i className="icon add" />
-                    New Quiz
-                  </Link>
-                </th>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+        <QuizList quiz={this.state.quiz} />
       );
     }
 
@@ -105,6 +64,12 @@ class App extends Component {
       const quiz = this.state.quiz;
       const answer = this.state.answer;
 
+      if (id === "new") {
+        return (
+          <QuizAdd quiz={this.state.quiz} />
+        );
+      }
+
       if (quiz[id]) {
 
         if (action === "edit") {
@@ -114,23 +79,18 @@ class App extends Component {
             <QuizEdit answer={answer[id]} {...quiz[id]} />
             </div>
           );
+
         } else {
           return (
             <Quiz key={id} answer={answer[id]} quiz={quiz[id]} />
           );
         }
-      } else {
-        return (
-          <QuizListPage />
-        );
       }
 
-    }
-
-    const NewQuizPage = () => {
       return (
-        <QuizAdd quiz={this.state.quiz} />
+        <QuizListPage />
       );
+
     }
 
     return (
@@ -154,7 +114,6 @@ class App extends Component {
           <section className="App-body">
             <Route exact path="/" render={HomePage} />
             <Route path="/quiz/:id?/:action?" render={({match}) => (QuizPage(match.params) || QuizListPage)} />
-            <Route path="/quiz/new" render={NewQuizPage} />
             <Route path="/answer" render={() => <p>answer</p>} />
 
             {/*'<div className="auth"></div>'*/}

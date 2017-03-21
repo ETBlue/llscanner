@@ -32,12 +32,11 @@ class QuizEdit extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
-        target: this.props.target
       },
       optionData: this.props.option || this._basicOptionData
     };
 
-    this._validation = this._validation.bind(this);
+    this._vlidate = this._vlidate.bind(this);
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
     this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
     this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
@@ -49,7 +48,6 @@ class QuizEdit extends Component {
       id: this.props.id,
       title: this.props.title,
       description: this.props.description,
-      target: this.props.target,
     };
     this._initialOptionData = this._compileOption(this.props.option) || this._basicOptionData;
 
@@ -60,7 +58,6 @@ class QuizEdit extends Component {
         id: nextProps.id,
         title: nextProps.title,
         description: nextProps.description,
-        target: nextProps.target
     };
     this._initialOptionData = this._compileOption(nextProps.option) || this._basicOptionData;
   }
@@ -143,7 +140,7 @@ class QuizEdit extends Component {
     }
   }
 
-  _validation(prevState) {
+  _vlidate(prevState) {
     let valid = true;
     if (prevState.quizData.title.length === 0) {
       valid = false;
@@ -173,7 +170,7 @@ class QuizEdit extends Component {
 
         prevState.focus.manual = false;
         prevState.quizData[name] = value;
-        prevState.valid = this._validation(prevState);
+        prevState.valid = this._vlidate(prevState);
 
         return {
           quizData: prevState.quizData,
@@ -199,14 +196,14 @@ class QuizEdit extends Component {
             delete prevState.optionData[number];
             prevState.optionData[value] = optionOrphan;
             prevState.optionData[value].id = value;
-            prevState.valid = this._validation(prevState);
+            prevState.valid = this._vlidate(prevState);
             prevState.focus.id = value;
           }
 
         } else {
           prevState.focus.manual = false;
           prevState.optionData[id][name] = value;
-          prevState.valid = this._validation(prevState);
+          prevState.valid = this._vlidate(prevState);
         }
 
         return {
@@ -245,7 +242,7 @@ class QuizEdit extends Component {
 
   _save() {
 
-    if (this._validation(this.state)) {
+    if (this._vlidate(this.state)) {
 
       const optionData = Object.keys(this.state.optionData).length === 0 ? 
         this._basicOptionData : this.state.optionData;
@@ -254,7 +251,6 @@ class QuizEdit extends Component {
         id: this.state.quizData.id,
         title: this.state.quizData.title,
         description: this.state.quizData.description,
-        target: this.state.quizData.target,
         option: optionData
       });
     }
