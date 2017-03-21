@@ -232,50 +232,43 @@ class QuizEdit extends Component {
   _onOptionAdd() {
 
     this.setState((prevState, props) => {
-      let optionData = prevState.optionData;
-      const id = Math.max(...Object.keys(optionData)) + 1;
-      optionData[id] = {id: id, title: "選項", value: ""};
-      return {optionData: optionData};
+      const id = Math.max(...Object.keys(prevState.optionData)) + 1;
+      prevState.optionData[id] = {
+        id: id,
+        title: this._basicOptionData[1].title,
+        value: this._basicOptionData[1].value
+      };
+      return {optionData: prevState.optionData};
     });
 
   }
 
   _save() {
 
-    this.setState((prevState, props) => {
-
-      if (this._validation(prevState)) {
-        if (Object.keys(prevState.optionData).length === 0) {
-          prevState.optionData = {
-            1: {
-              id: 1,
-              title: "選項",
-              value: ""
-            }
-          };
-        } else {
-        }
-        firebase.database().ref('quiz/' + this.props.id).set({
-          id: prevState.quizData.id,
-          title: prevState.quizData.title,
-          description: prevState.quizData.description,
-          target: prevState.quizData.target,
-          option: prevState.optionData
-        });
-        return prevState;
+    if (this._validation(this.state)) {
+      let optionData;
+      if (Object.keys(this.state.optionData).length === 0) {
+        optionData = this._basicOptionData;
+      } else {
+        optionData = this.state.optionData;
       }
-      return null;
-    });
-
+      firebase.database().ref('quiz/' + this.state.quizData.id).set({
+        id: this.state.quizData.id,
+        title: this.state.quizData.title,
+        description: this.state.quizData.description,
+        target: this.state.quizData.target,
+        option: optionData
+      });
+    }
   }
 
   _refresh() {
 
     this.setState((prevState, props) => {
-      const data = this._compileOption(this._initialOptionData) || this._basicOptionData;
+      const optionData = this._compileOption(this._initialOptionData) || this._basicOptionData;
       return {
         quizData: Object.assign({} , this._initialQuizData),
-        optionData: data
+        optionData: optionData
       };
     });
   }
