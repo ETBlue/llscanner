@@ -31,7 +31,7 @@ class QuizAdd extends Component {
     };
 
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
-    this._vlidate = this._vlidate.bind(this);
+    this._validate = this._validate.bind(this);
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
   }
 
@@ -46,7 +46,7 @@ class QuizAdd extends Component {
 
       prevState.quizData[name] = value;
       prevState.focus.manual = name === "id" ? true : false;
-      prevState.valid = this._vlidate(prevState);
+      prevState.valid = this._validate(prevState);
 
       return {
         quizData: prevState.quizData,
@@ -57,13 +57,14 @@ class QuizAdd extends Component {
 
   }
 
-  _vlidate(prevState) {
+  _validate(prevState) {
 
     let valid = true;
     if (prevState.quizData.title.length === 0 || 
       prevState.quizData.id.length === 0 ||
       this.props.quiz[prevState.quizData.id] !== undefined ||
       prevState.quizData.id === "new" ||
+      prevState.quizData.id === "edit" ||
       prevState.quizData.id === "quiz_id" )
     {
       valid = false;

@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   NavLink
 } from 'react-router-dom';
 import firebase from 'firebase';
 
 import Quiz from './quiz/Quiz';
 import QuizList from './quiz/QuizList';
+import QuizListEdit from './quiz/QuizListEdit';
 import QuizView from './quiz/QuizView';
 import QuizEdit from './quiz/QuizEdit';
 import QuizAdd from './quiz/QuizAdd';
@@ -18,9 +18,9 @@ import './App.css';
 
 class App extends Component {
 
-  constructor(props) {
+  constructor() {
 
-    super(props);
+    super();
 
     this.state = {
       quiz: {},
@@ -50,13 +50,6 @@ class App extends Component {
         );
     }
 
-    const QuizListPage = () => {
-
-      return (
-        <QuizList quiz={this.state.quiz} />
-      );
-    }
-
     const QuizPage = (params) => {
 
       const id = params.id;
@@ -67,6 +60,12 @@ class App extends Component {
       if (id === "new") {
         return (
           <QuizAdd quiz={this.state.quiz} />
+        );
+      }
+
+      if (id === "edit") {
+        return (
+          <QuizListEdit quiz={this.state.quiz} />
         );
       }
 
@@ -88,9 +87,8 @@ class App extends Component {
       }
 
       return (
-        <QuizListPage />
+        <QuizList quiz={this.state.quiz} />
       );
-
     }
 
     return (
@@ -109,14 +107,15 @@ class App extends Component {
               <NavLink exact to="/" className="item">Home</NavLink>
               <NavLink to="/quiz" className="item">Quiz</NavLink>
               <NavLink to="/answer" className="item">Answer</NavLink>
+              <NavLink to="/login" className="item">Login</NavLink>
             </nav>
           </header>
           <section className="App-body">
             <Route exact path="/" render={HomePage} />
-            <Route path="/quiz/:id?/:action?" render={({match}) => (QuizPage(match.params) || QuizListPage)} />
+            <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
             <Route path="/answer" render={() => <p>answer</p>} />
-
-            {/*'<div className="auth"></div>'*/}
+            {/*<Route path="/login" render={() => <div className="auth"></div>} />
+                        */}
           </section>
 
         </div>

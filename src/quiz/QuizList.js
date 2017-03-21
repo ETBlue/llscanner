@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
 class QuizList extends Component {
@@ -9,31 +8,37 @@ class QuizList extends Component {
     super(props);
 
     this.state = {
-      allQuiz: this.props.quiz,
-      valid: true
+      allQuiz: this._compileQuiz(this.props.quiz)
     };
 
-  }
-
-  _setID (event) {
+    this._compileQuiz = this._compileQuiz.bind(this);
 
   }
 
-
-  _save() {
-
+  componentWillReceiveProps(nextProps) {
+    this.setState((prevState, props) => {
+      return {
+        allQuiz: this._compileQuiz(nextProps.quiz),
+      };
+    });
   }
 
-
-  _vlidate(prevState) {
-    let valid = true;
-    if (prevState.quizData.title.length === 0) {
-      valid = false;
+  _compileQuiz(allQuiz) {
+    if (allQuiz) {
+      let data = Object.assign({}, allQuiz);
+      Object.keys(allQuiz).forEach((key) => {
+        data[key] = {};
+        Object.keys(allQuiz[key]).forEach((field) => {
+          data[key][field] = allQuiz[key][field];
+        });
+      });
+      return data;
     }
-    return valid;
   }
 
   render() {
+    console.log(this.props.quiz);
+    console.log(this.state.allQuiz);
 
     let quizListJSX;
     const quiz = this.state.allQuiz;
@@ -47,7 +52,8 @@ class QuizList extends Component {
               <Link key={id} to={"/quiz/" + id}>{item.title}</Link>
             </td>
             <td>{id}</td>
-            <td>action</td>
+            <td className="right aligned">
+            </td>
           </tr>
         )
       })
@@ -70,10 +76,16 @@ class QuizList extends Component {
           <tfoot>
             <tr>
               <th colSpan={3} className="right aligned">
-                <Link to="/quiz/new" className="ui icon labeled mini green button" >
-                  <i className="icon add" />
-                  New Quiz
-                </Link>
+                <div className="ui mini buttons">
+                  <Link to="/quiz/new" className="ui icon labeled green button" >
+                    <i className="icon add" />
+                    New Quiz
+                  </Link>
+                  <Link to="/quiz/edit" className="ui icon labeled button" >
+                    <i className="icon pencil" />
+                    Edit
+                  </Link>
+                </div>
               </th>
             </tr>
           </tfoot>

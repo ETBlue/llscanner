@@ -36,7 +36,7 @@ class QuizEdit extends Component {
       optionData: this.props.option || this._basicOptionData
     };
 
-    this._vlidate = this._vlidate.bind(this);
+    this._validate = this._validate.bind(this);
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
     this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
     this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
@@ -140,7 +140,7 @@ class QuizEdit extends Component {
     }
   }
 
-  _vlidate(prevState) {
+  _validate(prevState) {
     let valid = true;
     if (prevState.quizData.title.length === 0) {
       valid = false;
@@ -170,7 +170,7 @@ class QuizEdit extends Component {
 
         prevState.focus.manual = false;
         prevState.quizData[name] = value;
-        prevState.valid = this._vlidate(prevState);
+        prevState.valid = this._validate(prevState);
 
         return {
           quizData: prevState.quizData,
@@ -196,14 +196,14 @@ class QuizEdit extends Component {
             delete prevState.optionData[number];
             prevState.optionData[value] = optionOrphan;
             prevState.optionData[value].id = value;
-            prevState.valid = this._vlidate(prevState);
+            prevState.valid = this._validate(prevState);
             prevState.focus.id = value;
           }
 
         } else {
           prevState.focus.manual = false;
           prevState.optionData[id][name] = value;
-          prevState.valid = this._vlidate(prevState);
+          prevState.valid = this._validate(prevState);
         }
 
         return {
@@ -242,7 +242,7 @@ class QuizEdit extends Component {
 
   _save() {
 
-    if (this._vlidate(this.state)) {
+    if (this._validate(this.state)) {
 
       const optionData = Object.keys(this.state.optionData).length === 0 ? 
         this._basicOptionData : this.state.optionData;

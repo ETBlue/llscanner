@@ -17,7 +17,7 @@ const config = {
 firebase.initializeApp(config);
 
 //const uiConfig = {
-//  singInSuccessUrl: "success",
+//  singInSuccessUrl: "https://etblue.github.io/llscanner/",
 //  signInOptions: [
 //    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
 //    firebase.auth.EmailAuthProvider.PROVIDER_ID
