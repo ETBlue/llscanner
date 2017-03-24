@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
+  Switch,
   NavLink
 } from 'react-router-dom';
 import firebase from 'firebase';
@@ -110,14 +111,16 @@ class App extends Component {
               <NavLink to="/login" className="item">Login</NavLink>
             </nav>
           </header>
-          <section className="App-body">
-            <Route exact path="/" render={HomePage} />
-            <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
-            <Route path="/answer" render={() => <p>answer</p>} />
-            {/*<Route path="/login" render={() => <div className="auth"></div>} />
-                        */}
-          </section>
 
+          <div className="App-body">
+            <Switch>
+              <Route exact path="/" render={HomePage} />
+              <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
+              <Route path="/answer" render={() => <p>answer</p>} />
+              {/*<Route path="/login" render={() => <div className="auth"></div>} />
+                          */}
+            </Switch>
+          </div>
         </div>
       </Router>
     );
