@@ -80,11 +80,14 @@ class App extends Component {
       const order = this.state.quizOrder;
       const first = this.state.firstQuiz;
       const answer = this.state.answer;
+      const prev = quiz[first] ? order[quiz[first].order].prev : "";
+      const next = quiz[first] ? order[quiz[first].order].next : "";
+
       return (
         <section key={this.state.firstQuiz} className="Quiz">
           <QuizView 
-            prev={order[quiz[first].order].prev} 
-            next={order[quiz[first].order].next} 
+            prev={prev} 
+            next={next} 
             answer={answer[first]} {...quiz[first]} 
           />
           <Link to={"/quiz/" + first + "/edit"} className="ui mini icon button" >
