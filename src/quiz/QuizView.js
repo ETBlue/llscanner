@@ -47,7 +47,7 @@ class QuizView extends Component {
   _onSelect(event) {
 
     let answer = event.target.getAttribute("data-value");
-    answer = this.state.answer === answer ? "unknown" : answer;
+    answer = this.props.answer === answer ? "unknown" : answer;
     firebase.database().ref('answer/' + this.props.id).set(answer);
 
     this.setState((prevState, props) => {
@@ -59,11 +59,11 @@ class QuizView extends Component {
 
     let answerJSX;
     if (this.props.type === "select") {
-      const option = this.state.optionData;
+      const option = this.props.option;
       if (option) {
         const optionJSX = Object.keys(option).map( (key) => {
           const item = option[key];
-          const className = this.state.answer === item.value ? "active" : "";
+          const className = this.props.answer === item.value ? "active" : "";
           return (
             <Option 
               {...item} 
