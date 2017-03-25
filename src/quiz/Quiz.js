@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
 import QuizView from './QuizView';
-import './Quiz.css';
 
 class Quiz extends Component {
 

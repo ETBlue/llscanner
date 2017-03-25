@@ -1,43 +1,31 @@
 import React, { Component } from 'react';
-import './OptionForm.css';
+import './ConditionForm.css';
 
-class OptionForm extends Component {
+class ConditionForm extends Component {
 
   render() {
     return (
-      <div className="OptionForm" >
-        <h4 className="ui header">編輯選項</h4>
+      <div className="ConditionForm" >
+        <h4 className="ui header">編輯先決條件</h4>
         <a className="ui right top floated orange icon labeled mini button" 
           id={this.props.id}
           data-number={this.props.number}
           onClick={this.props.onDelete} 
           >
           <i className="icon trash" />
-          刪除此選項
+          刪除此條件
         </a>
-        <div className={"field" + (this.props.title ? "" : " error")}>
-          <label>顯示文字 *</label>
-          <input 
-            type="text" 
-            title="option" 
-            name="title" 
-            id={this.props.id} 
-            value={this.props.title} 
-            onChange={this.props.onChange} 
-            placeholder="請輸入字串" 
-          />
-        </div>
         <div className="two fields">
           <div className={"field " + (this.props.id ? "" : "error")}>
-            <label>排序 *</label>
+            <label>標的 *</label>
             <input 
               type="text" 
-              title="option" 
+              title="condition" 
               name="id" 
               id={this.props.id} 
               value={this.props.id} 
               onChange={this.props.onChange} 
-              placeholder="請輸入數字，注意不可以跟其他選項重複喔" 
+              placeholder="請輸入問題代號" 
               autoFocus={this.props.focus} 
               data-number={this.props.number} 
             />
@@ -46,12 +34,12 @@ class OptionForm extends Component {
             <label>設定值</label>
             <input 
               type="text" 
-              title="option" 
+              title="condition" 
               name="value" 
               id={this.props.id} 
               value={this.props.value} 
               onChange={this.props.onChange} 
-              placeholder="請輸入此選項代表的值" 
+              placeholder="問題的答案值" 
             />
           </div>
         </div>
@@ -63,4 +51,4 @@ class OptionForm extends Component {
 
 }
 
-export default OptionForm;
+export default ConditionForm;

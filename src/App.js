@@ -37,7 +37,7 @@ class App extends Component {
       this.setState((prevState, props) => {
         return {
           quiz: snapshot.val().quiz,
-          answer: snapshot.val().answer
+          answer: snapshot.val().answer,
         };
       });
     });
@@ -72,6 +72,11 @@ class App extends Component {
 
       if (quiz[id]) {
 
+        let order = {};
+        Object.keys(quiz).forEach((key) => {
+          order[quiz[key].order] = quiz[key].id;
+        });
+
         if (action === "edit") {
           return (
             <div>
@@ -95,7 +100,9 @@ class App extends Component {
     return (
 
       <Router basename="/llscanner">
+
         <div className="App">
+
           <header className="App-header ui center aligned basic inverted segment">
             <h1 className="ui inverted header">
             <img src={logo} className="App-logo ui image" alt="logo" />
@@ -108,7 +115,7 @@ class App extends Component {
               <NavLink exact to="/" className="item">Home</NavLink>
               <NavLink to="/quiz" className="item">Quiz</NavLink>
               <NavLink to="/answer" className="item">Answer</NavLink>
-              <NavLink to="/login" className="item">Login</NavLink>
+              {/*<NavLink to="/login" className="item">Login</NavLink>*/}
             </nav>
           </header>
 

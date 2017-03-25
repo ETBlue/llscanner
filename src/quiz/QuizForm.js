@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Input from './Input';
 import './QuizForm.css';
 
 class QuizForm extends Component {
@@ -8,9 +7,58 @@ class QuizForm extends Component {
     return (
       <div className="QuizForm">
         <h4 className="ui header">{this.props.header}</h4>
-        <Input label="標題" title="quiz" id={this.props.id} name="title" required={true} status={this.props.title ? "" : "error"} onChange={this.props.onChange} placeholder="要讀者回答的問題" default={this.props.title} />
-        <Input label="描述" title="quiz" id={this.props.id} name="description" onChange={this.props.onChange} placeholder="問題的補充說明" default={this.props.description} />
-        <Input label="目標代號" title="quiz" disabled={this.props.lockID} id={this.props.id} name="id" required={true} status={this.props.id ? "" : "error"} onChange={this.props.onChange} placeholder="本題的編號" default={this.props.id} />
+        <div className={"field " + (this.props.title ? "" : "error")}>
+          <label>題目 *</label>
+          <input 
+            type="text" 
+            title="quiz" 
+            name="title" 
+            id={this.props.id} 
+            value={this.props.title} 
+            onChange={this.props.onChange} 
+            placeholder="要讀者回答的問題" 
+            />
+        </div>
+        <div className="field">
+          <label>描述</label>
+          <input 
+            type="text" 
+            title="quiz" 
+            name="description" 
+            id={this.props.id} 
+            value={this.props.description} 
+            onChange={this.props.onChange} 
+            placeholder="問題的補充說明" 
+            />
+        </div>
+        <div className="two fields">
+          <div className={"field " + (this.props.id ? "" : "error")}>
+            <label>代號 *</label>
+            <input 
+              type="text" 
+              title="quiz" 
+              name="id" 
+              id={this.props.id} 
+              value={this.props.id} 
+              onChange={this.props.onChange} 
+              placeholder="本題的編號" 
+              disabled={this.props.locked} 
+              />
+          </div>
+          <div className="field">
+            <label>順序</label>
+            <input 
+              type="text" 
+              title="quiz" 
+              name="order" 
+              id={this.props.id} 
+              value={this.props.order} 
+              onChange={this.props.onChange} 
+              placeholder="本題的出現順序" 
+              disabled={this.props.locked} 
+              />
+          </div>
+        </div>
       </div>
     );
 

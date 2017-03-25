@@ -75,6 +75,23 @@ class QuizListEdit extends Component {
     return valid;
   }
 
+  _validateAll(allQuiz) {
+    let valid = true;
+    let keys = {};
+    Object.keys(allQuiz).forEach((key) => {
+      const order = allQuiz[key].order;
+      if (!keys[order]) {
+        keys[order] = true;
+      } else {
+        valid = false;
+      }
+      if (!this._validate(key)) {
+        valid = false;
+      }
+    });
+    return valid;
+  }
+
   _onQuizDelete (event) {
 
     const id = event.target.id;
@@ -89,62 +106,93 @@ class QuizListEdit extends Component {
     const target = event.target;
 
     const id = target.id;
+    const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
+    const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
 
     this.setState((prevState, props) => {
 
-      if ( !this._validate(value) ) {
-        prevState.valid = false;
-        prevState.allQuiz[id].id = value;
-        prevState.focus = id;
+      if (name === "id") {
 
-      } else {
-
-        if (prevState.allQuiz[value] !== undefined ) {
+        if ( !this._validate(value) ) {
           prevState.valid = false;
-          prevState.allQuiz[id].id = value;
-          prevState.focus = id;
+          prevState.allQuiz[number].id = value;
+          prevState.focus = number;
 
         } else {
-          prevState.valid = true;
-          const quizOrphan = Object.assign({}, prevState.allQuiz[id]);
-          delete prevState.allQuiz[id];
-          prevState.allQuiz[value] = quizOrphan;
-          prevState.allQuiz[value].id = value;
-          prevState.focus = value;
 
-          Object.keys(prevState.allQuiz).forEach((key) => {
-            if (!this._validate(key)) {
-              prevState.valid = false;
-            }
-          });
+          if (prevState.allQuiz[value] !== undefined ) {
+            prevState.valid = false;
+            prevState.allQuiz[number].id = value;
+            prevState.focus = number;
+
+          } else {
+            prevState.allQuiz[value] = Object.assign({}, prevState.allQuiz[id]);
+            delete prevState.allQuiz[id];
+
+            prevState.allQuiz[value].id = value;
+            prevState.focus = value;
+
+            prevState.valid = this._validateAll(prevState.allQuiz);
+          }
         }
       }
+      if (name === "order") {
+        if (value.length === 0) {
+          prevState.valid = false;
+        } else {
+          prevState.valid = this._validateAll(prevState.allQuiz);
+        }
+        prevState.allQuiz[id].order = value;
+      }
+
       return prevState;
     });
 
   }
 
   render() {
-    console.log(this.state.allQuiz);
 
     const valid = this.state.valid ? "" : "disabled";
-
-    let quizListJSX;
     const quiz = this.state.allQuiz;
 
+    let quizListJSX;
     if (quiz) {
+
       quizListJSX = Object.keys(quiz).map( (id) => {
+
         const item = quiz[id];
+        const condition = Object.keys(item.condition).map((key) => {
+          return (
+            <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
+          );
+        });
+
         return (
           <tr key={id}>
             <td>
-              <Link key={id} to={"/quiz/" + id}>{item.title}</Link>
+              <Link to={"/quiz/" + id}>{item.title}</Link>
             </td>
             <td>
               <div className="ui input">
-                <input autoFocus={this.state.focus === id ? true : false} id={id} type="text" onChange={this._onInputChange} placeholder={id} value={item.id} />
+                <input 
+                  autoFocus={this.state.focus === id ? true : false} 
+                  id={item.id} 
+                  data-number={id}
+                  title="id" 
+                  onChange={this._onInputChange} 
+                  placeholder={id} 
+                  value={item.id} 
+                  type="text" />
               </div>
+            </td>
+            <td>
+              <div className="ui input">
+                <input id={id} title="order" onChange={this._onInputChange} placeholder={item.order} value={item.order} size="3" type="text" />
+              </div>
+            </td>
+            <td>
+              {condition}
             </td>
             <td className="right aligned">
               <a id={id} onClick={this._onQuizDelete} className="ui mini red icon labeled button">
@@ -163,8 +211,10 @@ class QuizListEdit extends Component {
         <table className="ui unstackable table">
           <thead>
             <tr>
-              <th>問題</th>
-              <th>目標代號</th>
+              <th>題目</th>
+              <th>代號 *</th>
+              <th>順序 *</th>
+              <th>條件</th>
               <th></th>
             </tr>
           </thead>
@@ -173,7 +223,7 @@ class QuizListEdit extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={3} className="right aligned">
+              <th colSpan={5} className="right aligned">
                 <div className="ui mini buttons">
                   <Link to="/quiz" onClick={this._save} className={"ui icon labeled olive button " + valid} >
                     <i className="icon checkmark" />

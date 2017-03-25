@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 
 import Option from './Option';
-import './Quiz.css';
+import './QuizView.css';
 
-class Quiz extends Component {
+class QuizView extends Component {
 
   constructor(props) {
 
@@ -16,8 +16,10 @@ class Quiz extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
+        order: this.props.order,
       },
-      optionData: this.props.option || this._basicOptionData
+      optionData: this.props.option || this._basicOptionData,
+      conditionData: this.props.condition
     };
 
     this._setAnswer = this._setAnswer.bind(this); // 根據使用者的選擇設定這題的答案
@@ -41,7 +43,7 @@ class Quiz extends Component {
     }
 
     return (
-      <section className="Quiz">
+      <section className="QuizView">
         <div className="Question ui center aligned basic segment">
           <h3 className="ui header">
             {this.props.title}
@@ -70,4 +72,4 @@ class Quiz extends Component {
 
 }
 
-export default Quiz;
+export default QuizView;

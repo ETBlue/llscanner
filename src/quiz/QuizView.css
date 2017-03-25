@@ -1,0 +1,15 @@
+.QuizView .Option {
+  display: block!important;
+}
+
+.QuizView .ui.basic.buttons .Option.ui.button.teal {
+  background: #00b5ad!important;
+  color: #fff!important;
+  font-weight: bold;
+}
+
+.QuizView .ui.basic.buttons .Option.ui.button.active {
+  background: #333!important;
+  color: #fff!important;
+  font-weight: bold;
+}

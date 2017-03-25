@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
+import ConditionForm from './ConditionForm';
 
 import './QuizEdit.css';
 
@@ -21,6 +22,14 @@ class QuizEdit extends Component {
       }
     };
 
+    this._basicConditionData = {
+      quiz_id: {
+        id: "quiz_id",
+        logic: "equals_to",
+        value: ""
+      }
+    };
+
     this.state = {
       answer: this.props.answer, // 使用者選擇的答案
       valid: true,
@@ -32,24 +41,27 @@ class QuizEdit extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
+        order: this.props.order,
       },
-      optionData: this.props.option || this._basicOptionData
+      optionData: this.props.option || this._basicOptionData,
+      conditionData: this.props.condition
     };
 
-    this._validate = this._validate.bind(this);
-    this._onInputChange = this._onInputChange.bind(this); // 刪除本題
-    this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
+    this._initialQuizData = Object.assign({}, this.state.quizData);
+    this._initialOptionData = this._compileNest(this.props.option) || this._basicOptionData;
+    this._initialConditionData = this._compileNest(this.props.condition);
+
+    this._validateAll = this._validateAll.bind(this);
+    this._compileNest = this._compileNest.bind(this);
+
     this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
-
-    this._refresh = this._refresh.bind(this); // 取消編輯到一半的資料
+    this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
+    this._onConditionAdd = this._onConditionAdd.bind(this); // 新增條件
+    this._onConditionDelete = this._onConditionDelete.bind(this); // 刪除條件
+    this._onInputChange = this._onInputChange.bind(this); // 刪除本題
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
+    this._refresh = this._refresh.bind(this); // 取消編輯到一半的資料
 
-    this._initialQuizData = {
-      id: this.props.id,
-      title: this.props.title,
-      description: this.props.description,
-    };
-    this._initialOptionData = this._compileOption(this.props.option) || this._basicOptionData;
 
   }
 
@@ -58,8 +70,228 @@ class QuizEdit extends Component {
         id: nextProps.id,
         title: nextProps.title,
         description: nextProps.description,
+        order: nextProps.order,
     };
-    this._initialOptionData = this._compileOption(nextProps.option) || this._basicOptionData;
+    this._initialOptionData = this._compileNest(nextProps.option) || this._basicOptionData;
+    this._initialConditionData = this._compileNest(nextProps.condition);
+  }
+
+  _compileNest(nestedObject) {
+    if (nestedObject) {
+    let data = Object.assign({}, nestedObject);
+    Object.keys(nestedObject).forEach((key) => {
+      data[key] = {};
+      Object.keys(nestedObject[key]).forEach((field) => {
+        data[key][field] = nestedObject[key][field];
+      });
+    });
+    return data;
+    }
+  }
+
+  _validateAll(prevState) {
+    let valid = true;
+    if (prevState.quizData.title.length === 0) {
+      valid = false;
+    } else {
+      Object.keys(prevState.optionData).forEach((key) => {
+        if (prevState.optionData[key].id.length === 0 || 
+          prevState.optionData[key].title.length === 0) {
+          valid = false;
+        }
+      });
+      Object.keys(prevState.conditionData).forEach((key) => {
+        if (prevState.conditionData[key].id.length === 0 ||
+          prevState.conditionData[key].id === "quiz_id") {
+          valid = false;
+        }
+      });
+    }
+    return valid;
+  }
+
+  _onOptionAdd() {
+
+    this.setState((prevState, props) => {
+      const id = Math.max(...Object.keys(prevState.optionData)) + 1;
+      prevState.optionData[id] = {
+        id: id,
+        title: this._basicOptionData[1].title,
+        value: this._basicOptionData[1].value
+      };
+      return {
+        optionData: prevState.optionData
+      };
+    });
+
+  }
+
+  _onConditionAdd() {
+
+    this.setState((prevState, props) => {
+      prevState.conditionData.quiz_id = Object.assign({}, this._basicConditionData.quiz_id);
+      return {
+        conditionData: prevState.conditionData,
+        valid: false
+      };
+    });
+
+  }
+
+  _onOptionDelete(event) {
+
+    const id = event.target.getAttribute("data-number");
+
+    this.setState((prevState, props) => {
+      delete prevState.optionData[id];
+      return {
+        optionData: prevState.optionData
+      };
+    });
+
+  }
+
+  _onConditionDelete(event) {
+
+    const id = event.target.getAttribute("data-number");
+
+    this.setState((prevState, props) => {
+      delete prevState.conditionData[id];
+      return {
+        conditionData: prevState.conditionData
+      };
+    });
+
+  }
+
+  _save() {
+
+    if (this._validateAll(this.state)) {
+
+      const optionData = Object.keys(this.state.optionData).length === 0 ? 
+        this._basicOptionData : this.state.optionData;
+
+      firebase.database().ref('quiz/' + this.state.quizData.id).set({
+        id: this.state.quizData.id,
+        title: this.state.quizData.title,
+        description: this.state.quizData.description,
+        option: optionData,
+        condition: this.state.conditionData
+      });
+    }
+  }
+
+  _refresh() {
+
+    this.setState((prevState, props) => {
+      const optionData = this._compileNest(this._initialOptionData) || this._basicOptionData;
+      const conditionData = this._compileNest(this._initialConditionData);
+      return {
+        quizData: Object.assign({} , this._initialQuizData),
+        optionData: optionData,
+        conditionData: conditionData
+      };
+    });
+  }
+
+  _onInputChange(event) {
+
+    const target = event.target;
+
+    const title = target.title;
+    const id = target.id;
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
+
+    if (title === "quiz") {
+
+      this.setState((prevState, props) => {
+
+        prevState.focus.manual = false;
+        prevState.quizData[name] = value;
+        prevState.valid = this._validateAll(prevState);
+
+        return {
+          quizData: prevState.quizData,
+          valid: prevState.valid
+        };
+      });
+
+    }
+
+    if (title === "option") {
+
+      this.setState((prevState, props) => {
+
+        if (name === "id" ) {
+          prevState.focus.manual = true;
+
+          if ( prevState.optionData[value] ) { // id 欄位與其他 option 重複時，不動 key
+            prevState.valid = false;
+            prevState.optionData[number].id = value;
+            prevState.focus.id = number;
+
+          } else { // id 欄位合法變更時，改 key
+
+            prevState.optionData[value] = Object.assign({}, prevState.optionData[number]);
+            delete prevState.optionData[number];
+
+            prevState.optionData[value].id = value;
+            prevState.valid = this._validateAll(prevState);
+            prevState.focus.id = value;
+          }
+
+        } else {
+          prevState.focus.manual = false;
+          prevState.optionData[id][name] = value;
+          prevState.valid = this._validateAll(prevState);
+        }
+
+        return {
+          optionData: prevState.optionData,
+          valid: prevState.valid
+        };
+      });
+    }
+
+
+    if (title === "condition") {
+
+      this.setState((prevState, props) => {
+
+        if (name === "id" ) {
+          prevState.focus.manual = true;
+
+          if ( prevState.conditionData[value] || value === "quiz_id") { // id 欄位與其他 condition 重複時，不動 key
+            prevState.valid = false;
+            prevState.conditionData[number].id = value;
+            prevState.focus.id = number;
+
+          } else { // id 欄位合法變更時，改 key
+
+            prevState.conditionData[value] = Object.assign({}, prevState.conditionData[number]);
+            delete prevState.conditionData[number];
+
+            prevState.conditionData[value].id = value;
+            prevState.valid = this._validateAll(prevState);
+            prevState.focus.id = value;
+          }
+
+        } else {
+          prevState.focus.manual = false;
+          prevState.conditionData[id][name] = value;
+          prevState.valid = this._validateAll(prevState);
+        }
+
+        return {
+          conditionData: prevState.conditionData,
+          valid: prevState.valid
+        };
+      });
+
+    }
+
   }
 
   render() {
@@ -76,12 +308,29 @@ class QuizEdit extends Component {
           focus = true;
         }
         return (
-          <OptionForm key={key} number={key} {...item} focus={focus} header="編輯選項" onDelete={this._onOptionDelete} onChange={this._onInputChange} />
+          <OptionForm key={key} number={key} {...item} focus={focus} onDelete={this._onOptionDelete} onChange={this._onInputChange} />
         )
       })
 
     }
 
+    let conditionFormJSX;
+    const condition = this.state.conditionData;
+
+    if (condition) {
+
+      conditionFormJSX = Object.keys(condition).map( (key) => {
+        const item = condition[key];
+        let focus = false;
+        if (this.state.focus.manual && this.state.focus.id === key) {
+          focus = true;
+        }
+        return (
+          <ConditionForm key={key} number={key} {...item} focus={focus} onDelete={this._onConditionDelete} onChange={this._onInputChange} />
+        )
+      })
+
+    }
     const valid = this.state.valid ? "" : " disabled";
     const action = (
       <div className={"Action ui mini buttons"}>
@@ -109,7 +358,13 @@ class QuizEdit extends Component {
           <form ref="form" className="Form ui form">
             <div className="ui two column divided stackable grid">
               <div className="column">
-                <QuizForm lockID="true" {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
+                <QuizForm locked="true" {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
+                <hr className="ui divider" />
+                { conditionFormJSX }
+                <a onClick={this._onConditionAdd} className="ui green icon labeled mini button">
+                  <i className="icon add" />
+                  新增條件
+                </a>
               </div>
               <div className="column">
                 { optionFormJSX }
@@ -127,145 +382,6 @@ class QuizEdit extends Component {
     );
   }
 
-  _compileOption(optionData) {
-    if (optionData) {
-    let data = Object.assign({}, optionData);
-    Object.keys(optionData).forEach((key) => {
-      data[key] = {};
-      Object.keys(optionData[key]).forEach((field) => {
-        data[key][field] = optionData[key][field];
-      });
-    });
-    return data;
-    }
-  }
-
-  _validate(prevState) {
-    let valid = true;
-    if (prevState.quizData.title.length === 0) {
-      valid = false;
-    } else {
-      Object.keys(prevState.optionData).forEach((key) => {
-        if (prevState.optionData[key].id.length === 0 || !prevState.optionData[key].title.length === 0) {
-          valid = false;
-        }
-      });
-    }
-    return valid;
-  }
-
-  _onInputChange(event) {
-
-    const target = event.target;
-
-    const title = target.title;
-    const id = target.id;
-    const name = target.name;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
-
-    if (title === "quiz") {
-
-      this.setState((prevState, props) => {
-
-        prevState.focus.manual = false;
-        prevState.quizData[name] = value;
-        prevState.valid = this._validate(prevState);
-
-        return {
-          quizData: prevState.quizData,
-          valid: prevState.valid
-        };
-      });
-
-    }
-
-    if (title === "option") {
-
-      this.setState((prevState, props) => {
-
-        if (name === "id" ) {
-          prevState.focus.manual = true;
-
-          if ( prevState.optionData[value] ) { // id 欄位與其他 option 重複時，不動 key
-            prevState.valid = false;
-            prevState.focus.id = number;
-
-          } else { // id 欄位合法變更時，改 key
-            const optionOrphan = Object.assign({}, prevState.optionData[number]);
-            delete prevState.optionData[number];
-            prevState.optionData[value] = optionOrphan;
-            prevState.optionData[value].id = value;
-            prevState.valid = this._validate(prevState);
-            prevState.focus.id = value;
-          }
-
-        } else {
-          prevState.focus.manual = false;
-          prevState.optionData[id][name] = value;
-          prevState.valid = this._validate(prevState);
-        }
-
-        return {
-          optionData: prevState.optionData,
-          valid: prevState.valid
-        };
-      });
-    }
-
-  }
-
-  _onOptionDelete(event) {
-
-    const id = event.target.id;
-
-    this.setState((prevState, props) => {
-      delete prevState.optionData[id];
-      return {optionData: prevState.optionData};
-    });
-
-  }
-
-  _onOptionAdd() {
-
-    this.setState((prevState, props) => {
-      const id = Math.max(...Object.keys(prevState.optionData)) + 1;
-      prevState.optionData[id] = {
-        id: id,
-        title: this._basicOptionData[1].title,
-        value: this._basicOptionData[1].value
-      };
-      return {optionData: prevState.optionData};
-    });
-
-  }
-
-  _save() {
-
-    if (this._validate(this.state)) {
-
-      const optionData = Object.keys(this.state.optionData).length === 0 ? 
-        this._basicOptionData : this.state.optionData;
-
-      firebase.database().ref('quiz/' + this.state.quizData.id).set({
-        id: this.state.quizData.id,
-        title: this.state.quizData.title,
-        description: this.state.quizData.description,
-        option: optionData
-      });
-    }
-  }
-
-  _refresh() {
-
-    this.setState((prevState, props) => {
-      const optionData = this._compileOption(this._initialOptionData) || this._basicOptionData;
-      return {
-        quizData: Object.assign({} , this._initialQuizData),
-        optionData: optionData
-      };
-    });
-  }
 }
 
 export default QuizEdit;

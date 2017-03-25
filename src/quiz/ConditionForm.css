@@ -1,0 +1,10 @@
+.ConditionForm {
+  position: relative;
+  text-align: left;
+}
+
+.ConditionForm .right.top.floated.icon.labeled {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

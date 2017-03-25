@@ -20,6 +20,7 @@ class QuizAdd extends Component {
         id: "quiz_id",
         title: "問題",
         description: "",
+        order: ""
       },
       optionData: {
         1: {
@@ -27,7 +28,8 @@ class QuizAdd extends Component {
           title: "選項",
           value: ""
         }
-      }
+      },
+      conditionData: {}
     };
 
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
@@ -75,12 +77,10 @@ class QuizAdd extends Component {
   _save() {
 
     if (this.state.valid) {
-      firebase.database().ref('quiz/' + this.state.quizData.id).set({
-        id: this.state.quizData.id,
-        title: this.state.quizData.title,
-        description: this.state.quizData.description,
-        option: this.state.optionData
-      });
+      let quiz = this.state.quizData;
+      quiz.option = this.state.optionData;
+      quiz.condition = this.state.conditionData;
+      firebase.database().ref('quiz/' + this.state.quizData.id).set(quiz);
     }
   }
 
