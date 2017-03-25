@@ -42,14 +42,15 @@ class QuizEdit extends Component {
         title: this.props.title,
         description: this.props.description,
         order: this.props.order,
+        type: this.props.type
       },
       optionData: this.props.option || this._basicOptionData,
-      conditionData: this.props.condition
+      conditionData: this.props.condition || {}
     };
 
     this._initialQuizData = Object.assign({}, this.state.quizData);
-    this._initialOptionData = this._compileNest(this.props.option) || this._basicOptionData;
-    this._initialConditionData = this._compileNest(this.props.condition);
+    this._initialOptionData = this._compileNest(this.state.optionData);
+    this._initialConditionData = this._compileNest(this.state.conditionData);
 
     this._validateAll = this._validateAll.bind(this);
     this._compileNest = this._compileNest.bind(this);
@@ -71,9 +72,10 @@ class QuizEdit extends Component {
         title: nextProps.title,
         description: nextProps.description,
         order: nextProps.order,
+        type: nextProps.type
     };
     this._initialOptionData = this._compileNest(nextProps.option) || this._basicOptionData;
-    this._initialConditionData = this._compileNest(nextProps.condition);
+    this._initialConditionData = this._compileNest(nextProps.condition) || {};
   }
 
   _compileNest(nestedObject) {
@@ -94,18 +96,22 @@ class QuizEdit extends Component {
     if (prevState.quizData.title.length === 0) {
       valid = false;
     } else {
-      Object.keys(prevState.optionData).forEach((key) => {
-        if (prevState.optionData[key].id.length === 0 || 
-          prevState.optionData[key].title.length === 0) {
-          valid = false;
-        }
-      });
-      Object.keys(prevState.conditionData).forEach((key) => {
-        if (prevState.conditionData[key].id.length === 0 ||
-          prevState.conditionData[key].id === "quiz_id") {
-          valid = false;
-        }
-      });
+      if (prevState.optionData) {
+        Object.keys(prevState.optionData).forEach((key) => {
+          if (prevState.optionData[key].id.length === 0 || 
+            prevState.optionData[key].title.length === 0) {
+            valid = false;
+          }
+        });
+      }
+      if (prevState.conditionData) {
+        Object.keys(prevState.conditionData).forEach((key) => {
+          if (prevState.conditionData[key].id.length === 0 ||
+            prevState.conditionData[key].id === "quiz_id") {
+            valid = false;
+          }
+        });
+      }
     }
     return valid;
   }
@@ -129,6 +135,7 @@ class QuizEdit extends Component {
   _onConditionAdd() {
 
     this.setState((prevState, props) => {
+      prevState.conditionData = prevState.conditionData || {};
       prevState.conditionData.quiz_id = Object.assign({}, this._basicConditionData.quiz_id);
       return {
         conditionData: prevState.conditionData,
@@ -145,7 +152,8 @@ class QuizEdit extends Component {
     this.setState((prevState, props) => {
       delete prevState.optionData[id];
       return {
-        optionData: prevState.optionData
+        optionData: prevState.optionData,
+        valid: this._validateAll(prevState)
       };
     });
 
@@ -158,7 +166,8 @@ class QuizEdit extends Component {
     this.setState((prevState, props) => {
       delete prevState.conditionData[id];
       return {
-        conditionData: prevState.conditionData
+        conditionData: prevState.conditionData,
+        valid: this._validateAll(prevState)
       };
     });
 
@@ -171,20 +180,18 @@ class QuizEdit extends Component {
       const optionData = Object.keys(this.state.optionData).length === 0 ? 
         this._basicOptionData : this.state.optionData;
 
-      firebase.database().ref('quiz/' + this.state.quizData.id).set({
-        id: this.state.quizData.id,
-        title: this.state.quizData.title,
-        description: this.state.quizData.description,
-        option: optionData,
-        condition: this.state.conditionData
-      });
+      let quiz = this.state.quizData;
+      quiz.option = optionData;
+      quiz.condition = this.state.conditionData;
+
+      firebase.database().ref('quiz/' + this.state.quizData.id).set(quiz);
     }
   }
 
   _refresh() {
 
     this.setState((prevState, props) => {
-      const optionData = this._compileNest(this._initialOptionData) || this._basicOptionData;
+      const optionData = this._compileNest(this._initialOptionData);
       const conditionData = this._compileNest(this._initialConditionData);
       return {
         quizData: Object.assign({} , this._initialQuizData),
@@ -296,41 +303,6 @@ class QuizEdit extends Component {
 
   render() {
 
-    let optionFormJSX;
-    const option = this.state.optionData;
-
-    if (option) {
-
-      optionFormJSX = Object.keys(option).map( (key) => {
-        const item = option[key];
-        let focus = false;
-        if (this.state.focus.manual && this.state.focus.id === key) {
-          focus = true;
-        }
-        return (
-          <OptionForm key={key} number={key} {...item} focus={focus} onDelete={this._onOptionDelete} onChange={this._onInputChange} />
-        )
-      })
-
-    }
-
-    let conditionFormJSX;
-    const condition = this.state.conditionData;
-
-    if (condition) {
-
-      conditionFormJSX = Object.keys(condition).map( (key) => {
-        const item = condition[key];
-        let focus = false;
-        if (this.state.focus.manual && this.state.focus.id === key) {
-          focus = true;
-        }
-        return (
-          <ConditionForm key={key} number={key} {...item} focus={focus} onDelete={this._onConditionDelete} onChange={this._onInputChange} />
-        )
-      })
-
-    }
     const valid = this.state.valid ? "" : " disabled";
     const action = (
       <div className={"Action ui mini buttons"}>
@@ -349,39 +321,83 @@ class QuizEdit extends Component {
       </div>
     );
 
+    let conditionFormJSX;
+    let optionFormJSX;
+
+    const condition = this.state.conditionData;
+    if (condition && Object.keys(condition).length > 0) {
+      conditionFormJSX = Object.keys(condition).map( (key) => {
+        const item = condition[key];
+        let focus = false;
+        if (this.state.focus.manual && this.state.focus.id === key) {
+          focus = true;
+        }
+        return (
+          <ConditionForm key={key} number={key} {...item} focus={focus} onDelete={this._onConditionDelete} onChange={this._onInputChange} />
+        );
+      });
+    }
+
+    const option = this.state.optionData;
+    if (option && Object.keys(option).length > 0) {
+      optionFormJSX = Object.keys(option).map( (key) => {
+        const item = option[key];
+        let focus = false;
+        if (this.state.focus.manual && this.state.focus.id === key) {
+          focus = true;
+        }
+        return (
+          <OptionForm key={key} number={key} {...item} focus={focus} onDelete={this._onOptionDelete} onChange={this._onInputChange} />
+        )
+      })
+    }
 
     return (
-      <div className="FormWrapper basic ui segment">
-        <div className="QuizEdit ui segment">
-         {action}
-          <hr className="ui divider" />
-          <form ref="form" className="Form ui form">
-            <div className="ui two column divided stackable grid">
-              <div className="column">
-                <QuizForm locked="true" {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
-                <hr className="ui divider" />
-                { conditionFormJSX }
-                <a onClick={this._onConditionAdd} className="ui green icon labeled mini button">
-                  <i className="icon add" />
-                  新增條件
-                </a>
+        <div className="FormWrapper basic ui segment">
+          <div className="QuizEdit ui segment">
+           {action}
+            <hr className="ui divider" />
+            <form ref="form" className="Form ui form">
+              <div className="ui two column divided stackable grid">
+                <div className="column">
+                  <QuizForm locked="true" {...this.state.quizData} header="編輯問題" onChange={this._onInputChange} />
+                  { this.props.type === "select" && 
+                  <div className="wrapper">
+                    <hr className="ui divider" />
+                    {conditionFormJSX}
+                    <a onClick={this._onConditionAdd} className="ui green icon labeled mini button">
+                      <i className="icon add" />
+                      新增條件
+                    </a>
+                  </div>
+                  }
+                </div>
+                { this.props.type === "select" &&
+                <div className="column">
+                  { optionFormJSX }
+                  <a onClick={this._onOptionAdd} className="ui green icon labeled mini button">
+                    <i className="icon add" />
+                    新增選項
+                  </a>
+                </div>
+                }
+                { this.props.type === "input" &&
+                <div className="column">
+                  { conditionFormJSX }
+                  <a onClick={this._onConditionAdd} className="ui green icon labeled mini button">
+                    <i className="icon add" />
+                    新增條件
+                  </a>
+                </div>
+                }
               </div>
-              <div className="column">
-                { optionFormJSX }
-                <a onClick={this._onOptionAdd} className="ui green icon labeled mini button">
-                  <i className="icon add" />
-                  新增選項
-                </a>
-              </div>
-            </div>
-          </form>
-          <hr className="ui divider" />
-          {action}
+            </form>
+            <hr className="ui divider" />
+            {action}
+          </div>
         </div>
-      </div>
-    );
+      );
   }
-
 }
 
 export default QuizEdit;

@@ -20,7 +20,8 @@ class QuizAdd extends Component {
         id: "quiz_id",
         title: "問題",
         description: "",
-        order: ""
+        order: "",
+        type: "select"
       },
       optionData: {
         1: {
@@ -69,6 +70,10 @@ class QuizAdd extends Component {
       prevState.quizData.id === "edit" ||
       prevState.quizData.id === "quiz_id" )
     {
+      valid = false;
+    }
+    if (prevState.quizData.type !== "select" &&
+      prevState.quizData.type !== "input") {
       valid = false;
     }
     return valid;

@@ -162,11 +162,14 @@ class QuizListEdit extends Component {
       quizListJSX = Object.keys(quiz).map( (id) => {
 
         const item = quiz[id];
-        const condition = Object.keys(item.condition).map((key) => {
-          return (
-            <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
-          );
-        });
+        let condition;
+        if (item.condition) {
+          condition = Object.keys(item.condition).map((key) => {
+            return (
+              <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
+            );
+          });
+        }
 
         return (
           <tr key={id}>
@@ -176,19 +179,29 @@ class QuizListEdit extends Component {
             <td>
               <div className="ui input">
                 <input 
-                  autoFocus={this.state.focus === id ? true : false} 
+                  type="text" 
                   id={item.id} 
                   data-number={id}
-                  title="id" 
-                  onChange={this._onInputChange} 
-                  placeholder={id} 
+                  name="id" 
                   value={item.id} 
-                  type="text" />
+                  placeholder={id} 
+                  onChange={this._onInputChange} 
+                  autoFocus={this.state.focus === id ? true : false} 
+                  />
               </div>
             </td>
             <td>
               <div className="ui input">
-                <input id={id} title="order" onChange={this._onInputChange} placeholder={item.order} value={item.order} size="3" type="text" />
+                <input 
+                  type="text" 
+                  size="3" 
+                  id={item.id} 
+                  data-number={id}
+                  name="order" 
+                  value={item.order} 
+                  placeholder={item.order} 
+                  onChange={this._onInputChange} 
+                  />
               </div>
             </td>
             <td>

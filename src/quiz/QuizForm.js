@@ -32,7 +32,7 @@ class QuizForm extends Component {
             />
         </div>
         <div className="two fields">
-          <div className={"field " + (this.props.id ? "" : "error")}>
+          <div className={"field" + (this.props.id ? "" : " error")}>
             <label>代號 *</label>
             <input 
               type="text" 
@@ -58,6 +58,19 @@ class QuizForm extends Component {
               disabled={this.props.locked} 
               />
           </div>
+        </div>
+        <div className={"field" + (this.props.type === "select" || this.props.type === "input" ? "" : " error")}>
+          <label>類型 *</label>
+          <input 
+            type="text" 
+            title="quiz" 
+            name="type" 
+            id={this.props.id} 
+            value={this.props.type} 
+            onChange={this.props.onChange} 
+            placeholder="本題的類型" 
+            disabled={this.props.locked} 
+            />
         </div>
       </div>
     );

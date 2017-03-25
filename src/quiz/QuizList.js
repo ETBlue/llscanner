@@ -45,11 +45,14 @@ class QuizList extends Component {
       quizListJSX = Object.keys(quiz).map( (id) => {
 
         const item = quiz[id];
-        const condition = Object.keys(item.condition).map((key) => {
-          return (
-            <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
-          );
-        });
+        let condition;
+        if (item.condition) {
+          condition = Object.keys(item.condition).map((key) => {
+            return (
+              <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
+            );
+          });
+        }
 
         return (
           <tr key={id}>
