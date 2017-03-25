@@ -26,6 +26,8 @@ class App extends Component {
     this.state = {
       quiz: {},
       answer: {},
+      quizOrder: {},
+      firstQuiz: ""
     };
   }
 
@@ -35,9 +37,37 @@ class App extends Component {
 
     data.on('value', snapshot => {
       this.setState((prevState, props) => {
+
+        const quiz = snapshot.val().quiz;
+
+        let orderArray = [];
+        Object.keys(quiz).forEach((key) => {
+          orderArray.push(quiz[key].order);
+          prevState.quizOrder[quiz[key].order] = {
+            current: key
+          };
+        });
+
+        orderArray = orderArray.sort();
+        orderArray.forEach((order, index) => {
+          if (index > 0) {
+            prevState.quizOrder[order].prev = prevState.quizOrder[orderArray[index - 1]].current;
+          } else {
+            prevState.quizOrder[order].prev = "";
+            prevState.firstQuiz = prevState.quizOrder[order].current;
+          }
+          if (index < orderArray.length - 1) {
+            prevState.quizOrder[order].next = prevState.quizOrder[orderArray[index + 1]].current;
+          } else {
+            prevState.quizOrder[order].next = "";
+          }
+        });
+
         return {
-          quiz: snapshot.val().quiz,
+          quiz: quiz,
           answer: snapshot.val().answer,
+          quizOrder: prevState.quizOrder,
+          firstQuiz: prevState.firstQuiz
         };
       });
     });
@@ -46,9 +76,22 @@ class App extends Component {
   render() {
 
     const HomePage = () => {
+      const quiz = this.state.quiz;
+      const order = this.state.quizOrder;
+      const first = this.state.firstQuiz;
+      const answer = this.state.answer;
       return (
-        <p>wahahahaha</p>
-        );
+        <section key={this.state.firstQuiz} className="Quiz">
+          <QuizView 
+            prev={order[quiz[first].order].prev} 
+            next={order[quiz[first].order].next} 
+            answer={answer[first]} {...quiz[first]} 
+          />
+          <Link to={"/quiz/" + first + "/edit"} className="ui mini icon button" >
+            <i className="icon pencil" />
+          </Link>
+        </section>
+      );
     }
 
     const QuizPage = (params) => {
@@ -56,31 +99,8 @@ class App extends Component {
       const id = params.id;
       const action = params.action;
       const quiz = this.state.quiz;
+      const order = this.state.quizOrder;
       const answer = this.state.answer;
-
-      let orderArray = [];
-      let orderMap = {};
- 
-      Object.keys(quiz).forEach((key) => {
-        orderArray.push(quiz[key].order);
-        orderMap[quiz[key].order] = {
-          current: key
-        };
-      });
-
-      orderArray = orderArray.sort();
-      orderArray.forEach((order, index) => {
-        if (index > 0) {
-          orderMap[order].prev = orderMap[orderArray[index - 1]].current;
-        } else {
-          orderMap[order].prev = "";
-        }
-        if (index < orderArray.length - 1) {
-          orderMap[order].next = orderMap[orderArray[index + 1]].current;
-        } else {
-          orderMap[order].next = "";
-        }
-      });
 
       if (id === "new") {
         return (
@@ -90,7 +110,7 @@ class App extends Component {
 
       if (id === "edit") {
         return (
-          <QuizListEdit quiz={this.state.quiz} answer={this.state.answer} />
+          <QuizListEdit quiz={quiz} answer={answer} />
         );
       }
 
@@ -100,8 +120,8 @@ class App extends Component {
           return (
             <section key={id}>
               <QuizView 
-                prev={orderMap[quiz[id].order].prev} 
-                next={orderMap[quiz[id].order].next} 
+                prev={order[quiz[id].order].prev} 
+                next={order[quiz[id].order].next} 
                 answer={answer[id]} {...quiz[id]} 
               />
               <QuizEdit answer={answer[id]} {...quiz[id]} />
@@ -112,8 +132,8 @@ class App extends Component {
           return (
             <section key={id} className="Quiz">
               <QuizView 
-                prev={orderMap[quiz[id].order].prev} 
-                next={orderMap[quiz[id].order].next} 
+                prev={order[quiz[id].order].prev} 
+                next={order[quiz[id].order].next} 
                 answer={answer[id]} {...quiz[id]} 
               />
               <Link to={"/quiz/" + id + "/edit"} className="ui mini icon button" >
@@ -125,7 +145,7 @@ class App extends Component {
       }
 
       return (
-        <QuizList quiz={this.state.quiz} />
+        <QuizList quiz={quiz} />
       );
     }
 

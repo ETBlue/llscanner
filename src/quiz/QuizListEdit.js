@@ -135,7 +135,9 @@ class QuizListEdit extends Component {
 
           } else {
             prevState.allQuiz[value] = Object.assign({}, prevState.allQuiz[id]);
+            prevState.allAnswer[value] = prevState.allAnswer[id];
             delete prevState.allQuiz[id];
+            delete prevState.allAnswer[id];
 
             prevState.allQuiz[value].id = value;
             prevState.focus = value;
