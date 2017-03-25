@@ -3,11 +3,11 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Link,
   NavLink
 } from 'react-router-dom';
 import firebase from 'firebase';
 
-import Quiz from './quiz/Quiz';
 import QuizList from './quiz/QuizList';
 import QuizListEdit from './quiz/QuizListEdit';
 import QuizView from './quiz/QuizView';
@@ -58,6 +58,30 @@ class App extends Component {
       const quiz = this.state.quiz;
       const answer = this.state.answer;
 
+      let orderArray = [];
+      let orderMap = {};
+ 
+      Object.keys(quiz).forEach((key) => {
+        orderArray.push(quiz[key].order);
+        orderMap[quiz[key].order] = {
+          current: key
+        };
+      });
+
+      orderArray = orderArray.sort();
+      orderArray.forEach((order, index) => {
+        if (index > 0) {
+          orderMap[order].prev = orderMap[orderArray[index - 1]].current;
+        } else {
+          orderMap[order].prev = "";
+        }
+        if (index < orderArray.length - 1) {
+          orderMap[order].next = orderMap[orderArray[index + 1]].current;
+        } else {
+          orderMap[order].next = "";
+        }
+      });
+
       if (id === "new") {
         return (
           <QuizAdd quiz={this.state.quiz} />
@@ -72,22 +96,30 @@ class App extends Component {
 
       if (quiz[id]) {
 
-        let order = {};
-        Object.keys(quiz).forEach((key) => {
-          order[quiz[key].order] = quiz[key].id;
-        });
-
         if (action === "edit") {
           return (
-            <div>
-            <QuizView answer={answer[id]} {...quiz[id]} />
-            <QuizEdit answer={answer[id]} {...quiz[id]} />
-            </div>
+            <section key={id}>
+              <QuizView 
+                prev={orderMap[quiz[id].order].prev} 
+                next={orderMap[quiz[id].order].next} 
+                answer={answer[id]} {...quiz[id]} 
+              />
+              <QuizEdit answer={answer[id]} {...quiz[id]} />
+            </section>
           );
 
         } else {
           return (
-            <Quiz key={id} answer={answer[id]} quiz={quiz[id]} />
+            <section key={id} className="Quiz">
+              <QuizView 
+                prev={orderMap[quiz[id].order].prev} 
+                next={orderMap[quiz[id].order].next} 
+                answer={answer[id]} {...quiz[id]} 
+              />
+              <Link to={"/quiz/" + id + "/edit"} className="ui mini icon button" >
+                <i className="icon pencil" />
+              </Link>
+            </section>
           );
         }
       }

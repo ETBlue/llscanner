@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import {Link} from 'react-router-dom';
 
 import Option from './Option';
 import './QuizView.css';
@@ -18,6 +19,8 @@ class QuizView extends Component {
         description: this.props.description,
         order: this.props.order,
         type: this.props.type,
+        prev: this.props.prev,
+        next: this.props.next,
       },
       optionData: this.props.option || (this.props.type === "select" ? this._basicOptionData : {}),
       conditionData: this.props.condition || {}
@@ -44,12 +47,8 @@ class QuizView extends Component {
   _onSelect(event) {
 
     let answer = event.target.getAttribute("data-value");
+    firebase.database().ref('answer/' + this.props.id).set(answer);
 
-    this.setState((prevState, props) => {
-      answer = prevState.answer === answer ? "unknown" : answer;
-      firebase.database().ref('answer/' + this.props.id).set(answer);
-      return {answer: answer};
-    });
   }
 
   render() {
@@ -64,6 +63,7 @@ class QuizView extends Component {
           return (
             <Option 
               {...item} 
+              next={this.props.next} 
               key={key} 
               className={className} 
               onClick={this._onSelect} 
@@ -87,12 +87,13 @@ class QuizView extends Component {
             value={this.state.answer} 
             onChange={this._onInputChange}
           />
-          <a 
+          <Link 
+            to={"/quiz/" + this.props.next} 
             className="ui button"
             onClick={this._onInputSubmit}
           >
             Submit
-          </a>
+          </Link>
         </div>
       );
     }
