@@ -10,6 +10,7 @@ class QuizListEdit extends Component {
 
     this.state = {
       allQuiz: this._compileQuiz(this.props.quiz),
+      allAnswer: Object.assign({}, this.props.answer),
       valid: true,
       focus: ""
     };
@@ -21,14 +22,17 @@ class QuizListEdit extends Component {
     this._validate = this._validate.bind(this);
     this._initialState = Object.assign({}, this.state);
     this._initialState.allQuiz = this._compileQuiz(this.props.quiz);
+    this._initialState.allAnswer = Object.assign({}, this.props.answer);
 
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState((prevState, props) => {
       this._initialState.allQuiz = this._compileQuiz(nextProps.quiz);
+      this._initialState.allAnswer = Object.assign({}, nextProps.answer);
       return {
         allQuiz: this._compileQuiz(nextProps.quiz),
+        allAnswer: Object.assign({}, nextProps.answer),
       };
     });
   }
@@ -37,6 +41,7 @@ class QuizListEdit extends Component {
 
     if (this.state.valid) {
       firebase.database().ref('quiz').set(this.state.allQuiz);
+      firebase.database().ref('answer').set(this.state.allAnswer);
     }
   }
 
@@ -59,6 +64,7 @@ class QuizListEdit extends Component {
       const allQuiz = this._compileQuiz(this._initialState.allQuiz);
       return {
         allQuiz: allQuiz,
+        allAnswer: Object.assign({}, this._initialState.allAnswer),
         valid: this._initialState.valid,
         focus: this._initialState.focus
       };
@@ -97,6 +103,7 @@ class QuizListEdit extends Component {
     const id = event.target.id;
     this.setState((prevState, props) => {
       delete prevState.allQuiz[id];
+      delete prevState.allAnswer[id];
       return prevState;
     });
   }

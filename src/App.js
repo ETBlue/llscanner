@@ -90,7 +90,7 @@ class App extends Component {
 
       if (id === "edit") {
         return (
-          <QuizListEdit quiz={this.state.quiz} />
+          <QuizListEdit quiz={this.state.quiz} answer={this.state.answer} />
         );
       }
 
