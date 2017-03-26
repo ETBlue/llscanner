@@ -47,7 +47,6 @@ class QuizView extends Component {
   _onSelect(event) {
 
     let answer = event.target.getAttribute("data-value");
-    answer = this.props.answer === answer ? "unknown" : answer;
     firebase.database().ref('answer/' + this.props.id).set(answer);
 
     this.setState((prevState, props) => {
