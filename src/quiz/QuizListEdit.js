@@ -221,6 +221,7 @@ class QuizListEdit extends Component {
             <td>
               <Link to={"/quiz/" + id}>{item.title}</Link>
             </td>
+            <td>{item.type}</td>
             <td>
               <div className="ui input">
                 <input 
@@ -248,13 +249,14 @@ class QuizListEdit extends Component {
 
     return (
       <div className="QuizList ui basic segment">
-        <h2 className="ui header">測驗題列表</h2>
+        <h2 className="ui header">編輯測驗題列表</h2>
         <table className="ui unstackable table">
           <thead>
             <tr>
-              <th>題目</th>
-              <th>代號 *</th>
-              <th></th>
+              <th className="five wide">題目</th>
+              <th className="two wide">類型</th>
+              <th className="five wide">代號 *</th>
+              <th className="four wide"></th>
             </tr>
           </thead>
           <tbody>
@@ -262,7 +264,7 @@ class QuizListEdit extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={3} className="right aligned">
+              <th colSpan={4} className="right aligned">
                 <div className="ui mini buttons">
                   <Link to="/quiz" onClick={this._save} className={"ui icon labeled olive button " + valid} >
                     <i className="icon checkmark" />

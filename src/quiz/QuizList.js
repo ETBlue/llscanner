@@ -36,9 +36,8 @@ class QuizList extends Component {
             <td>
               <Link key={item.id} to={"/quiz/" + item.id}>{item.title}</Link>
             </td>
+            <td>{item.type}</td>
             <td>{item.id}</td>
-            <td className="right aligned">
-            </td>
           </tr>
         )
       })
@@ -51,8 +50,8 @@ class QuizList extends Component {
           <thead>
             <tr>
               <th>題目</th>
+              <th className="two wide">類型</th>
               <th>代號</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>

@@ -90,8 +90,6 @@ class StepList extends Component {
             <td>{item.id}</td>
             <td>{condition}</td>
             <td>{route}</td>
-            <td className="right aligned">
-            </td>
           </tr>
         )
       })
@@ -103,11 +101,10 @@ class StepList extends Component {
         <table className="ui unstackable table">
           <thead>
             <tr>
-              <th>題目</th>
-              <th>排序</th>
-              <th>先決條件</th>
-              <th>分岔</th>
-              <th></th>
+              <th className="four wide">代號</th>
+              <th className="two wide">排序</th>
+              <th className="five wide">先決條件</th>
+              <th className="five wide">分岔</th>
             </tr>
           </thead>
           <tbody>
@@ -115,7 +112,7 @@ class StepList extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={5} className="right aligned">
+              <th colSpan={4} className="right aligned">
                 <div className="ui mini buttons">
                   <Link to="/step/new" className="ui icon labeled green button" >
                     <i className="icon add" />

@@ -29,3 +29,7 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.ui.table tr td {
+  word-break: break-all;
+}
