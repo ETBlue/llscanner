@@ -29,7 +29,6 @@ class App extends Component {
       order: {},
       route: {},
       condition: {},
-      // quizOrder: {},
       first: "",
       answer: {},
     };
@@ -59,29 +58,6 @@ class App extends Component {
         });
         prevState.first = path[list[0]].quiz;
 
-//        let orderArray = [];
-//        Object.keys(quiz).forEach((key) => {
-//          orderArray.push(quiz[key].order);
-//          prevState.quizOrder[quiz[key].order] = {
-//            current: key
-//          };
-//        });
-//
-//        orderArray = orderArray.sort();
-//        orderArray.forEach((order, index) => {
-//          if (index > 0) {
-//            prevState.quizOrder[order].prev = prevState.quizOrder[orderArray[index - 1]].current;
-//          } else {
-//            prevState.quizOrder[order].prev = "";
-//            prevState.first = prevState.quizOrder[order].current;
-//          }
-//          if (index < orderArray.length - 1) {
-//            prevState.quizOrder[order].next = prevState.quizOrder[orderArray[index + 1]].current;
-//          } else {
-//            prevState.quizOrder[order].next = "";
-//          }
-//        });
-
         return {
           quiz: quiz,
           path: path,
@@ -90,7 +66,6 @@ class App extends Component {
           condition: prevState.condition,
           answer: snapshot.val().answer,
           first: prevState.first,
-          //quizOrder: prevState.quizOrder,
         };
       });
     });

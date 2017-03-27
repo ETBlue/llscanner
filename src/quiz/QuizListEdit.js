@@ -23,8 +23,6 @@ class QuizListEdit extends Component {
     this._save = this._save.bind(this);
 
     // data preparation
-//    this._route = {};
-//    this._condition = {};
     this._compilePath = this._compilePath.bind(this);
     this._copyNested = this._copyNested.bind(this);
 
@@ -67,8 +65,6 @@ class QuizListEdit extends Component {
         prev: path[key - 1].quiz,
         next: path[key + 1].quiz,
       };
-//      this._route[path[key].quiz] = path[key].route;
-//      this._condition[path[key].quiz] = path[key].condition;
     });
     }
     return order;
@@ -202,14 +198,6 @@ class QuizListEdit extends Component {
           }
         }
       }
-//      if (name === "order") {
-//        if (value.length === 0) {
-//          prevState.valid = false;
-//        } else {
-//          prevState.valid = this._validateAll(prevState.quiz);
-//        }
-//        prevState.quiz[id].order = value;
-//      }
 
       return prevState;
     });
@@ -227,14 +215,6 @@ class QuizListEdit extends Component {
       quizListJSX = Object.keys(quiz).map( (id) => {
 
         const item = quiz[id];
-//        let condition;
-//        if (item.condition) {
-//          condition = Object.keys(item.condition).map((key) => {
-//            return (
-//              <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
-//            );
-//          });
-//        }
 
         return (
           <tr key={id}>
@@ -255,25 +235,6 @@ class QuizListEdit extends Component {
                   />
               </div>
             </td>
-          {/*
-            <td>
-              <div className="ui input">
-                <input 
-                  type="text" 
-                  size="3" 
-                  id={item.id} 
-                  data-number={id}
-                  name="order" 
-                  value={item.order} 
-                  placeholder={item.order} 
-                  onChange={this._onInputChange} 
-                  />
-              </div>
-            </td>
-            <td>
-              {condition}
-            </td>
-          */}
             <td className="right aligned">
               <a id={id} onClick={this._onQuizDelete} className="ui mini red icon labeled button">
                 <i className="icon trash" />
@@ -293,10 +254,6 @@ class QuizListEdit extends Component {
             <tr>
               <th>題目</th>
               <th>代號 *</th>
-            {/*
-              <th>順序 *</th>
-              <th>條件</th>
-            */}
               <th></th>
             </tr>
           </thead>
