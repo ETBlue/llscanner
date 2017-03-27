@@ -84,8 +84,9 @@ class StepList extends Component {
 
         return (
           <tr key={id}>
-            <td>
+            <td><code className="code">
               <Link key={item.id} to={"/step/" + item.id}>{item.quiz}</Link>
+              </code>
             </td>
             <td>{item.id}</td>
             <td>{condition}</td>

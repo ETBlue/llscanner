@@ -36,8 +36,8 @@ class QuizList extends Component {
             <td>
               <Link key={item.id} to={"/quiz/" + item.id}>{item.title}</Link>
             </td>
-            <td>{item.type}</td>
-            <td>{item.id}</td>
+            <td><code className="code">{item.type}</code></td>
+            <td><code className="code">{item.id}</code></td>
           </tr>
         )
       })

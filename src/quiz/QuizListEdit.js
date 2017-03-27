@@ -221,7 +221,7 @@ class QuizListEdit extends Component {
             <td>
               <Link to={"/quiz/" + id}>{item.title}</Link>
             </td>
-            <td>{item.type}</td>
+            <td><code className="code">{item.type}</code></td>
             <td>
               <div className="ui input">
                 <input 
