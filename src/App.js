@@ -25,9 +25,13 @@ class App extends Component {
 
     this.state = {
       quiz: {},
+      path: {},
+      order: {},
+      route: {},
+      condition: {},
+      // quizOrder: {},
+      first: "",
       answer: {},
-      quizOrder: {},
-      firstQuiz: ""
     };
   }
 
@@ -36,38 +40,57 @@ class App extends Component {
     const data = firebase.database().ref();
 
     data.on('value', snapshot => {
+
       this.setState((prevState, props) => {
 
         const quiz = snapshot.val().quiz;
+        const path = snapshot.val().path;
 
-        let orderArray = [];
-        Object.keys(quiz).forEach((key) => {
-          orderArray.push(quiz[key].order);
-          prevState.quizOrder[quiz[key].order] = {
-            current: key
+        const list = Object.keys(path);
+        list.forEach((key, index) => {
+          prevState.order[path[key].quiz] = {
+            id: key,
+            current: path[key].quiz,
+            prev: index > 0 ? path[ list[index - 1]].quiz : "",
+            next: index < list.length - 1 ? path[ list[index + 1]].quiz : "",
           };
+          prevState.route[path[key].quiz] = path[key].route;
+          prevState.condition[path[key].quiz] = path[key].condition;
         });
+        prevState.first = path[list[0]].quiz;
 
-        orderArray = orderArray.sort();
-        orderArray.forEach((order, index) => {
-          if (index > 0) {
-            prevState.quizOrder[order].prev = prevState.quizOrder[orderArray[index - 1]].current;
-          } else {
-            prevState.quizOrder[order].prev = "";
-            prevState.firstQuiz = prevState.quizOrder[order].current;
-          }
-          if (index < orderArray.length - 1) {
-            prevState.quizOrder[order].next = prevState.quizOrder[orderArray[index + 1]].current;
-          } else {
-            prevState.quizOrder[order].next = "";
-          }
-        });
+//        let orderArray = [];
+//        Object.keys(quiz).forEach((key) => {
+//          orderArray.push(quiz[key].order);
+//          prevState.quizOrder[quiz[key].order] = {
+//            current: key
+//          };
+//        });
+//
+//        orderArray = orderArray.sort();
+//        orderArray.forEach((order, index) => {
+//          if (index > 0) {
+//            prevState.quizOrder[order].prev = prevState.quizOrder[orderArray[index - 1]].current;
+//          } else {
+//            prevState.quizOrder[order].prev = "";
+//            prevState.first = prevState.quizOrder[order].current;
+//          }
+//          if (index < orderArray.length - 1) {
+//            prevState.quizOrder[order].next = prevState.quizOrder[orderArray[index + 1]].current;
+//          } else {
+//            prevState.quizOrder[order].next = "";
+//          }
+//        });
 
         return {
           quiz: quiz,
+          path: path,
+          order: prevState.order,
+          route: prevState.route,
+          condition: prevState.condition,
           answer: snapshot.val().answer,
-          quizOrder: prevState.quizOrder,
-          firstQuiz: prevState.firstQuiz
+          first: prevState.first,
+          //quizOrder: prevState.quizOrder,
         };
       });
     });
@@ -76,21 +99,25 @@ class App extends Component {
   render() {
 
     const HomePage = () => {
+
+      const id = this.state.first;
+
       const quiz = this.state.quiz;
-      const order = this.state.quizOrder;
-      const first = this.state.firstQuiz;
+      const order = this.state.order;
+      const route = this.state.route;
+      const condition = this.state.condition;
       const answer = this.state.answer;
-      const prev = quiz[first] ? order[quiz[first].order].prev : "";
-      const next = quiz[first] ? order[quiz[first].order].next : "";
 
       return (
-        <section key={this.state.firstQuiz} className="Quiz">
+        <section className="Quiz">
           <QuizView 
-            prev={prev} 
-            next={next} 
-            answer={answer[first]} {...quiz[first]} 
+            {...quiz[id]} 
+            order={order[id]} 
+            route={route[id]} 
+            condition={condition[id]} 
+            answer={answer[id]} 
           />
-          <Link to={"/quiz/" + first + "/edit"} className="ui mini icon button" >
+          <Link to={"/quiz/" + id + "/edit"} className="ui mini icon button" >
             <i className="icon pencil" />
           </Link>
         </section>
@@ -101,19 +128,22 @@ class App extends Component {
 
       const id = params.id;
       const action = params.action;
+
       const quiz = this.state.quiz;
-      const order = this.state.quizOrder;
+      const order = this.state.order;
+      const route = this.state.route;
+      const condition = this.state.condition;
       const answer = this.state.answer;
 
       if (id === "new") {
         return (
-          <QuizAdd quiz={this.state.quiz} />
+          <QuizAdd quiz={quiz} />
         );
       }
 
       if (id === "edit") {
         return (
-          <QuizListEdit quiz={quiz} answer={answer} />
+          <QuizListEdit quiz={quiz} />
         );
       }
 
@@ -123,11 +153,13 @@ class App extends Component {
           return (
             <section key={id}>
               <QuizView 
-                prev={order[quiz[id].order].prev} 
-                next={order[quiz[id].order].next} 
-                answer={answer[id]} {...quiz[id]} 
+                {...quiz[id]} 
+                order={order[id]} 
+                route={route[id]} 
+                condition={condition[id]} 
+                answer={answer[id]} 
               />
-              <QuizEdit answer={answer[id]} {...quiz[id]} />
+              <QuizEdit {...quiz[id]} />
             </section>
           );
 
@@ -135,9 +167,11 @@ class App extends Component {
           return (
             <section key={id} className="Quiz">
               <QuizView 
-                prev={order[quiz[id].order].prev} 
-                next={order[quiz[id].order].next} 
-                answer={answer[id]} {...quiz[id]} 
+                {...quiz[id]} 
+                order={order[id]} 
+                route={route[id]} 
+                condition={condition[id]} 
+                answer={answer[id]} 
               />
               <Link to={"/quiz/" + id + "/edit"} className="ui mini icon button" >
                 <i className="icon pencil" />

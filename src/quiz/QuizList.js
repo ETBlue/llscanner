@@ -8,7 +8,7 @@ class QuizList extends Component {
     super(props);
 
     this.state = {
-      allQuiz: this._compileQuiz(this.props.quiz)
+      quiz: this._compileQuiz(this.props.quiz)
     };
 
     this._compileQuiz = this._compileQuiz.bind(this);
@@ -18,18 +18,18 @@ class QuizList extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState((prevState, props) => {
       return {
-        allQuiz: this._compileQuiz(nextProps.quiz),
+        quiz: this._compileQuiz(nextProps.quiz),
       };
     });
   }
 
-  _compileQuiz(allQuiz) {
-    if (allQuiz) {
-      let data = Object.assign({}, allQuiz);
-      Object.keys(allQuiz).forEach((key) => {
+  _compileQuiz(quiz) {
+    if (quiz) {
+      let data = Object.assign({}, quiz);
+      Object.keys(quiz).forEach((key) => {
         data[key] = {};
-        Object.keys(allQuiz[key]).forEach((field) => {
-          data[key][field] = allQuiz[key][field];
+        Object.keys(quiz[key]).forEach((field) => {
+          data[key][field] = quiz[key][field];
         });
       });
       return data;
@@ -39,20 +39,12 @@ class QuizList extends Component {
   render() {
 
     let quizListJSX;
-    const quiz = this.state.allQuiz;
+    const quiz = this.state.quiz;
 
     if (quiz) {
       quizListJSX = Object.keys(quiz).map( (id) => {
 
         const item = quiz[id];
-        let condition;
-        if (item.condition) {
-          condition = Object.keys(item.condition).map((key) => {
-            return (
-              <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
-            );
-          });
-        }
 
         return (
           <tr key={id}>
@@ -60,8 +52,6 @@ class QuizList extends Component {
               <Link key={item.id} to={"/quiz/" + item.id}>{item.title}</Link>
             </td>
             <td>{item.id}</td>
-            <td>{item.order}</td>
-            <td>{condition}</td>
             <td className="right aligned">
             </td>
           </tr>
@@ -77,8 +67,6 @@ class QuizList extends Component {
             <tr>
               <th>題目</th>
               <th>代號</th>
-              <th>順序</th>
-              <th>條件</th>
               <th></th>
             </tr>
           </thead>
@@ -87,7 +75,7 @@ class QuizList extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={5} className="right aligned">
+              <th colSpan={3} className="right aligned">
                 <div className="ui mini buttons">
                   <Link to="/quiz/new" className="ui icon labeled green button" >
                     <i className="icon add" />

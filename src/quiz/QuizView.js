@@ -12,23 +12,43 @@ class QuizView extends Component {
     super(props);
 
     this.state = {
-      answer: this.props.answer || "", // 使用者選擇的答案
-      quizData: { // 準備送出的表單資料
+      quiz: {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
-        order: this.props.order,
         type: this.props.type,
-        prev: this.props.prev,
-        next: this.props.next,
       },
-      optionData: this.props.option || (this.props.type === "select" ? this._basicOptionData : {}),
-      conditionData: this.props.condition || {}
+      option: this.props.option || (this.props.type === "select" ? this._basicOptionData : {}),
+      answer: this.props.answer || "", // 使用者選擇的答案
+
+      order: this.props.order,
+      route: this.props.route,
+      condition: this.props.condition,
     };
 
     this._onInputChange = this._onInputChange.bind(this);
     this._onInputSubmit = this._onInputSubmit.bind(this);
     this._onSelect = this._onSelect.bind(this); // 根據使用者的選擇設定這題的答案
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState((prevState, props) => {
+
+      return {
+        quiz: {
+          id: nextProps.id,
+          title: nextProps.title,
+          description: nextProps.description,
+          type: nextProps.type,
+        },
+        option: nextProps.option || (nextProps.type === "select" ? this._basicOptionData : {}),
+        answer: nextProps.answer || "", // 使用者選擇的答案
+
+        order: nextProps.order,
+        route: nextProps.route,
+        condition: nextProps.condition,
+      };
+    });
   }
 
   _onInputChange(event) {
@@ -46,7 +66,7 @@ class QuizView extends Component {
 
   _onSelect(event) {
 
-    let answer = event.target.getAttribute("data-value");
+    const answer = event.target.getAttribute("data-value");
     firebase.database().ref('answer/' + this.props.id).set(answer);
 
     this.setState((prevState, props) => {
@@ -57,20 +77,25 @@ class QuizView extends Component {
   render() {
 
     let answerJSX;
-    if (this.props.type === "select") {
-      const option = this.props.option;
+
+    if (this.state.quiz.type === "select") {
+      const option = this.state.option;
       if (option) {
         const optionJSX = Object.keys(option).map( (key) => {
+
           const item = option[key];
-          const className = this.props.answer === item.value ? "active" : "";
+          const className = this.state.answer === item.value ? "active" : "";
+          const next = this.state.route && this.state.route[item.value] ? this.state.route[item.value] : 
+            (this.state.order && this.state.order.next ? this.state.order.next : 
+            "") ;
           return (
             <Option 
               {...item} 
-              next={this.props.next} 
               key={key} 
+              next={next} 
               className={className} 
               onClick={this._onSelect} 
-              />
+            />
           )
         });
         answerJSX = (
@@ -80,18 +105,19 @@ class QuizView extends Component {
         );
       }
     }
-    if (this.props.type === "input") {
+
+    if (this.state.quiz.type === "input") {
       answerJSX = (
         <div className="ui action input">
           <input 
             type="text" 
-            id={this.props.id}
-            placeholder={this.props.answer} 
+            id={this.state.quiz.id}
+            placeholder={this.state.answer} 
             value={this.state.answer} 
             onChange={this._onInputChange}
           />
           <Link 
-            to={"/quiz/" + this.props.next} 
+            to={this.state.order.next} 
             className="ui button"
             onClick={this._onInputSubmit}
           >
@@ -105,10 +131,10 @@ class QuizView extends Component {
       <section className="QuizView">
         <div className="Question ui center aligned basic segment">
           <h3 className="ui header">
-            {this.props.title}
+            {this.state.quiz.title}
           </h3>
           <p>
-            {this.props.description}
+            {this.state.quiz.description}
           </p>
           { answerJSX }
         </div>

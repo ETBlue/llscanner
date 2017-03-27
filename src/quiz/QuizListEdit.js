@@ -8,52 +8,95 @@ class QuizListEdit extends Component {
 
     super(props);
 
+    // to be rendered
     this.state = {
-      allQuiz: this._compileQuiz(this.props.quiz),
-      allAnswer: Object.assign({}, this.props.answer),
+      quiz: this.props.quiz,
       valid: true,
       focus: ""
     };
 
+    // form control functions
     this._onInputChange = this._onInputChange.bind(this);
     this._onQuizDelete = this._onQuizDelete.bind(this);
+    this._validate = this._validate.bind(this);
     this._refresh = this._refresh.bind(this);
     this._save = this._save.bind(this);
-    this._validate = this._validate.bind(this);
-    this._initialState = Object.assign({}, this.state);
-    this._initialState.allQuiz = this._compileQuiz(this.props.quiz);
-    this._initialState.allAnswer = Object.assign({}, this.props.answer);
+
+    // data preparation
+//    this._route = {};
+//    this._condition = {};
+    this._compilePath = this._compilePath.bind(this);
+    this._copyNested = this._copyNested.bind(this);
+
+    // data initialization
+    this._initialState = this._copyNested(this.state);
+    this._answer = this.props.answer;
+    this._path = this.props.path;
+    this._order = this._compilePath(this.props.path);
+    this._initialAnswer = this._copyNested(this.props.answer);
+    this._initialPath = this._copyNested(this.props.path);
+    this._initialOrder = this._copyNested(this._order);
 
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState((prevState, props) => {
-      this._initialState.allQuiz = this._compileQuiz(nextProps.quiz);
-      this._initialState.allAnswer = Object.assign({}, nextProps.answer);
+
+      // data initialization... again
+      this._initialState.quiz = this._copyNested(nextProps.quiz);
+      this._answer = nextProps.answer;
+      this._path = nextProps.path;
+      this._order = this._compilePath(nextProps.path);
+      this._initialAnswer = this._copyNested(nextProps.answer);
+      this._initialPath = this._copyNested(nextProps.path);
+      this._initialOrder = this._copyNested(this._order);
+
       return {
-        allQuiz: this._compileQuiz(nextProps.quiz),
-        allAnswer: Object.assign({}, nextProps.answer),
+        quiz: nextProps.quiz,
       };
     });
   }
 
-  _save() {
-
-    if (this.state.valid) {
-      firebase.database().ref('quiz').set(this.state.allQuiz);
-      firebase.database().ref('answer').set(this.state.allAnswer);
+  _compilePath(path) {
+    let order = {};
+    if (path) {
+    Object.keys(path).forEach((key) => {
+      order[path[key].quiz] = {
+        id: key,
+        current: path[key].quiz,
+        prev: path[key - 1].quiz,
+        next: path[key + 1].quiz,
+      };
+//      this._route[path[key].quiz] = path[key].route;
+//      this._condition[path[key].quiz] = path[key].condition;
+    });
     }
+    return order;
   }
 
-  _compileQuiz(allQuiz) {
-    if (allQuiz) {
-      let data = Object.assign({}, allQuiz);
-      Object.keys(allQuiz).forEach((key) => {
-        data[key] = {};
-        Object.keys(allQuiz[key]).forEach((field) => {
-          data[key][field] = allQuiz[key][field];
+  _copyNested(obj) {
+    if (obj) {
+      let data = Object.assign({}, obj);
+      if (Object.keys(obj).length > 0) {
+      Object.keys(obj).forEach((id) => {
+        data[id] = obj[id];
+        if (Object.keys(obj[id]).length > 0 && typeof obj[id] !== "string") {
+        Object.keys(obj[id]).forEach((prop) => {
+          data[id][prop] = obj[id][prop];
+          if (Object.keys(obj[id][prop]).length > 0 && typeof obj[id][prop] !== "string") {
+          Object.keys(obj[id][prop]).forEach((attr) => {
+            data[id][prop][attr] = obj[id][prop][attr];
+            if (Object.keys(obj[id][prop][attr]).length > 0 && typeof obj[id][prop][attr] !== "string") {
+            Object.keys(obj[id][prop][attr]).forEach((field) => {
+              data[id][prop][attr][field] = obj[id][prop][attr][field];
+            });
+            }
+          });
+          }
         });
+        }
       });
+      }
       return data;
     }
   }
@@ -61,15 +104,26 @@ class QuizListEdit extends Component {
   _refresh() {
     this.setState((prevState, props) => {
 
-      const allQuiz = this._compileQuiz(this._initialState.allQuiz);
+    this._answer = this._copyNested(this._initialAnswer);
+    this._path = this._copyNested(this._initialPath);
+    this._order = this._compilePath(this._initialOrder);
+
       return {
-        allQuiz: allQuiz,
-        allAnswer: Object.assign({}, this._initialState.allAnswer),
+        quiz: this._copyNested(this._initialState.quiz),
         valid: this._initialState.valid,
         focus: this._initialState.focus
       };
     });
 
+  }
+
+  _save() {
+
+    if (this.state.valid) {
+      firebase.database().ref('quiz').set(this.state.quiz);
+      firebase.database().ref('answer').set(this._answer);
+      firebase.database().ref('path').set(this._path);
+    }
   }
 
   _validate(id) {
@@ -81,16 +135,9 @@ class QuizListEdit extends Component {
     return valid;
   }
 
-  _validateAll(allQuiz) {
+  _validateAll(quiz) {
     let valid = true;
-    let keys = {};
-    Object.keys(allQuiz).forEach((key) => {
-      const order = allQuiz[key].order;
-      if (!keys[order]) {
-        keys[order] = true;
-      } else {
-        valid = false;
-      }
+    Object.keys(quiz).forEach((key) => {
       if (!this._validate(key)) {
         valid = false;
       }
@@ -102,8 +149,11 @@ class QuizListEdit extends Component {
 
     const id = event.target.id;
     this.setState((prevState, props) => {
-      delete prevState.allQuiz[id];
-      delete prevState.allAnswer[id];
+      delete prevState.quiz[id];
+      delete this._answer[id];
+      delete this._path[this._order[id].id]
+      delete this._order[id];
+
       return prevState;
     });
   }
@@ -123,37 +173,43 @@ class QuizListEdit extends Component {
 
         if ( !this._validate(value) ) {
           prevState.valid = false;
-          prevState.allQuiz[number].id = value;
+          prevState.quiz[number].id = value;
           prevState.focus = number;
 
         } else {
 
-          if (prevState.allQuiz[value] !== undefined ) {
+          if (prevState.quiz[value] !== undefined ) {
             prevState.valid = false;
-            prevState.allQuiz[number].id = value;
+            prevState.quiz[number].id = value;
             prevState.focus = number;
 
           } else {
-            prevState.allQuiz[value] = Object.assign({}, prevState.allQuiz[id]);
-            prevState.allAnswer[value] = prevState.allAnswer[id];
-            delete prevState.allQuiz[id];
-            delete prevState.allAnswer[id];
-
-            prevState.allQuiz[value].id = value;
+            prevState.quiz[value] = Object.assign({}, prevState.quiz[id]);
+            prevState.quiz[value].id = value;
             prevState.focus = value;
+            delete prevState.quiz[id];
 
-            prevState.valid = this._validateAll(prevState.allQuiz);
+            this._answer[value] = this._answer[id];
+            delete this._answer[id];
+
+            this._path[this._order[id].id].id.quiz = value;
+
+            this._order[value] = this._order[id];
+            this._order[value].current = value;
+            delete this._order[id];
+
+            prevState.valid = this._validateAll(prevState.quiz);
           }
         }
       }
-      if (name === "order") {
-        if (value.length === 0) {
-          prevState.valid = false;
-        } else {
-          prevState.valid = this._validateAll(prevState.allQuiz);
-        }
-        prevState.allQuiz[id].order = value;
-      }
+//      if (name === "order") {
+//        if (value.length === 0) {
+//          prevState.valid = false;
+//        } else {
+//          prevState.valid = this._validateAll(prevState.quiz);
+//        }
+//        prevState.quiz[id].order = value;
+//      }
 
       return prevState;
     });
@@ -163,7 +219,7 @@ class QuizListEdit extends Component {
   render() {
 
     const valid = this.state.valid ? "" : "disabled";
-    const quiz = this.state.allQuiz;
+    const quiz = this.state.quiz;
 
     let quizListJSX;
     if (quiz) {
@@ -171,14 +227,14 @@ class QuizListEdit extends Component {
       quizListJSX = Object.keys(quiz).map( (id) => {
 
         const item = quiz[id];
-        let condition;
-        if (item.condition) {
-          condition = Object.keys(item.condition).map((key) => {
-            return (
-              <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
-            );
-          });
-        }
+//        let condition;
+//        if (item.condition) {
+//          condition = Object.keys(item.condition).map((key) => {
+//            return (
+//              <div key={key}>{item.condition[key].id}: {item.condition[key].value}</div>
+//            );
+//          });
+//        }
 
         return (
           <tr key={id}>
@@ -199,6 +255,7 @@ class QuizListEdit extends Component {
                   />
               </div>
             </td>
+          {/*
             <td>
               <div className="ui input">
                 <input 
@@ -216,6 +273,7 @@ class QuizListEdit extends Component {
             <td>
               {condition}
             </td>
+          */}
             <td className="right aligned">
               <a id={id} onClick={this._onQuizDelete} className="ui mini red icon labeled button">
                 <i className="icon trash" />
@@ -235,8 +293,10 @@ class QuizListEdit extends Component {
             <tr>
               <th>題目</th>
               <th>代號 *</th>
+            {/*
               <th>順序 *</th>
               <th>條件</th>
+            */}
               <th></th>
             </tr>
           </thead>
@@ -245,7 +305,7 @@ class QuizListEdit extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={5} className="right aligned">
+              <th colSpan={3} className="right aligned">
                 <div className="ui mini buttons">
                   <Link to="/quiz" onClick={this._save} className={"ui icon labeled olive button " + valid} >
                     <i className="icon checkmark" />
