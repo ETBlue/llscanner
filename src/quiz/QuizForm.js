@@ -45,32 +45,19 @@ class QuizForm extends Component {
               disabled={this.props.locked} 
               />
           </div>
-          <div className="field">
-            <label>順序</label>
+          <div className={"field" + (this.props.type === "select" || this.props.type === "input" ? "" : " error")}>
+            <label>類型 *</label>
             <input 
               type="text" 
               title="quiz" 
-              name="order" 
+              name="type" 
               id={this.props.id} 
-              value={this.props.order} 
+              value={this.props.type} 
               onChange={this.props.onChange} 
-              placeholder="本題的出現順序" 
+              placeholder="本題的類型" 
               disabled={this.props.locked} 
               />
           </div>
-        </div>
-        <div className={"field" + (this.props.type === "select" || this.props.type === "input" ? "" : " error")}>
-          <label>類型 *</label>
-          <input 
-            type="text" 
-            title="quiz" 
-            name="type" 
-            id={this.props.id} 
-            value={this.props.type} 
-            onChange={this.props.onChange} 
-            placeholder="本題的類型" 
-            disabled={this.props.locked} 
-            />
         </div>
       </div>
     );

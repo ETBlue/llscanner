@@ -114,14 +114,19 @@ class App extends Component {
       const action = params.action;
 
       const quiz = this.state.quiz;
+      const step = this.state.step;
       const order = this.state.order;
       const route = this.state.route;
       const condition = this.state.condition;
       const answer = this.state.answer;
 
+      const stepID = Math.max(Object.keys(step).map((id) =>{
+        return parseInt(id, 10);
+      }) + 1);
+
       if (id === "new") {
         return (
-          <QuizAdd quiz={quiz} />
+          <QuizAdd quiz={quiz} step={stepID} />
         );
       }
 

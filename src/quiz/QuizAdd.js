@@ -30,6 +30,7 @@ class QuizAdd extends Component {
           value: ""
         }
       },
+      step: this.props.step,
     };
 
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
@@ -84,6 +85,10 @@ class QuizAdd extends Component {
       let quiz = this.state.quizData;
       quiz.option = this.state.optionData;
       firebase.database().ref('quiz/' + this.state.quizData.id).set(quiz);
+      firebase.database().ref('step/' + this.state.step).set({
+        id: this.state.step,
+        quiz: this.state.quizData.id
+      });
     }
   }
 
