@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom';
 import firebase from 'firebase';
 
+import StepList from './step/StepList';
+
 import QuizList from './quiz/QuizList';
 import QuizListEdit from './quiz/QuizListEdit';
 import QuizView from './quiz/QuizView';
@@ -25,7 +27,7 @@ class App extends Component {
 
     this.state = {
       quiz: {},
-      path: {},
+      step: {},
       order: {},
       route: {},
       condition: {},
@@ -43,24 +45,24 @@ class App extends Component {
       this.setState((prevState, props) => {
 
         const quiz = snapshot.val().quiz;
-        const path = snapshot.val().path;
+        const step = snapshot.val().step;
 
-        const list = Object.keys(path);
+        const list = Object.keys(step);
         list.forEach((key, index) => {
-          prevState.order[path[key].quiz] = {
+          prevState.order[step[key].quiz] = {
             id: key,
-            current: path[key].quiz,
-            prev: index > 0 ? path[ list[index - 1]].quiz : "",
-            next: index < list.length - 1 ? path[ list[index + 1]].quiz : "",
+            current: step[key].quiz,
+            prev: index > 0 ? step[ list[index - 1]].quiz : "",
+            next: index < list.length - 1 ? step[ list[index + 1]].quiz : "",
           };
-          prevState.route[path[key].quiz] = path[key].route;
-          prevState.condition[path[key].quiz] = path[key].condition;
+          prevState.route[step[key].quiz] = step[key].route;
+          prevState.condition[step[key].quiz] = step[key].condition;
         });
-        prevState.first = path[list[0]].quiz;
+        prevState.first = step[list[0]].quiz;
 
         return {
           quiz: quiz,
-          path: path,
+          step: step,
           order: prevState.order,
           route: prevState.route,
           condition: prevState.condition,
@@ -73,6 +75,13 @@ class App extends Component {
 
   render() {
 
+    const StepPage = () => {
+      return (
+        <StepList 
+          step={this.state.step} 
+        />
+      );
+    }
     const HomePage = () => {
 
       const id = this.state.first;
@@ -178,6 +187,7 @@ class App extends Component {
             <nav className="ui inverted compact secondary pointing menu">
               <NavLink exact to="/" className="item">Home</NavLink>
               <NavLink to="/quiz" className="item">Quiz</NavLink>
+              <NavLink to="/step" className="item">Step</NavLink>
               <NavLink to="/answer" className="item">Answer</NavLink>
               {/*<NavLink to="/login" className="item">Login</NavLink>*/}
             </nav>
@@ -188,6 +198,7 @@ class App extends Component {
               <Route exact path="/" render={HomePage} />
               <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
               <Route path="/answer" render={() => <p>answer</p>} />
+              <Route path="/step" render={StepPage} />
               <Route path="/:endpoint" render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
               {/*<Route path="/login" render={() => <div className="auth"></div>} />
                           */}

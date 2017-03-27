@@ -8,32 +8,17 @@ class QuizList extends Component {
     super(props);
 
     this.state = {
-      quiz: this._compileQuiz(this.props.quiz)
+      quiz: this.props.quiz,
     };
-
-    this._compileQuiz = this._compileQuiz.bind(this);
 
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState((prevState, props) => {
       return {
-        quiz: this._compileQuiz(nextProps.quiz),
+        quiz: nextProps.quiz,
       };
     });
-  }
-
-  _compileQuiz(quiz) {
-    if (quiz) {
-      let data = Object.assign({}, quiz);
-      Object.keys(quiz).forEach((key) => {
-        data[key] = {};
-        Object.keys(quiz[key]).forEach((field) => {
-          data[key][field] = quiz[key][field];
-        });
-      });
-      return data;
-    }
   }
 
   render() {
