@@ -179,6 +179,7 @@ class App extends Component {
               <Route exact path="/" render={HomePage} />
               <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
               <Route path="/answer" render={() => <p>answer</p>} />
+              <Route path="/:endpoint" render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
               {/*<Route path="/login" render={() => <div className="auth"></div>} />
                           */}
             </Switch>
