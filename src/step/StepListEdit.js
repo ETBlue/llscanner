@@ -131,29 +131,27 @@ class StepListEdit extends Component {
 
   render() {
 
+    let stepListJSX;
     const valid = this.state.valid ? "" : "disabled";
     const step = this.state.step;
 
-    let stepListJSX;
     if (step) {
-
       stepListJSX = Object.keys(step).map( (id) => {
+
       const item = step[id];
+
       if (item) {
 
-        let condition;
-        let route;
+        let conditionJSX;
+        let routeJSX;
 
         if (item.condition) {
+          conditionJSX = Object.keys(item.condition).map((key) => {
 
-          condition = Object.keys(item.condition).map((key) => {
-          if (item.condition[key]) {
-
-            const target = Object.keys(item.condition[key]).map((target) => {
-            if (item.condition[key][target]) {
-
-              const rule = item.condition[key][target];
+            const listJSX = Object.keys(item.condition[key]).map((id) => {
+              const rule = item.condition[key][id];
               const answer = rule.answer.split(",").map((str, index, arr) => {
+
                 return (
                   <span key={str}>
                   <code className="code">{str.trim()}</code>
@@ -161,47 +159,59 @@ class StepListEdit extends Component {
                   </span>
                 );
               });
+
               return (
-                <div key={target} className="item">
-                  當
-                  <code className="code">{rule.id}</code>
-                  的答案
-                  <code className="code">{rule.condition}</code>
-                  這些值
-                  {answer}
-                  時
+                <div key={id} className="ui vertical segment">
+                  <div className="ui list">
+                    <div className="item">
+                      <i className="icon flag" />
+                      <span className="content">
+                      <code className="code">{rule.id}</code>
+                      </span>
+                    </div>
+                    <div className="item">
+                      <i className="icon setting" />
+                      <span className="content">
+                      <code className="code">{rule.condition}</code>
+                      </span>
+                    </div>
+                    <div className="item">
+                      <i className="icon tags" />
+                      <span className="content">
+                      {answer}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               );
-            } else {return null;}
             });
-
             return (
-              <div key={key} className="ui divided list">
-              {target}
+              <div key={key}>
+                <h5 className="ui vertical segment">
+                <span className="ui label">{key}</span>
+                </h5>
+                {listJSX}
               </div>
             );
-          } else {return null;}
           });
         }
 
         if (item.route) {
-          const list = Object.keys(item.route).map((key) => {
-          if (item.route[key]){
-
+          const listJSX = Object.keys(item.route).map((key) => {
             return (
               <div key={key} className="item">
-                回答
-                <code className="code">{key}</code>
-                將導向
-                <code className="code">{item.route[key]}</code>
+                <i className="icon random" />
+                <span className="content">
+                  <code className="code">{key}</code>
+                  →
+                  <code className="code">{item.route[key]}</code>
+                </span>
               </div>
             );
-
-          } else {return null;}
           });
-          route = (
-            <div className="ui divided list">
-              {list}
+          routeJSX = (
+            <div className="ui divided relaxed list">
+              {listJSX}
             </div>
           );
         }
@@ -227,7 +237,7 @@ class StepListEdit extends Component {
                   />
               </div>
             </td>
-            <td>{condition}{route}</td>
+            <td>{conditionJSX}{routeJSX}</td>
             <td className="right aligned">
               <a id={id} onClick={this._onStepDelete} className="ui mini red icon labeled button">
                 <i className="icon trash" />
