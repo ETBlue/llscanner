@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
-import QuizForm from './QuizForm';
-import './QuizAdd.css';
+import StepForm from './StepForm';
+import './StepAdd.css';
 
-class QuizAdd extends Component {
+class StepAdd extends Component {
 
   constructor(props) {
 
@@ -13,25 +13,22 @@ class QuizAdd extends Component {
 
     this.state = {
       valid: false,
-      quizData: { // 準備送出的表單資料
-        id: "quiz_id",
-        title: "問題",
-        description: "",
-        type: "select"
-      },
-    };
-
-    this._optionData = {
-      1: {
-        id: 1,
-        title: "選項",
-        value: ""
+      stepData: {
+        id: this.props.stepID,
+        quiz: ""
       }
     };
 
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
     this._validate = this._validate.bind(this);
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState((prevState, props) => {
+      prevState.stepData.id = nextProps.stepID;
+      return prevState;
+    });
   }
 
   _onInputChange(event) {
@@ -43,7 +40,7 @@ class QuizAdd extends Component {
 
     this.setState((prevState, props) => {
 
-      prevState.quizData[name] = value;
+      prevState.stepData[name] = value;
       prevState.valid = this._validate(prevState);
 
       return prevState;
@@ -54,17 +51,15 @@ class QuizAdd extends Component {
   _validate(prevState) {
 
     let valid = true;
-    if (prevState.quizData.title.length === 0 || 
-      prevState.quizData.id.length === 0 ||
-      this.props.quiz[prevState.quizData.id] !== undefined ||
-      prevState.quizData.id === "new" ||
-      prevState.quizData.id === "edit" ||
-      prevState.quizData.id === "quiz_id" )
+    if (prevState.stepData.id.length === 0 || 
+      prevState.stepData.quiz.length === 0 ||
+      this.props.step[prevState.stepData.id] ||
+      prevState.stepData.id === "new" ||
+      prevState.stepData.id === "edit" ||
+      !parseInt(prevState.stepData.id, 10)
+      // TODO: check existence of quiz
+      )
     {
-      valid = false;
-    }
-    if (prevState.quizData.type !== "select" &&
-      prevState.quizData.type !== "input") {
       valid = false;
     }
     return valid;
@@ -73,12 +68,10 @@ class QuizAdd extends Component {
   _save() {
 
     if (this.state.valid) {
-      let quizData = this.state.quizData;
-      quizData.option = this._optionData;
-      firebase.database().ref('quiz/' + quizData.id).set(quizData);
-      firebase.database().ref('step/' + this.props.stepID).set({
-        id: this.props.stepID,
-        quiz: quizData.id
+      let stepData = this.state.stepData;
+      firebase.database().ref('step/' + stepData.id).set({
+        id: stepData.id,
+        quiz: stepData.quiz
       });
     }
   }
@@ -88,26 +81,26 @@ class QuizAdd extends Component {
     const valid = this.state.valid ? "" : " disabled";
 
     return (
-        <div className="NewQuiz ui basic segment">
-          <h2 className="ui header">新增測驗題</h2>
+        <div className="NewStep ui basic segment">
+          <h2 className="ui header">新增測驗步驟</h2>
           <div className="new ui segment">
             <form className="Form ui form">
-              <QuizForm 
-                {...this.state.quizData} 
-                header="新問題" 
+              <StepForm 
+                {...this.state.stepData} 
+                header="新步驟" 
                 onChange={this._onInputChange} 
               />
               <hr className="ui divider" />
               <div className="ui mini buttons">
                 <Link 
-                  to={"/quiz/" + this.state.quizData.id + "/edit" } 
+                  to={"/step/" + this.state.stepData.id + "/edit" } 
                   onClick={this._save} 
                   className={"ui icon labeled olive button " + valid}
                 >
                   <i className="icon checkmark" />
                   送出
                 </Link>
-                <Link to="/quiz" className="ui icon labeled button">
+                <Link to="/step" className="ui icon labeled button">
                   <i className="icon cancel" />
                   取消
                 </Link>
@@ -119,4 +112,4 @@ class QuizAdd extends Component {
   }
 }
 
-export default QuizAdd;
+export default StepAdd;

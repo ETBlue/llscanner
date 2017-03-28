@@ -10,12 +10,15 @@ import firebase from 'firebase';
 
 import StepList from './step/StepList';
 import StepListEdit from './step/StepListEdit';
+import StepAdd from './step/StepAdd';
+import StepView from './step/StepView';
+import StepEdit from './step/StepEdit';
 
 import QuizList from './quiz/QuizList';
 import QuizListEdit from './quiz/QuizListEdit';
+import QuizAdd from './quiz/QuizAdd';
 import QuizView from './quiz/QuizView';
 import QuizEdit from './quiz/QuizEdit';
-import QuizAdd from './quiz/QuizAdd';
 
 import logo from './logo.svg';
 import './App.css';
@@ -76,15 +79,20 @@ class App extends Component {
 
   render() {
 
+    const quiz = this.state.quiz;
+    const step = this.state.step;
+    const order = this.state.order;
+    const route = this.state.route;
+    const condition = this.state.condition;
+    const answer = this.state.answer;
+    const ids = Object.keys(step).map((id) =>{
+      return parseInt(id, 10);
+    });
+    const stepID = Math.max( ...ids ) + 10;
+
     const HomePage = () => {
 
       const id = this.state.first;
-
-      const quiz = this.state.quiz;
-      const order = this.state.order;
-      const route = this.state.route;
-      const condition = this.state.condition;
-      const answer = this.state.answer;
 
       return (
         <section className="Quiz">
@@ -107,35 +115,55 @@ class App extends Component {
       const id = params.id;
       const action = params.action;
 
-      const step = this.state.step;
-
       if (id === "new") {
         return (
-          <StepList 
-            step={this.state.step} 
+          <StepAdd 
+            quiz={quiz} 
+            step={step} 
+            stepID={stepID} 
           />
         );
       }
-
       if (id === "edit") {
         return (
           <StepListEdit 
-            step={this.state.step} 
+            step={step} 
           />
         );
       }
-
       if (step[id]) {
+
         if (action === "edit") {
+          return (
+            <section key={id}>
+              <StepView 
+                step={step[id]} 
+                quiz={quiz[step[id].quiz]}
+              />
+              <StepEdit 
+                step={step[id]} 
+                quiz={quiz} 
+              />
+            </section>
+          );
 
         } else {
-
+          return (
+            <section key={id}>
+              <StepView 
+                step={step[id]} 
+                quiz={quiz[step[id].quiz]}
+              />
+              <Link to={"/step/" + id + "/edit"} className="ui mini icon button" >
+                <i className="icon pencil" />
+              </Link>
+            </section>
+          );
         }
       }
-
       return (
         <StepList 
-          step={this.state.step} 
+          step={step} 
         />
       );
     }
@@ -145,27 +173,23 @@ class App extends Component {
       const id = params.id;
       const action = params.action;
 
-      const quiz = this.state.quiz;
-      const step = this.state.step;
-      const order = this.state.order;
-      const route = this.state.route;
-      const condition = this.state.condition;
-      const answer = this.state.answer;
-
-      const ids = Object.keys(step).map((id) =>{
-        return parseInt(id, 10);
-      });
-      const stepID = Math.max( ...ids ) + 10;
-
       if (id === "new") {
         return (
-          <QuizAdd quiz={quiz} step={stepID} />
+          <QuizAdd 
+            quiz={quiz} 
+            stepID={stepID} 
+          />
         );
       }
 
       if (id === "edit") {
         return (
-          <QuizListEdit quiz={quiz} answer={answer} step={step} order={order} />
+          <QuizListEdit 
+            quiz={quiz} 
+            answer={answer} 
+            step={step} 
+            order={order} 
+          />
         );
       }
 
