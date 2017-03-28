@@ -9,6 +9,7 @@ import {
 import firebase from 'firebase';
 
 import StepList from './step/StepList';
+import StepListEdit from './step/StepListEdit';
 
 import QuizList from './quiz/QuizList';
 import QuizListEdit from './quiz/QuizListEdit';
@@ -75,13 +76,6 @@ class App extends Component {
 
   render() {
 
-    const StepPage = () => {
-      return (
-        <StepList 
-          step={this.state.step} 
-        />
-      );
-    }
     const HomePage = () => {
 
       const id = this.state.first;
@@ -105,6 +99,44 @@ class App extends Component {
             <i className="icon pencil" />
           </Link>
         </section>
+      );
+    }
+
+    const StepPage = (params) => {
+
+      const id = params.id;
+      const action = params.action;
+
+      const step = this.state.step;
+
+      if (id === "new") {
+        return (
+          <StepList 
+            step={this.state.step} 
+          />
+        );
+      }
+
+      if (id === "edit") {
+        return (
+          <StepListEdit 
+            step={this.state.step} 
+          />
+        );
+      }
+
+      if (step[id]) {
+        if (action === "edit") {
+
+        } else {
+
+        }
+      }
+
+      return (
+        <StepList 
+          step={this.state.step} 
+        />
       );
     }
 
@@ -132,7 +164,7 @@ class App extends Component {
 
       if (id === "edit") {
         return (
-          <QuizListEdit quiz={quiz} />
+          <QuizListEdit quiz={quiz} answer={answer} step={step} order={order} />
         );
       }
 
@@ -203,7 +235,7 @@ class App extends Component {
               <Route exact path="/" render={HomePage} />
               <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
               <Route path="/answer" render={() => <p>answer</p>} />
-              <Route path="/step" render={StepPage} />
+              <Route path="/step/:id?/:action?" render={({match}) => StepPage(match.params)} />
               <Route path="/:endpoint" render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
               {/*<Route path="/login" render={() => <div className="auth"></div>} />
                           */}

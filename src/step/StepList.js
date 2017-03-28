@@ -51,7 +51,9 @@ class StepList extends Component {
                   <code className="code">{rule.id}</code>
                   的答案
                   <code className="code">{rule.condition}</code>
-                  這些值： {answer}
+                  這些值
+                  {answer}
+                  時
                 </div>
               );
             });
@@ -84,13 +86,13 @@ class StepList extends Component {
 
         return (
           <tr key={id}>
-            <td><code className="code">
-              <Link key={item.id} to={"/step/" + item.id}>{item.quiz}</Link>
+            <td>
+              <code className="code">
+                <Link to={"/step/" + item.id}>{item.quiz}</Link>
               </code>
             </td>
             <td>{item.id}</td>
-            <td>{condition}</td>
-            <td>{route}</td>
+            <td>{condition}{route}</td>
           </tr>
         )
       })
@@ -102,10 +104,9 @@ class StepList extends Component {
         <table className="ui unstackable table">
           <thead>
             <tr>
-              <th className="four wide">代號</th>
+              <th className="five wide">代號</th>
               <th className="two wide">排序</th>
-              <th className="five wide">先決條件</th>
-              <th className="five wide">分岔</th>
+              <th className="nine wide">進出規則</th>
             </tr>
           </thead>
           <tbody>
@@ -113,7 +114,7 @@ class StepList extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={4} className="right aligned">
+              <th colSpan={3} className="right aligned">
                 <div className="ui mini buttons">
                   <Link to="/step/new" className="ui icon labeled green button" >
                     <i className="icon add" />

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
+import _copyNested from '../_copyNested'
+
 import QuizForm from './QuizForm';
 import OptionForm from './OptionForm';
 //import ConditionForm from './ConditionForm';
@@ -40,10 +42,9 @@ class QuizEdit extends Component {
     };
 
     this._initialQuizData = Object.assign({}, this.state.quizData);
-    this._initialOptionData = this._compileNest(this.state.optionData);
+    this._initialOptionData = _copyNested(this.state.optionData);
 
     this._validateAll = this._validateAll.bind(this);
-    this._compileNest = this._compileNest.bind(this);
 
     this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
     this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
@@ -62,20 +63,7 @@ class QuizEdit extends Component {
         order: nextProps.order,
         type: nextProps.type
     };
-    this._initialOptionData = this._compileNest(nextProps.option) || this._basicOptionData;
-  }
-
-  _compileNest(nestedObject) {
-    if (nestedObject) {
-    let data = Object.assign({}, nestedObject);
-    Object.keys(nestedObject).forEach((key) => {
-      data[key] = {};
-      Object.keys(nestedObject[key]).forEach((field) => {
-        data[key][field] = nestedObject[key][field];
-      });
-    });
-    return data;
-    }
+    this._initialOptionData = _copyNested(nextProps.option) || this._basicOptionData;
   }
 
   _validateAll(prevState) {
@@ -142,7 +130,7 @@ class QuizEdit extends Component {
   _refresh() {
 
     this.setState((prevState, props) => {
-      const optionData = this._compileNest(this._initialOptionData);
+      const optionData = _copyNested(this._initialOptionData);
       return {
         quizData: Object.assign({} , this._initialQuizData),
         optionData: optionData,

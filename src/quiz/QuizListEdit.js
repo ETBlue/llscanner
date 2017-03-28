@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
+import _copyNested from '../_copyNested'
+
 class QuizListEdit extends Component {
 
   constructor(props) {
@@ -22,18 +24,14 @@ class QuizListEdit extends Component {
     this._refresh = this._refresh.bind(this);
     this._save = this._save.bind(this);
 
-    // data preparation
-    this._compilePath = this._compilePath.bind(this);
-    this._copyNested = this._copyNested.bind(this);
-
     // data initialization
-    this._initialState = this._copyNested(this.state);
+    this._initialQuiz = _copyNested(this.props.quiz);
     this._answer = this.props.answer;
-    this._path = this.props.path;
-    this._order = this._compilePath(this.props.path);
-    this._initialAnswer = this._copyNested(this.props.answer);
-    this._initialPath = this._copyNested(this.props.path);
-    this._initialOrder = this._copyNested(this._order);
+    this._step = this.props.step;
+    this._order = this.props.order;
+    this._initialAnswer = _copyNested(this.props.answer);
+    this._initialStep = _copyNested(this.props.step);
+    this._initialOrder = _copyNested(this.props.order);
 
   }
 
@@ -41,73 +39,30 @@ class QuizListEdit extends Component {
     this.setState((prevState, props) => {
 
       // data initialization... again
-      this._initialState.quiz = this._copyNested(nextProps.quiz);
+      this._initialQuiz = _copyNested(nextProps.quiz);
       this._answer = nextProps.answer;
-      this._path = nextProps.path;
-      this._order = this._compilePath(nextProps.path);
-      this._initialAnswer = this._copyNested(nextProps.answer);
-      this._initialPath = this._copyNested(nextProps.path);
-      this._initialOrder = this._copyNested(this._order);
-
+      this._step = nextProps.step;
+      this._order = nextProps.order;
+      this._initialAnswer = _copyNested(nextProps.answer);
+      this._initialStep = _copyNested(nextProps.step);
+      this._initialOrder = _copyNested(nextProps.order);
       return {
         quiz: nextProps.quiz,
       };
     });
   }
 
-  _compilePath(path) {
-    let order = {};
-    if (path) {
-    Object.keys(path).forEach((key) => {
-      order[path[key].quiz] = {
-        id: key,
-        current: path[key].quiz,
-        prev: path[key - 1].quiz,
-        next: path[key + 1].quiz,
-      };
-    });
-    }
-    return order;
-  }
-
-  _copyNested(obj) {
-    if (obj) {
-      let data = Object.assign({}, obj);
-      if (Object.keys(obj).length > 0) {
-      Object.keys(obj).forEach((id) => {
-        data[id] = obj[id];
-        if (Object.keys(obj[id]).length > 0 && typeof obj[id] !== "string") {
-        Object.keys(obj[id]).forEach((prop) => {
-          data[id][prop] = obj[id][prop];
-          if (Object.keys(obj[id][prop]).length > 0 && typeof obj[id][prop] !== "string") {
-          Object.keys(obj[id][prop]).forEach((attr) => {
-            data[id][prop][attr] = obj[id][prop][attr];
-            if (Object.keys(obj[id][prop][attr]).length > 0 && typeof obj[id][prop][attr] !== "string") {
-            Object.keys(obj[id][prop][attr]).forEach((field) => {
-              data[id][prop][attr][field] = obj[id][prop][attr][field];
-            });
-            }
-          });
-          }
-        });
-        }
-      });
-      }
-      return data;
-    }
-  }
-
   _refresh() {
     this.setState((prevState, props) => {
 
-    this._answer = this._copyNested(this._initialAnswer);
-    this._path = this._copyNested(this._initialPath);
-    this._order = this._compilePath(this._initialOrder);
+      this._answer = _copyNested(this._initialAnswer);
+      this._step = _copyNested(this._initialStep);
+      this._order = _copyNested(this._initialOrder);
 
       return {
-        quiz: this._copyNested(this._initialState.quiz),
-        valid: this._initialState.valid,
-        focus: this._initialState.focus
+        quiz: _copyNested(this._initialQuiz),
+        valid: true,
+        focus: ""
       };
     });
 
@@ -118,7 +73,7 @@ class QuizListEdit extends Component {
     if (this.state.valid) {
       firebase.database().ref('quiz').set(this.state.quiz);
       firebase.database().ref('answer').set(this._answer);
-      firebase.database().ref('path').set(this._path);
+      firebase.database().ref('step').set(this._step);
     }
   }
 
@@ -147,7 +102,7 @@ class QuizListEdit extends Component {
     this.setState((prevState, props) => {
       delete prevState.quiz[id];
       delete this._answer[id];
-      delete this._path[this._order[id].id]
+      delete this._step[this._order[id].id]
       delete this._order[id];
 
       return prevState;
@@ -161,7 +116,6 @@ class QuizListEdit extends Component {
     const id = target.id;
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
 
     this.setState((prevState, props) => {
 
@@ -169,30 +123,31 @@ class QuizListEdit extends Component {
 
         if ( !this._validate(value) ) {
           prevState.valid = false;
-          prevState.quiz[number].id = value;
-          prevState.focus = number;
+          prevState.quiz[id].id = value;
+          prevState.focus = id;
 
         } else {
 
           if (prevState.quiz[value] !== undefined ) {
             prevState.valid = false;
-            prevState.quiz[number].id = value;
-            prevState.focus = number;
+            prevState.quiz[id].id = value;
+            prevState.focus = id;
 
           } else {
-            prevState.quiz[value] = Object.assign({}, prevState.quiz[id]);
+            prevState.quiz[value] = prevState.quiz[id];
             prevState.quiz[value].id = value;
             prevState.focus = value;
             delete prevState.quiz[id];
 
-            this._answer[value] = this._answer[id];
+            this._answer[value] = this._answer[id] || "";
             delete this._answer[id];
 
-            this._path[this._order[id].id].id.quiz = value;
-
-            this._order[value] = this._order[id];
-            this._order[value].current = value;
-            delete this._order[id];
+            if (this._order[id]) {
+              this._step[this._order[id].id].quiz = value;
+              this._order[value] = this._order[id];
+              this._order[value].current = value;
+              delete this._order[id];
+            }
 
             prevState.valid = this._validateAll(prevState.quiz);
           }
@@ -226,8 +181,7 @@ class QuizListEdit extends Component {
               <div className="ui input">
                 <input 
                   type="text" 
-                  id={item.id} 
-                  data-number={id}
+                  id={id} 
                   name="id" 
                   value={item.id} 
                   placeholder={id} 
