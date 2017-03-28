@@ -102,7 +102,8 @@ class QuizListEdit extends Component {
     this.setState((prevState, props) => {
       delete prevState.quiz[id];
       delete this._answer[id];
-      delete this._step[this._order[id].id]
+      if (this._order[id]) {delete this._step[this._order[id].id];}
+      
       delete this._order[id];
 
       return prevState;

@@ -152,9 +152,10 @@ class App extends Component {
       const condition = this.state.condition;
       const answer = this.state.answer;
 
-      const stepID = Math.max(Object.keys(step).map((id) =>{
+      const ids = Object.keys(step).map((id) =>{
         return parseInt(id, 10);
-      }) + 1);
+      });
+      const stepID = Math.max( ...ids ) + 10;
 
       if (id === "new") {
         return (
