@@ -8,8 +8,8 @@ class StepView extends Component {
     super(props);
 
     this.state = {
-      stepData: this.props.step,
-      quizData: this.props.quiz,
+      stepData: this.props.stepData,
+      quizData: this.props.quizData,
     };
 
   }
@@ -18,8 +18,8 @@ class StepView extends Component {
     this.setState((prevState, props) => {
 
       return {
-        stepData: nextProps.step,
-        quizData: nextProps.quiz,
+        stepData: nextProps.stepData,
+        quizData: nextProps.quizData,
       };
     });
   }
@@ -95,9 +95,9 @@ class StepView extends Component {
           <div key={key} className="item">
             <i className="icon random" />
             <span className="content">
-              <code className="code">{key}</code>
+              <code className="code">{step.route[key].id}</code>
               →
-              <code className="code">{step.route[key]}</code>
+              <code className="code">{step.route[key].quiz}</code>
             </span>
           </div>
         );

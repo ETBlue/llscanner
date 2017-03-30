@@ -158,7 +158,8 @@ class QuizEdit extends Component {
 
         return {
           quizData: prevState.quizData,
-          valid: prevState.valid
+          valid: prevState.valid,
+          focus: prevState.focus,
         };
       });
 
@@ -194,7 +195,8 @@ class QuizEdit extends Component {
 
         return {
           optionData: prevState.optionData,
-          valid: prevState.valid
+          valid: prevState.valid,
+          focus: prevState.focus,
         };
       });
     }
@@ -206,7 +208,7 @@ class QuizEdit extends Component {
     const valid = this.state.valid ? "" : " disabled";
     const action = (
       <div className={"Action ui mini buttons"}>
-        <Link to={"/quiz/" + this.state.quizData.id} onClick={this._save} className={"ui icon labeled olive mini button" + valid}>
+        <Link to={"/quiz/" + this.state.quizData.id} onClick={this._save} className={"ui icon labeled teal mini button" + valid}>
           <i className="icon checkmark" />
           送出
         </Link>

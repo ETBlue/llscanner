@@ -221,7 +221,7 @@ class QuizListEdit extends Component {
             <tr>
               <th colSpan={4} className="right aligned">
                 <div className="ui mini buttons">
-                  <Link to="/quiz" onClick={this._save} className={"ui icon labeled olive button " + valid} >
+                  <Link to="/quiz" onClick={this._save} className={"ui icon labeled teal button " + valid} >
                     <i className="icon checkmark" />
                     Save
                   </Link>

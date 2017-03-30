@@ -16,7 +16,8 @@ class StepAdd extends Component {
       stepData: {
         id: this.props.stepID,
         quiz: ""
-      }
+      },
+      quizIDs: this.props.quizIDs,
     };
 
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
@@ -27,6 +28,7 @@ class StepAdd extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState((prevState, props) => {
       prevState.stepData.id = nextProps.stepID;
+      prevState.quizIDs = nextProps.quizIDs;
       return prevState;
     });
   }
@@ -95,7 +97,7 @@ class StepAdd extends Component {
                 <Link 
                   to={"/step/" + this.state.stepData.id + "/edit" } 
                   onClick={this._save} 
-                  className={"ui icon labeled olive button " + valid}
+                  className={"ui icon labeled teal button " + valid}
                 >
                   <i className="icon checkmark" />
                   送出

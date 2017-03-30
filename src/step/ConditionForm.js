@@ -1,47 +1,51 @@
 import React, { Component } from 'react';
+import RuleForm from './RuleForm';
 import './ConditionForm.css';
 
 class ConditionForm extends Component {
 
   render() {
+
+    const ruleJSX = !this.props.rules ? "" : Object.keys(this.props.rules).map((id) => {
+
+      return (
+        <RuleForm 
+          key={id} 
+          number={id} 
+          focus={this.props.focus} 
+          conditionID={this.props.id}
+          checkedItem={this.props.rules[id].condition} 
+          {...this.props.rules[id]} 
+          onRuleAdd={this.props.onRuleAdd} 
+          onRuleDelete={this.props.onRuleDelete} 
+          onInputChange={this.props.onInputChange} 
+          onRadioSelect={this.props.onRadioSelect} 
+        />
+      );
+    });
+
     return (
       <div className="ConditionForm" >
-        <h4 className="ui header">編輯先決條件</h4>
-        <a className="ui right top floated orange icon labeled mini button" 
-          id={this.props.id}
-          data-number={this.props.number}
-          onClick={this.props.onDelete} 
-          >
+        <h4 className="ui header">編輯進入條件 {this.props.id}</h4>
+        <a className="ui right top floated red icon labeled mini button" 
+          title="condition" 
+          id={this.props.id} 
+          onClick={this.props.onConditionDelete} 
+        >
           <i className="icon trash" />
           刪除此條件
         </a>
-        <div className="two fields">
-          <div className={"field " + (this.props.id ? "" : "error")}>
-            <label>標的 *</label>
-            <input 
-              type="text" 
-              title="condition" 
-              name="id" 
-              id={this.props.id} 
-              value={this.props.id} 
-              onChange={this.props.onChange} 
-              placeholder="請輸入問題代號" 
-              autoFocus={this.props.focus} 
-              data-number={this.props.number} 
-            />
-          </div>
-          <div className="field">
-            <label>設定值</label>
-            <input 
-              type="text" 
-              title="condition" 
-              name="value" 
-              id={this.props.id} 
-              value={this.props.value} 
-              onChange={this.props.onChange} 
-              placeholder="問題的答案值" 
-            />
-          </div>
+        {ruleJSX}
+        <hr className="ui divider" />
+        <div className="action">
+          <a className="ui olive icon labeled mini button" 
+            title="condition" 
+            id={this.props.id} 
+            onClick={this.props.onRuleAdd} 
+          >
+            <i className="icon add" />
+            新增條件 {this.props.id} 的規則
+          </a>
         </div>
         <hr className="ui divider" />
       </div>

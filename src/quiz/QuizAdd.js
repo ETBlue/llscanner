@@ -102,7 +102,7 @@ class QuizAdd extends Component {
                 <Link 
                   to={"/quiz/" + this.state.quizData.id + "/edit" } 
                   onClick={this._save} 
-                  className={"ui icon labeled olive button " + valid}
+                  className={"ui icon labeled teal button " + valid}
                 >
                   <i className="icon checkmark" />
                   送出

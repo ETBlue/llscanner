@@ -4,8 +4,9 @@ import {Link} from 'react-router-dom';
 
 import _copyNested from '../_copyNested'
 
-import StepForm from './StepForm';
 import ConditionForm from './ConditionForm';
+import RouteForm from './RouteForm';
+import './StepEdit.css';
 
 class StepEdit extends Component {
 
@@ -13,98 +14,206 @@ class StepEdit extends Component {
 
     super(props);
 
-    this._basicOptionData = {
-      1: {
-        id: 1,
-        title: "選項",
-        value: ""
-      }
-    };
-
     this.state = {
-      answer: this.props.answer, // 使用者選擇的答案
       valid: true,
       focus: {
         manual: false,
         id: ""
       },
-      quizData: { // 準備送出的表單資料
-        id: this.props.id,
-        title: this.props.title,
-        description: this.props.description,
-        order: this.props.order,
-        type: this.props.type
-      },
-      optionData: this.props.option || this._basicOptionData,
+      stepData: this.props.stepData,
+      quizIDs: this.props.quizIDs,
+      answerValues: this.props.answerValues,
     };
 
-    this._initialQuizData = Object.assign({}, this.state.quizData);
-    this._initialOptionData = _copyNested(this.state.optionData);
+    // setup recovery data
+    this._initialStepData = _copyNested(this.props.stepData);
+    this._basicRuleID = "target_id";
+    this._basicRuleData = {
+      id: this._basicRuleID,
+      condition: "",
+      answer: ""
+    };
+    this._basicRouteID = "answer_value";
 
-    this._validateAll = this._validateAll.bind(this);
-
-    this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
-    this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
+    // bind all functions
+    this._onConditionAdd = this._onConditionAdd.bind(this); // 新增選項
+    this._onConditionDelete = this._onConditionDelete.bind(this); // 刪除選項
+    this._onRuleAdd = this._onRuleAdd.bind(this); // 新增選項
+    this._onRuleDelete = this._onRuleDelete.bind(this); // 刪除選項
+    this._onRouteAdd = this._onRouteAdd.bind(this); // 新增選項
+    this._onRouteDelete = this._onRouteDelete.bind(this); // 刪除選項
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
+    this._onRadiosSelect = this._onRadiosSelect.bind(this);
+    this._validateAll = this._validateAll.bind(this);
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
     this._refresh = this._refresh.bind(this); // 取消編輯到一半的資料
-
 
   }
 
   componentWillReceiveProps(nextProps) {
-    this._initialQuizData = {
-        id: nextProps.id,
-        title: nextProps.title,
-        description: nextProps.description,
-        order: nextProps.order,
-        type: nextProps.type
-    };
-    this._initialOptionData = _copyNested(nextProps.option) || this._basicOptionData;
+
+    // setup recovery data... again
+    this._initialStepData = _copyNested(nextProps.stepData);
+
+    // re-render page
+    this.setState((prevState, props) => {
+      prevState = {
+        valid: true,
+        focus: {
+          manual: false,
+          id: ""
+        },
+        stepData: nextProps.stepData,
+        quizIDs: nextProps.quizIDs,
+        answerValues: nextProps.answerValues,
+      };
+      return prevState;
+    });
   }
 
   _validateAll(prevState) {
+
     let valid = true;
-    if (prevState.quizData.title.length === 0) {
-      valid = false;
-    } else {
-      if (prevState.optionData) {
-        Object.keys(prevState.optionData).forEach((key) => {
-          if (prevState.optionData[key].id.length === 0 || 
-            prevState.optionData[key].title.length === 0) {
-            valid = false;
-          }
-        });
-      }
+
+    const conditions = prevState.stepData.condition;
+    if (conditions) {
+      Object.keys(conditions).forEach((key) => {
+
+        if (conditions[key]) {
+          Object.keys(conditions[key]).forEach((id) => {
+            // all condition rules must have an id, which should not be the default value
+
+            if (conditions[key][id].id.length === 0 ||
+              conditions[key][id].id === this._basicRuleID) {
+              valid = false;
+            }
+          });
+        }
+
+      });
     }
+
+    const routes = prevState.stepData.route;
+    if (routes) {
+      Object.keys(routes).forEach((key) => {
+
+        // all route rules must have an id, which should not be the default value
+        if (routes[key].id.length === 0 ||
+          routes[key].id === this._basicRouteID) {
+          valid = false;
+        }
+
+      });
+    }
+
     return valid;
   }
 
-  _onOptionAdd() {
+  _onConditionAdd() {
 
     this.setState((prevState, props) => {
-      const id = Math.max(...Object.keys(prevState.optionData)) + 1;
-      prevState.optionData[id] = {
-        id: id,
-        title: this._basicOptionData[1].title,
-        value: this._basicOptionData[1].value
+
+      // set up condition data if there is no one
+      if (!prevState.stepData.condition) {
+        prevState.stepData.condition = {};
+      }
+
+      // find the very first empty spot in conditions
+      let id;
+      for (let i = 1; i <= Object.keys(prevState.stepData.condition).length + 1; i++) {
+        if (!prevState.stepData.condition[i]) {
+          id = i;
+          break;
+        }
+      }
+      // give the brand new condition a default content
+      prevState.stepData.condition[id] = {
+        [this._basicRuleID]: _copyNested(this._basicRuleData)
       };
       return {
-        optionData: prevState.optionData
+        stepData: prevState.stepData,
+        valid: false,
       };
     });
 
   }
 
-  _onOptionDelete(event) {
+  _onConditionDelete(event) {
 
-    const id = event.target.getAttribute("data-number");
+    const id = event.target.id;
 
     this.setState((prevState, props) => {
-      delete prevState.optionData[id];
+      delete prevState.stepData.condition[id];
       return {
-        optionData: prevState.optionData,
-        valid: this._validateAll(prevState)
+        stepData: prevState.stepData,
+        valid: this._validateAll(prevState),
+      };
+    });
+
+  }
+
+  _onRuleAdd(event) {
+
+    const id = event.target.id;
+
+    this.setState((prevState, props) => {
+
+      // give the brand new rule a default content
+      prevState.stepData.condition[id][this._basicRuleID] = _copyNested(this._basicRuleData);
+
+      console.log(prevState.stepData.condition[id]);
+      return {
+        stepData: prevState.stepData,
+        valid: false,
+      };
+    });
+
+  }
+
+  _onRuleDelete(event) {
+
+    const id = event.target.id;
+    const conditionID = event.target.getAttribute('data-conditionID');
+
+    this.setState((prevState, props) => {
+      delete prevState.stepData.condition[conditionID][id];
+      return {
+        stepData: prevState.stepData,
+        valid: this._validateAll(prevState),
+      };
+    });
+
+  }
+
+  _onRouteAdd() {
+
+    this.setState((prevState, props) => {
+
+      // give the brand new condition a default content
+      if (!prevState.stepData.route) {
+        prevState.stepData.route = {};
+      }
+      prevState.stepData.route[this._basicRouteID] = {
+          id: this._basicRouteID,
+          quiz: ""
+      };
+      return {
+        stepData: prevState.stepData,
+        valid: false,
+      };
+    });
+
+  }
+
+  _onRouteDelete(event) {
+
+    const id = event.target.id;
+
+    this.setState((prevState, props) => {
+      delete prevState.stepData.route[id];
+      return {
+        stepData: prevState.stepData,
+        valid: this._validateAll(prevState),
       };
     });
 
@@ -114,25 +223,42 @@ class StepEdit extends Component {
 
     if (this._validateAll(this.state)) {
 
-      const optionData = Object.keys(this.state.optionData).length === 0 ? 
-        this._basicOptionData : this.state.optionData;
-
-      let quiz = this.state.quizData;
-      quiz.option = optionData;
-
-      firebase.database().ref('quiz/' + this.state.quizData.id).set(quiz);
+      firebase.database().ref('step/' + this.props.stepData.id).set(this.state.stepData);
     }
   }
 
   _refresh() {
 
     this.setState((prevState, props) => {
-      const optionData = _copyNested(this._initialOptionData);
+      prevState.stepData = _copyNested(this._initialStepData);
       return {
-        quizData: Object.assign({} , this._initialQuizData),
-        optionData: optionData,
+        valid: true,
+        focus: {
+          manual: false,
+          id: ""
+        },
+        stepData: prevState.stepData,
       };
     });
+  }
+
+  _onRadiosSelect(event) {
+
+    const target = event.target;
+
+    const title = target.title;
+    const conditionID = target.getAttribute("data-conditionID");
+    const id = target.id;
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+
+    if (title === "condition") {
+      this.setState((prevState, props) => {
+        prevState.stepData.condition[conditionID][id][name] = value;
+        return prevState;
+      });
+    }
+
   }
 
   _onInputChange(event) {
@@ -140,57 +266,77 @@ class StepEdit extends Component {
     const target = event.target;
 
     const title = target.title;
+    const conditionID = target.getAttribute("data-conditionID");
     const id = target.id;
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    const number = target.getAttribute("data-number"); // 中繼狀態用的 id 替身
 
-    if (title === "quiz") {
-
-      this.setState((prevState, props) => {
-
-        prevState.focus.manual = false;
-        prevState.quizData[name] = value;
-        prevState.valid = this._validateAll(prevState);
-
-        return {
-          quizData: prevState.quizData,
-          valid: prevState.valid
-        };
-      });
-
-    }
-
-    if (title === "option") {
+    if (title === "condition") {
 
       this.setState((prevState, props) => {
 
         if (name === "id" ) {
           prevState.focus.manual = true;
 
-          if ( prevState.optionData[value] ) { // id 欄位與其他 option 重複時，不動 key
+          if ( prevState.stepData.condition[conditionID][value] ) { // id 欄位與其他 condition 重複時，不動 key
             prevState.valid = false;
-            prevState.optionData[number].id = value;
-            prevState.focus.id = number;
+            prevState.stepData.condition[conditionID][id].id = value;
+            prevState.focus.id = id;
 
           } else { // id 欄位合法變更時，改 key
 
-            prevState.optionData[value] = Object.assign({}, prevState.optionData[number]);
-            delete prevState.optionData[number];
+            prevState.stepData.condition[conditionID][value] = _copyNested(prevState.stepData.condition[conditionID][id]);
+            delete prevState.stepData.condition[conditionID][id];
 
-            prevState.optionData[value].id = value;
+            prevState.stepData.condition[conditionID][value].id = value;
+            prevState.valid = this._validateAll(prevState);
+            prevState.focus.id = value;
+          }
+
+        } else if (name !== "condition") {
+          prevState.focus.manual = false;
+          prevState.stepData.condition[conditionID][id][name] = value;
+          prevState.valid = this._validateAll(prevState);
+        }
+
+        return {
+          stepData: prevState.stepData,
+          valid: prevState.valid,
+          focus: prevState.focus
+        };
+      });
+    }
+
+    if (title === "route") {
+
+      this.setState((prevState, props) => {
+
+        if (name === "id" ) {
+          prevState.focus.manual = true;
+
+          if ( prevState.stepData.route[value] ) { // id 欄位與其他 route 重複時，不動 key
+            prevState.valid = false;
+            prevState.stepData.route[id].id = value;
+            prevState.focus.id = id;
+
+          } else { // id 欄位合法變更時，改 key
+
+            prevState.stepData.route[value] = _copyNested(prevState.stepData.route[id]);
+            delete prevState.stepData.route[id];
+
+            prevState.stepData.route[value].id = value;
             prevState.valid = this._validateAll(prevState);
             prevState.focus.id = value;
           }
 
         } else {
           prevState.focus.manual = false;
-          prevState.optionData[id][name] = value;
+          prevState.stepData.route[id][name] = value;
           prevState.valid = this._validateAll(prevState);
         }
 
         return {
-          optionData: prevState.optionData,
+          stepData: prevState.stepData,
           valid: prevState.valid
         };
       });
@@ -203,11 +349,11 @@ class StepEdit extends Component {
     const valid = this.state.valid ? "" : " disabled";
     const action = (
       <div className={"Action ui mini buttons"}>
-        <Link to={"/quiz/" + this.state.quizData.id} onClick={this._save} className={"ui icon labeled olive mini button" + valid}>
+        <Link to={"/step/" + this.state.stepData.id} onClick={this._save} className={"ui icon labeled teal mini button" + valid}>
           <i className="icon checkmark" />
           送出
         </Link>
-        <Link to={"/quiz/" + this.state.quizData.id} className="ui icon labeled mini button">
+        <Link to={"/step/" + this.state.stepData.id} className="ui icon labeled mini button">
           <i className="icon cancel" />
           取消
         </Link>
@@ -218,19 +364,50 @@ class StepEdit extends Component {
       </div>
     );
 
-    let optionFormJSX;
+    let conditionFormJSX;
 
-    const option = this.state.optionData;
-    if (option && Object.keys(option).length > 0) {
-      optionFormJSX = Object.keys(option).map( (key) => {
-        const item = option[key];
-        let focus = false;
-        if (this.state.focus.manual && this.state.focus.id === key) {
-          focus = true;
+    const condition = this.state.stepData.condition;
+    if (condition && Object.keys(condition).length > 0) {
+      conditionFormJSX = Object.keys(condition).map( (key) => {
+        if (condition[key]) {
+          return (
+            <ConditionForm 
+            key={key} 
+            id={key}
+            rules={condition[key]}
+            focus={this.state.focus} 
+            onConditionDelete={this._onConditionDelete} 
+            onRuleAdd={this._onRuleAdd} 
+            onRuleDelete={this._onRuleDelete} 
+            onInputChange={this._onInputChange} 
+            onRadioSelect={this._onRadiosSelect}
+            />
+          );
+        } else {
+          return null;
         }
-        return (
-          <ConditionForm key={key} number={key} {...item} focus={focus} onDelete={this._onOptionDelete} onChange={this._onInputChange} />
-        )
+      })
+    }
+
+    let routeFormJSX;
+
+    const route = this.state.stepData.route;
+    if (route && Object.keys(route).length > 0) {
+      routeFormJSX = Object.keys(route).map( (key) => {
+        if (route[key]) {
+          return (
+            <RouteForm 
+            key={key} 
+            number={key} 
+            {...route[key]} 
+            focus={this.state.focus} 
+            onRouteDelete={this._onRouteDelete} 
+            onInputChange={this._onInputChange} 
+            />
+          );
+        } else {
+          return null;
+        }
       })
     }
 
@@ -242,18 +419,17 @@ class StepEdit extends Component {
             <form ref="form" className="Form ui form">
               <div className="ui two column divided stackable grid">
                 <div className="column">
-                  <StepForm 
-                    locked="true" 
-                    header="編輯問題" 
-                    {...this.state.quizData} 
-                    onChange={this._onInputChange} 
-                  />
+                  { conditionFormJSX }
+                  <a onClick={this._onConditionAdd} className="ui green icon labeled mini button">
+                    <i className="icon add" />
+                    新增進入條件
+                  </a>
                 </div>
                 <div className="column">
-                  { optionFormJSX }
-                  <a onClick={this._onOptionAdd} className="ui green icon labeled mini button">
+                { routeFormJSX }
+                  <a onClick={this._onRouteAdd} className="ui green icon labeled mini button">
                     <i className="icon add" />
-                    新增選項
+                    新增離開路徑
                   </a>
                 </div>
               </div>

@@ -202,9 +202,9 @@ class StepListEdit extends Component {
               <div key={key} className="item">
                 <i className="icon random" />
                 <span className="content">
-                  <code className="code">{key}</code>
+                  <code className="code">{item.route[key].id}</code>
                   →
-                  <code className="code">{item.route[key]}</code>
+                  <code className="code">{item.route[key].quiz}</code>
                 </span>
               </div>
             );
@@ -269,7 +269,7 @@ class StepListEdit extends Component {
             <tr>
               <th colSpan={4} className="right aligned">
                 <div className="ui mini buttons">
-                  <Link to="/step" onClick={this._save} className={"ui icon labeled olive button " + valid} >
+                  <Link to="/step" onClick={this._save} className={"ui icon labeled teal button " + valid} >
                     <i className="icon checkmark" />
                     Save
                   </Link>

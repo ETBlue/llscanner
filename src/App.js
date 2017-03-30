@@ -85,15 +85,16 @@ class App extends Component {
     const route = this.state.route;
     const condition = this.state.condition;
     const answer = this.state.answer;
-    const ids = Object.keys(step).map((id) =>{
+
+    // generate new step id, used by both quizadd and stepadd
+    const stepIDs = Object.keys(step).map((id) =>{
       return parseInt(id, 10);
     });
-    const stepID = Math.max( ...ids ) + 10;
+    const newStepID = Math.max( ...stepIDs ) + 10;
 
     const HomePage = () => {
 
       const id = this.state.first;
-
       return (
         <section className="Quiz">
           <QuizView 
@@ -115,12 +116,27 @@ class App extends Component {
       const id = params.id;
       const action = params.action;
 
+      // collect quiz ids and answer values for step validation
+      let quizIDs = [];
+      let answerValues = [];
+      Object.keys(quiz).forEach((id) => {
+        quizIDs.push(id);
+        if (quiz[id].type === "select") {
+          Object.keys(quiz[id].option).forEach((optionID) => {
+            const ans = quiz[id].option[optionID].value;
+            if (ans.length > 0) {
+              answerValues.push(ans);
+            }
+          });
+        }
+      });
+
       if (id === "new") {
         return (
           <StepAdd 
-            quiz={quiz} 
             step={step} 
-            stepID={stepID} 
+            stepID={newStepID} 
+            quizIDs={quizIDs} 
           />
         );
       }
@@ -137,12 +153,13 @@ class App extends Component {
           return (
             <section key={id}>
               <StepView 
-                step={step[id]} 
-                quiz={quiz[step[id].quiz]}
+                stepData={step[id]} 
+                quizData={quiz[step[id].quiz]}
               />
               <StepEdit 
-                step={step[id]} 
-                quiz={quiz} 
+                stepData={step[id]} 
+                quizIDs={quizIDs} 
+                answerValues={answerValues} 
               />
             </section>
           );
@@ -151,8 +168,8 @@ class App extends Component {
           return (
             <section key={id}>
               <StepView 
-                step={step[id]} 
-                quiz={quiz[step[id].quiz]}
+                stepData={step[id]} 
+                quizData={quiz[step[id].quiz]}
               />
               <Link to={"/step/" + id + "/edit"} className="ui mini icon button" >
                 <i className="icon pencil" />
@@ -177,7 +194,7 @@ class App extends Component {
         return (
           <QuizAdd 
             quiz={quiz} 
-            stepID={stepID} 
+            stepID={newStepID} 
           />
         );
       }
