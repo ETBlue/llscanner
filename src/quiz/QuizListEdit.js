@@ -12,7 +12,7 @@ class QuizListEdit extends Component {
 
     // to be rendered
     this.state = {
-      quiz: this.props.quiz,
+      quiz: _copyNested(this.props.quiz),
       valid: true,
       focus: ""
     };
@@ -26,9 +26,9 @@ class QuizListEdit extends Component {
 
     // data initialization
     this._initialQuiz = _copyNested(this.props.quiz);
-    this._answer = this.props.answer;
-    this._step = this.props.step;
-    this._order = this.props.order;
+    this._answer = _copyNested(this.props.answer);
+    this._step = _copyNested(this.props.step);
+    this._order = _copyNested(this.props.order);
     this._initialAnswer = _copyNested(this.props.answer);
     this._initialStep = _copyNested(this.props.step);
     this._initialOrder = _copyNested(this.props.order);
@@ -40,9 +40,9 @@ class QuizListEdit extends Component {
 
       // data initialization... again
       this._initialQuiz = _copyNested(nextProps.quiz);
-      this._answer = nextProps.answer;
-      this._step = nextProps.step;
-      this._order = nextProps.order;
+      this._answer = _copyNested(nextProps.answer);
+      this._step = _copyNested(nextProps.step);
+      this._order = _copyNested(nextProps.order);
       this._initialAnswer = _copyNested(nextProps.answer);
       this._initialStep = _copyNested(nextProps.step);
       this._initialOrder = _copyNested(nextProps.order);

@@ -5,11 +5,16 @@ class ConditionForm extends Component {
 
   render() {
 
-    const options = ["equal_to", "not_equal_to", "belong_to", "not_belong_to", "greater_than", "less_than"];
-
-    const optionJSX = options.map((option) => {
+    const optionJSX = this.props.quizIDs.map((quizID) => {
       return (
-        <div key={option} className="field">
+        <option key={quizID} value={quizID} />
+      );
+    });
+
+    const conditions = ["equal_to", "not_equal_to", "belong_to", "not_belong_to", "greater_than", "less_than"];
+    const conditionJSX = conditions.map((condition) => {
+      return (
+        <div key={condition} className="field">
           <div className="ui radio checkbox">
             <input 
               type="radio" 
@@ -17,13 +22,13 @@ class ConditionForm extends Component {
               data-conditionID={this.props.conditionID} 
               id={this.props.number} 
               name="condition" 
-              value={option} 
-              checked={this.props.checkedItem === option ? true : false}
+              value={condition} 
+              checked={this.props.checkedItem === condition ? true : false}
               onClick={this.props.onRadioSelect} 
               onChange={this.props.onInputChange} 
             />
             <label>
-              {option}
+              {condition}
             </label>
           </div>
         </div>
@@ -57,11 +62,15 @@ class ConditionForm extends Component {
             onChange={this.props.onInputChange} 
             placeholder="請輸入問題代號" 
             autoFocus={this.props.focus.manual && this.props.focus.id === this.props.number ? true : false} 
+            list="quizIDs" 
           />
+          <datalist id="quizIDs">
+            { optionJSX }
+          </datalist>
         </div>
         <div className="grouped fields">
           <label>判斷方式</label>
-          {optionJSX}
+          {conditionJSX}
         </div>
         <div className="field">
           <label>答案值</label>

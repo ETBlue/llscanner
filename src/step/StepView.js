@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import './StepView.css';
 
 class StepView extends Component {
 
@@ -75,7 +76,7 @@ class StepView extends Component {
         return (
           <div key={key}>
             <h5 className="ui vertical segment">
-            <span className="ui label">{key}</span>
+            {key}
             </h5>
             {listJSX}
           </div>

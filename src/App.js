@@ -122,12 +122,14 @@ class App extends Component {
       Object.keys(quiz).forEach((id) => {
         quizIDs.push(id);
         if (quiz[id].type === "select") {
-          Object.keys(quiz[id].option).forEach((optionID) => {
-            const ans = quiz[id].option[optionID].value;
-            if (ans.length > 0) {
-              answerValues.push(ans);
-            }
-          });
+          if (quiz[id].option) {
+            Object.keys(quiz[id].option).forEach((optionID) => {
+              const ans = quiz[id].option[optionID].value;
+              if (ans.length > 0) {
+                answerValues.push(ans);
+              }
+            });
+          }
         }
       });
 
@@ -144,6 +146,7 @@ class App extends Component {
         return (
           <StepListEdit 
             step={step} 
+            quiz={quiz} 
           />
         );
       }
@@ -158,6 +161,7 @@ class App extends Component {
               />
               <StepEdit 
                 stepData={step[id]} 
+                quizData={quiz[step[id].quiz]}
                 quizIDs={quizIDs} 
                 answerValues={answerValues} 
               />
@@ -181,6 +185,7 @@ class App extends Component {
       return (
         <StepList 
           step={step} 
+          quiz={quiz} 
         />
       );
     }

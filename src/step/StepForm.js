@@ -4,6 +4,11 @@ import './StepForm.css';
 class StepForm extends Component {
 
   render() {
+    const optionJSX = this.props.quizIDs.map((quizID) => {
+      return (
+        <option key={quizID} value={quizID} />
+      );
+    });
     return (
       <div className="StepForm">
         <h4 className="ui header">{this.props.header}</h4>
@@ -19,7 +24,11 @@ class StepForm extends Component {
               value={this.props.quiz} 
               onChange={this.props.onChange} 
               placeholder="要讀者回答的問題代號" 
-              />
+              list="quizIDs" 
+            />
+            <datalist id="quizIDs">
+              { optionJSX }
+            </datalist>
           </div>
           <div className={"field" + (this.props.id ? "" : " error")}>
             <label>排序 *</label>

@@ -85,7 +85,8 @@ class QuizView extends Component {
 
           const item = option[key];
           const className = this.state.answer === item.value ? "active" : "";
-          const next = this.state.route && this.state.route[item.value] ? this.state.route[item.value] : 
+          const next = this.state.route && this.state.route[item.value] ? 
+            this.state.route[item.value].quiz : 
             (this.state.order && this.state.order.next ? this.state.order.next : 
             "") ;
           return (

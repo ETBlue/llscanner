@@ -38,10 +38,10 @@ class QuizEdit extends Component {
         order: this.props.order,
         type: this.props.type
       },
-      optionData: this.props.option || this._basicOptionData,
+      optionData: this.props.option ? _copyNested(this.props.option) : _copyNested(this._basicOptionData),
     };
 
-    this._initialQuizData = Object.assign({}, this.state.quizData);
+    this._initialQuizData = _copyNested(this.state.quizData);
     this._initialOptionData = _copyNested(this.state.optionData);
 
     this._validateAll = this._validateAll.bind(this);
@@ -49,6 +49,7 @@ class QuizEdit extends Component {
     this._onOptionAdd = this._onOptionAdd.bind(this); // 新增選項
     this._onOptionDelete = this._onOptionDelete.bind(this); // 刪除選項
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
+    this._onRadioSelect = this._onRadioSelect.bind(this);
     this._save = this._save.bind(this); // 將編輯的資料送出到 server
     this._refresh = this._refresh.bind(this); // 取消編輯到一半的資料
 
@@ -63,7 +64,7 @@ class QuizEdit extends Component {
         order: nextProps.order,
         type: nextProps.type
     };
-    this._initialOptionData = _copyNested(nextProps.option) || this._basicOptionData;
+    this._initialOptionData = nextProps.option ? _copyNested(nextProps.option) : _copyNested(this._basicOptionData);
   }
 
   _validateAll(prevState) {
@@ -73,9 +74,11 @@ class QuizEdit extends Component {
     } else {
       if (prevState.optionData) {
         Object.keys(prevState.optionData).forEach((key) => {
-          if (prevState.optionData[key].id.length === 0 || 
-            prevState.optionData[key].title.length === 0) {
-            valid = false;
+          if (prevState.optionData[key]) {
+            if (prevState.optionData[key].id.length === 0 || 
+              prevState.optionData[key].title.length === 0) {
+              valid = false;
+            }
           }
         });
       }
@@ -132,10 +135,32 @@ class QuizEdit extends Component {
     this.setState((prevState, props) => {
       const optionData = _copyNested(this._initialOptionData);
       return {
-        quizData: Object.assign({} , this._initialQuizData),
+        quizData: _copyNested(this._initialQuizData),
         optionData: optionData,
       };
     });
+  }
+
+  _onRadioSelect(event) {
+
+    const target = event.target;
+
+    const title = target.title;
+    const id = target.id;
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+
+    if (title === "quiz" && name === "type") {
+      this.setState((prevState, props) => {
+        prevState.focus.manual = false;
+        prevState.quizData.type = value;
+        return {
+          quizData: prevState.quizData,
+          focus: prevState.focus,
+        }
+      });
+    }
+
   }
 
   _onInputChange(event) {
@@ -187,7 +212,7 @@ class QuizEdit extends Component {
             prevState.focus.id = value;
           }
 
-        } else {
+        } else if (name !== "type") {
           prevState.focus.manual = false;
           prevState.optionData[id][name] = value;
           prevState.valid = this._validateAll(prevState);
@@ -228,15 +253,25 @@ class QuizEdit extends Component {
     const option = this.state.optionData;
     if (option && Object.keys(option).length > 0) {
       optionFormJSX = Object.keys(option).map( (key) => {
-        const item = option[key];
-        let focus = false;
-        if (this.state.focus.manual && this.state.focus.id === key) {
-          focus = true;
+        if (option[key]) {
+          const item = option[key];
+          let focus = false;
+          if (this.state.focus.manual && this.state.focus.id === key) {
+            focus = true;
+          }
+          return (
+            <OptionForm 
+              key={key} 
+              number={key} {...item} 
+              focus={focus} 
+              onDelete={this._onOptionDelete} 
+              onChange={this._onInputChange} 
+            />
+          );
+        } else {
+          return null;
         }
-        return (
-          <OptionForm key={key} number={key} {...item} focus={focus} onDelete={this._onOptionDelete} onChange={this._onInputChange} />
-        )
-      })
+      });
     }
 
     return (
@@ -252,14 +287,20 @@ class QuizEdit extends Component {
                     header="編輯問題" 
                     {...this.state.quizData} 
                     onChange={this._onInputChange} 
+                    onRadioSelect={this._onRadioSelect} 
                   />
                 </div>
                 <div className="column">
-                  { optionFormJSX }
-                  <a onClick={this._onOptionAdd} className="ui green icon labeled mini button">
-                    <i className="icon add" />
-                    新增選項
-                  </a>
+                { this.state.quizData.type === "select" ?
+                  (<div className="optionForm">
+                    {optionFormJSX} 
+                    <a onClick={this._onOptionAdd} className="ui green icon labeled mini button">
+                      <i className="icon add" />
+                      新增選項
+                    </a>
+                  </div>
+                  ) : ""
+                }
                 </div>
               </div>
             </form>

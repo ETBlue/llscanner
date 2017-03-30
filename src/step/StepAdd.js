@@ -75,6 +75,12 @@ class StepAdd extends Component {
         id: stepData.id,
         quiz: stepData.quiz
       });
+      firebase.database().ref('quiz/' + stepData.quiz).set({
+        id: stepData.quiz,
+        title: "問題",
+        description: "",
+        type: "select"
+      });
     }
   }
 
@@ -91,6 +97,7 @@ class StepAdd extends Component {
                 {...this.state.stepData} 
                 header="新步驟" 
                 onChange={this._onInputChange} 
+                quizIDs={this.state.quizIDs} 
               />
               <hr className="ui divider" />
               <div className="ui mini buttons">

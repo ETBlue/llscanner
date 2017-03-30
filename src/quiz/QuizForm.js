@@ -31,32 +31,46 @@ class QuizForm extends Component {
             placeholder="問題的補充說明" 
             />
         </div>
-        <div className="two fields">
-          <div className={"field" + (this.props.id ? "" : " error")}>
-            <label>代號 *</label>
+        <div className={"field" + (this.props.id ? "" : " error")}>
+          <label>代號 *</label>
+          <input 
+            type="text" 
+            title="quiz" 
+            name="id" 
+            id={this.props.id} 
+            value={this.props.id} 
+            onChange={this.props.onChange} 
+            placeholder="本題的編號" 
+            disabled={this.props.locked} 
+            />
+        </div>
+        <div className="inline fields">
+          <label>類型 *</label>
+          <div className="field">
             <input 
-              type="text" 
+              type="radio" 
               title="quiz" 
-              name="id" 
               id={this.props.id} 
-              value={this.props.id} 
-              onChange={this.props.onChange} 
-              placeholder="本題的編號" 
-              disabled={this.props.locked} 
-              />
-          </div>
-          <div className={"field" + (this.props.type === "select" || this.props.type === "input" ? "" : " error")}>
-            <label>類型 *</label>
-            <input 
-              type="text" 
-              title="quiz" 
               name="type" 
-              id={this.props.id} 
-              value={this.props.type} 
+              value="select" 
+              onClick={this.props.onRadioSelect} 
               onChange={this.props.onChange} 
-              placeholder="本題的類型" 
-              disabled={this.props.locked} 
-              />
+              checked={this.props.type === "select" ? true : false}
+            />
+            <label>select</label>
+          </div>
+          <div className="field">
+            <input 
+              type="radio" 
+              title="quiz" 
+              id={this.props.id} 
+              name="type" 
+              value="input" 
+              onClick={this.props.onRadioSelect} 
+              onChange={this.props.onChange} 
+              checked={this.props.type === "input" ? true : false}
+            />
+            <label>input</label>
           </div>
         </div>
       </div>

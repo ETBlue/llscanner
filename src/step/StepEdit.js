@@ -20,7 +20,8 @@ class StepEdit extends Component {
         manual: false,
         id: ""
       },
-      stepData: this.props.stepData,
+      stepData: _copyNested(this.props.stepData),
+      quizData: this.props.quizData,
       quizIDs: this.props.quizIDs,
       answerValues: this.props.answerValues,
     };
@@ -63,7 +64,8 @@ class StepEdit extends Component {
           manual: false,
           id: ""
         },
-        stepData: nextProps.stepData,
+        stepData: _copyNested(nextProps.stepData),
+        quizData: nextProps.quizData,
         quizIDs: nextProps.quizIDs,
         answerValues: nextProps.answerValues,
       };
@@ -230,6 +232,7 @@ class StepEdit extends Component {
   _refresh() {
 
     this.setState((prevState, props) => {
+
       prevState.stepData = _copyNested(this._initialStepData);
       return {
         valid: true,
@@ -372,15 +375,16 @@ class StepEdit extends Component {
         if (condition[key]) {
           return (
             <ConditionForm 
-            key={key} 
-            id={key}
-            rules={condition[key]}
-            focus={this.state.focus} 
-            onConditionDelete={this._onConditionDelete} 
-            onRuleAdd={this._onRuleAdd} 
-            onRuleDelete={this._onRuleDelete} 
-            onInputChange={this._onInputChange} 
-            onRadioSelect={this._onRadiosSelect}
+              key={key} 
+              id={key}
+              rules={condition[key]}
+              focus={this.state.focus} 
+              onConditionDelete={this._onConditionDelete} 
+              onRuleAdd={this._onRuleAdd} 
+              onRuleDelete={this._onRuleDelete} 
+              onInputChange={this._onInputChange} 
+              onRadioSelect={this._onRadiosSelect} 
+              quizIDs={this.state.quizIDs} 
             />
           );
         } else {
@@ -393,16 +397,29 @@ class StepEdit extends Component {
 
     const route = this.state.stepData.route;
     if (route && Object.keys(route).length > 0) {
+      let answers;
+      const option = this.state.quizData.option;
+      if (option) {
+        answers = Object.keys(option).map((id) => {
+          if (option[id]) {
+            return option[id].value;
+          } else {
+            return null;
+          }
+        });
+      }
       routeFormJSX = Object.keys(route).map( (key) => {
         if (route[key]) {
           return (
             <RouteForm 
-            key={key} 
-            number={key} 
-            {...route[key]} 
-            focus={this.state.focus} 
-            onRouteDelete={this._onRouteDelete} 
-            onInputChange={this._onInputChange} 
+              key={key} 
+              number={key} 
+              {...route[key]} 
+              focus={this.state.focus} 
+              onRouteDelete={this._onRouteDelete} 
+              onInputChange={this._onInputChange} 
+              quizIDs={this.state.quizIDs} 
+              quizAnswers={answers} 
             />
           );
         } else {

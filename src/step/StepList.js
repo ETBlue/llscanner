@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
+import './StepList.css';
+
 class StepList extends Component {
 
   constructor(props) {
@@ -9,6 +11,7 @@ class StepList extends Component {
 
     this.state = {
       step: this.props.step,
+      quiz: this.props.quiz
     };
 
   }
@@ -17,6 +20,7 @@ class StepList extends Component {
     this.setState((prevState, props) => {
       return {
         step: nextProps.step,
+        quiz: nextProps.quiz,
       };
     });
   }
@@ -75,9 +79,9 @@ class StepList extends Component {
               );
             });
             return (
-              <div key={key}>
-                <h5 className="ui vertical segment">
-                <span className="ui label">{key}</span>
+              <div key={key} className="Condition">
+                <h5 className="ui dividing header">
+                進入條件 {key}
                 </h5>
                 {listJSX}
               </div>
@@ -99,8 +103,13 @@ class StepList extends Component {
             );
           });
           routeJSX = (
-            <div className="ui divided relaxed list">
-              {listJSX}
+            <div>
+              <h5 className="ui dividing header">
+              離開路徑
+              </h5>
+              <div className="ui divided relaxed list">
+                {listJSX}
+              </div>
             </div>
           );
         }
@@ -111,6 +120,7 @@ class StepList extends Component {
               <code className="code">
                 <Link to={"/step/" + item.id}>{item.quiz}</Link>
               </code>
+              <p className="comment">{this.state.quiz[item.quiz].title}</p>
             </td>
             <td>{item.id}</td>
             <td>{conditionJSX}{routeJSX}</td>
@@ -125,7 +135,7 @@ class StepList extends Component {
         <table className="ui unstackable table">
           <thead>
             <tr>
-              <th className="five wide">題目代號</th>
+              <th className="five wide">題目</th>
               <th className="two wide">排序</th>
               <th className="nine wide">進出規則</th>
             </tr>

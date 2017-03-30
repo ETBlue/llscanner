@@ -20,6 +20,7 @@ class ConditionForm extends Component {
           onRuleDelete={this.props.onRuleDelete} 
           onInputChange={this.props.onInputChange} 
           onRadioSelect={this.props.onRadioSelect} 
+          quizIDs={this.props.quizIDs} 
         />
       );
     });

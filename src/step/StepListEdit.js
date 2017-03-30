@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
 import _copyNested from '../_copyNested'
+import './StepList.css';
 
 class StepListEdit extends Component {
 
@@ -12,7 +13,8 @@ class StepListEdit extends Component {
 
     // to be rendered
     this.state = {
-      step: this.props.step,
+      step: _copyNested(this.props.step),
+      quiz: _copyNested(this.props.quiz),
       valid: true,
       focus: ""
     };
@@ -26,6 +28,7 @@ class StepListEdit extends Component {
 
     // data initialization
     this._initialStep = _copyNested(this.props.step);
+    this._initialQuiz = _copyNested(this.props.quiz);
 
   }
 
@@ -34,9 +37,11 @@ class StepListEdit extends Component {
 
       // data initialization... again
       this._initialStep = _copyNested(nextProps.step);
+      this._initialQuiz = _copyNested(nextProps.quiz);
 
       return {
-        step: nextProps.step,
+        step: _copyNested(nextProps.step),
+        quiz: _copyNested(nextProps.quiz),
         valid: true,
         focus: ""
       };
@@ -47,6 +52,7 @@ class StepListEdit extends Component {
     this.setState((prevState, props) => {
       return {
         step: _copyNested(this._initialStep),
+        quiz: _copyNested(this._initialQuiz),
         valid: true,
         focus: ""
       };
@@ -58,6 +64,7 @@ class StepListEdit extends Component {
 
     if (this.state.valid) {
       firebase.database().ref('step').set(this.state.step);
+      firebase.database().ref('quiz').set(this.state.quiz);
     }
   }
 
@@ -84,6 +91,7 @@ class StepListEdit extends Component {
 
     const id = event.target.id;
     this.setState((prevState, props) => {
+      delete prevState.quiz[prevState.step[id].quiz];
       delete prevState.step[id];
       return prevState;
     });
@@ -148,51 +156,56 @@ class StepListEdit extends Component {
         if (item.condition) {
           conditionJSX = Object.keys(item.condition).map((key) => {
 
-            const listJSX = Object.keys(item.condition[key]).map((id) => {
-              const rule = item.condition[key][id];
-              const answer = rule.answer.split(",").map((str, index, arr) => {
+            if (item.condition[key]) {
+              const listJSX = Object.keys(item.condition[key]).map((id) => {
+
+                const rule = item.condition[key][id];
+                const answer = rule.answer.split(",").map((str, index, arr) => {
+
+                  return (
+                    <span key={str}>
+                    <code className="code">{str.trim()}</code>
+                    {index < arr.length - 1 ? ", " : "" }
+                    </span>
+                  );
+                });
 
                 return (
-                  <span key={str}>
-                  <code className="code">{str.trim()}</code>
-                  {index < arr.length - 1 ? ", " : "" }
-                  </span>
-                );
-              });
-
-              return (
-                <div key={id} className="ui vertical segment">
-                  <div className="ui list">
-                    <div className="item">
-                      <i className="icon flag" />
-                      <span className="content">
-                      <code className="code">{rule.id}</code>
-                      </span>
-                    </div>
-                    <div className="item">
-                      <i className="icon setting" />
-                      <span className="content">
-                      <code className="code">{rule.condition}</code>
-                      </span>
-                    </div>
-                    <div className="item">
-                      <i className="icon tags" />
-                      <span className="content">
-                      {answer}
-                      </span>
+                  <div key={id} className="ui vertical segment">
+                    <div className="ui list">
+                      <div className="item">
+                        <i className="icon flag" />
+                        <span className="content">
+                        <code className="code">{rule.id}</code>
+                        </span>
+                      </div>
+                      <div className="item">
+                        <i className="icon setting" />
+                        <span className="content">
+                        <code className="code">{rule.condition}</code>
+                        </span>
+                      </div>
+                      <div className="item">
+                        <i className="icon tags" />
+                        <span className="content">
+                        {answer}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                );
+              });
+              return (
+                <div key={key} className="Condition">
+                  <h5 className="ui dividing header">
+                  進入條件 {key}
+                  </h5>
+                  {listJSX}
                 </div>
               );
-            });
-            return (
-              <div key={key}>
-                <h5 className="ui vertical segment">
-                <span className="ui label">{key}</span>
-                </h5>
-                {listJSX}
-              </div>
-            );
+            } else {
+              return null;
+            }
           });
         }
 
@@ -210,8 +223,13 @@ class StepListEdit extends Component {
             );
           });
           routeJSX = (
-            <div className="ui divided relaxed list">
-              {listJSX}
+            <div>
+              <h5 className="ui dividing header">
+              離開路徑
+              </h5>
+              <div className="ui divided relaxed list">
+                {listJSX}
+              </div>
             </div>
           );
         }
@@ -222,6 +240,7 @@ class StepListEdit extends Component {
               <code className="code">
                 <Link to={"/step/" + item.id}>{item.quiz}</Link>
               </code>
+              <p className="comment">{this.state.quiz[item.quiz].title}</p>
             </td>
             <td>
               <div className="ui input">
@@ -256,7 +275,7 @@ class StepListEdit extends Component {
         <table className="ui unstackable table">
           <thead>
             <tr>
-              <th className="four wide">代號</th>
+              <th className="four wide">題目</th>
               <th className="two wide">排序 *</th>
               <th className="six wide">進出規則</th>
               <th className="four wide"></th>
