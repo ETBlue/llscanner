@@ -91,7 +91,6 @@ class StepListEdit extends Component {
 
     const id = event.target.id;
     this.setState((prevState, props) => {
-      delete prevState.quiz[prevState.step[id].quiz];
       delete prevState.step[id];
       return prevState;
     });

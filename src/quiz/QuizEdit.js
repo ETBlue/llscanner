@@ -35,7 +35,6 @@ class QuizEdit extends Component {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
-        order: this.props.order,
         type: this.props.type
       },
       optionData: this.props.option ? _copyNested(this.props.option) : _copyNested(this._basicOptionData),
@@ -61,7 +60,6 @@ class QuizEdit extends Component {
         id: nextProps.id,
         title: nextProps.title,
         description: nextProps.description,
-        order: nextProps.order,
         type: nextProps.type
     };
     this._initialOptionData = nextProps.option ? _copyNested(nextProps.option) : _copyNested(this._basicOptionData);
@@ -126,7 +124,7 @@ class QuizEdit extends Component {
       let quiz = this.state.quizData;
       quiz.option = optionData;
 
-      firebase.database().ref('quiz/' + this.state.quizData.id).set(quiz);
+      firebase.database().ref('quiz/' + quiz.id).set(quiz);
     }
   }
 

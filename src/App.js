@@ -137,6 +137,7 @@ class App extends Component {
         return (
           <StepAdd 
             step={step} 
+            quiz={quiz} 
             stepID={newStepID} 
             quizIDs={quizIDs} 
           />

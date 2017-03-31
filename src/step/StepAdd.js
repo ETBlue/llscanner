@@ -18,6 +18,7 @@ class StepAdd extends Component {
         quiz: ""
       },
       quizIDs: this.props.quizIDs,
+      quiz: this.props.quiz,
     };
 
     this._onInputChange = this._onInputChange.bind(this); // 刪除本題
@@ -75,12 +76,14 @@ class StepAdd extends Component {
         id: stepData.id,
         quiz: stepData.quiz
       });
-      firebase.database().ref('quiz/' + stepData.quiz).set({
-        id: stepData.quiz,
-        title: "問題",
-        description: "",
-        type: "select"
-      });
+      if (!this.props.quiz[stepData.quiz]) {
+        firebase.database().ref('quiz/' + stepData.quiz).set({
+          id: stepData.quiz,
+          title: "問題",
+          description: "",
+          type: "select"
+        });
+      }
     }
   }
 
