@@ -8,6 +8,10 @@ import {
 } from 'react-router-dom';
 import firebase from 'firebase';
 
+import ArticleList from './law/ArticleList';
+import LawList from './law/LawList';
+import 勞動基準法 from './law/LSA20161221.json';
+
 import StepList from './step/StepList';
 import StepListEdit from './step/StepListEdit';
 import StepAdd from './step/StepAdd';
@@ -111,6 +115,27 @@ class App extends Component {
       );
     }
 
+    const LawPage = (params) => {
+
+      const id = params.id;
+      const law = {
+        勞動基準法: 勞動基準法,
+      };
+
+      if (id) {
+        return (
+          <ArticleList
+            lawData={law[id]} 
+          />
+        );
+      } else {
+        return (
+          <LawList
+            law={law} 
+          />
+        );
+      }
+    }
     const StepPage = (params) => {
 
       const id = params.id;
@@ -273,6 +298,7 @@ class App extends Component {
               <NavLink exact to="/" className="item">Home</NavLink>
               <NavLink to="/quiz" className="item">Quiz</NavLink>
               <NavLink to="/step" className="item">Step</NavLink>
+              <NavLink to="/law" className="item">Law</NavLink>
               <NavLink to="/answer" className="item">Answer</NavLink>
               {/*<NavLink to="/login" className="item">Login</NavLink>*/}
             </nav>
@@ -284,6 +310,7 @@ class App extends Component {
               <Route path="/quiz/:id?/:action?" render={({match}) => QuizPage(match.params)} />
               <Route path="/answer" render={() => <p>answer</p>} />
               <Route path="/step/:id?/:action?" render={({match}) => StepPage(match.params)} />
+              <Route path="/law/:id?" render={({match}) => LawPage(match.params)} />
               <Route path="/:endpoint" render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
               {/*<Route path="/login" render={() => <div className="auth"></div>} />
                           */}

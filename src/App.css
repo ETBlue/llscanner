@@ -39,3 +39,11 @@
   background-color: rgba(0,100,200, 0.1);
   font-size: 0.8rem;
 }
+
+.ui.header {
+  line-height: 1.5em!important;
+}
+.ui.header .sub.header {
+  margin-top: 0.5em!important;
+  line-height: 1.5em!important;
+}

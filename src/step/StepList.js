@@ -116,14 +116,20 @@ class StepList extends Component {
 
         return (
           <tr key={id}>
-            <td>
-              <code className="code">
-                <Link to={"/step/" + item.id}>{item.quiz}</Link>
-              </code>
-              <p className="comment">{this.state.quiz[item.quiz].title}</p>
+            <td className="top aligned">
+              <h4 className="ui header">
+                <Link to={"/step/" + item.id}>
+                  <code>
+                  {item.quiz}
+                  </code>
+                </Link>
+                <div className="sub header">
+                  {this.state.quiz[item.quiz].title}
+                </div>
+              </h4>
             </td>
-            <td>{item.id}</td>
-            <td>{conditionJSX}{routeJSX}</td>
+            <td className="top aligned">{item.id}</td>
+            <td className="top aligned">{conditionJSX}{routeJSX}</td>
           </tr>
         )
       })
@@ -132,7 +138,7 @@ class StepList extends Component {
     return (
       <div className="StepList ui basic segment">
         <h2 className="ui header">步驟列表</h2>
-        <table className="ui unstackable table">
+        <table className="ui table">
           <thead>
             <tr>
               <th className="five wide">題目</th>

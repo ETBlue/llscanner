@@ -235,13 +235,19 @@ class StepListEdit extends Component {
 
         return (
           <tr key={id}>
-            <td>
-              <code className="code">
-                <Link to={"/step/" + item.id}>{item.quiz}</Link>
-              </code>
-              <p className="comment">{this.state.quiz[item.quiz].title}</p>
+            <td className="top aligned">
+              <h4 className="ui header">
+                <Link to={"/step/" + item.id}>
+                  <code>
+                  {item.quiz}
+                  </code>
+                </Link>
+                <div className="sub header">
+                  {this.state.quiz[item.quiz].title}
+                </div>
+              </h4>
             </td>
-            <td>
+            <td className="top aligned">
               <div className="ui input">
                 <input 
                   type="text" 
@@ -255,7 +261,7 @@ class StepListEdit extends Component {
                   />
               </div>
             </td>
-            <td>{conditionJSX}{routeJSX}</td>
+            <td className="top aligned">{conditionJSX}{routeJSX}</td>
             <td className="right aligned">
               <a id={id} onClick={this._onStepDelete} className="ui mini red icon labeled button">
                 <i className="icon trash" />

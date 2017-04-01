@@ -1,73 +1,73 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
-class QuizList extends Component {
+class ArticleList extends Component {
 
   constructor(props) {
 
     super(props);
 
     this.state = {
-      quiz: this.props.quiz,
+      law: this.props.law,
     };
 
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState((prevState, props) => {
-      return {
-        quiz: nextProps.quiz,
-      };
+      prevState.law = nextProps.law;
+      return prevState;
     });
   }
 
   render() {
 
-    let quizListJSX;
-    const quiz = this.state.quiz;
+    let lawListJSX;
 
-    if (quiz) {
-      quizListJSX = Object.keys(quiz).map( (id) => {
-
-        const item = quiz[id];
+    if (this.state.law) {
+      lawListJSX = Object.keys(this.state.law).map( (law) => {
 
         return (
-          <tr key={id}>
+          <tr key={law}>
             <td className="top aligned">
               <h4 className="ui header">
-              <Link to={"/quiz/" + id}>{item.title}</Link>
+                <Link to={"/law/" + this.state.law[law].title}>
+                  {this.state.law[law].title}
+                </Link>
               </h4>
             </td>
-            <td className="top aligned"><code className="code">{item.type}</code></td>
-            <td className="top aligned"><code className="code">{item.id}</code></td>
+            <td className="top aligned">
+              {this.state.law[law].versions ? this.state.law[law].versions.join("　") : ""}
+            </td>
           </tr>
-        )
-      })
+        );
+
+      });
     }
 
     return (
-      <div className="QuizList ui basic segment">
-        <h2 className="ui header">測驗題列表</h2>
+      <div className="ArticleList ui basic segment">
+        <h2 className="ui header">法規列表</h2>
         <table className="ui table">
           <thead>
             <tr>
-              <th>題目</th>
-              <th className="two wide">類型</th>
-              <th>代號</th>
+              <th className="">法規名稱</th>
+              <th className="">版本</th>
             </tr>
           </thead>
           <tbody>
-          { quizListJSX }
+          { lawListJSX }
           </tbody>
+        {/*
           <tfoot>
             <tr>
               <th colSpan={3} className="right aligned">
                 <div className="ui mini buttons">
-                  <Link to="/quiz/new" className="ui icon labeled green button" >
+                  <Link to="/law/new" className="ui icon labeled green button" >
                     <i className="icon add" />
-                    New Quiz
+                    New Article
                   </Link>
-                  <Link to="/quiz/edit" className="ui icon labeled button" >
+                  <Link to="/law/edit" className="ui icon labeled button" >
                     <i className="icon pencil" />
                     Edit List
                   </Link>
@@ -75,6 +75,7 @@ class QuizList extends Component {
               </th>
             </tr>
           </tfoot>
+        */}
         </table>
       </div>
     );
@@ -82,4 +83,4 @@ class QuizList extends Component {
 
 }
 
-export default QuizList;
+export default ArticleList;

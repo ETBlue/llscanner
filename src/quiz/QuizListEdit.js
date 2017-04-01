@@ -174,11 +174,13 @@ class QuizListEdit extends Component {
 
         return (
           <tr key={id}>
-            <td>
+            <td className="top aligned">
+              <h4 className="ui header">
               <Link to={"/quiz/" + id}>{item.title}</Link>
+              </h4>
             </td>
-            <td><code className="code">{item.type}</code></td>
-            <td>
+            <td className="top aligned"><code className="code">{item.type}</code></td>
+            <td className="top aligned">
               <div className="ui input">
                 <input 
                   type="text" 
