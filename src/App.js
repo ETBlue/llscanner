@@ -10,7 +10,13 @@ import firebase from 'firebase';
 
 import ArticleList from './law/ArticleList';
 import LawList from './law/LawList';
-import 勞動基準法 from './law/LSA20161221.json';
+
+import 勞動基準法 from './law/json/勞動基準法.json';
+import 勞資爭議處理法 from './law/json/勞資爭議處理法.json';
+import 大量解僱勞工保護法 from './law/json/大量解僱勞工保護法.json';
+import 工會法 from './law/json/工會法.json';
+import 船員法 from './law/json/船員法.json';
+import 高級中等學校建教合作實施及建教生權益保障法 from './law/json/高級中等學校建教合作實施及建教生權益保障法.json';
 
 import StepList from './step/StepList';
 import StepListEdit from './step/StepListEdit';
@@ -120,6 +126,11 @@ class App extends Component {
       const id = params.id;
       const law = {
         勞動基準法: 勞動基準法,
+        勞資爭議處理法: 勞資爭議處理法,
+        大量解僱勞工保護法: 大量解僱勞工保護法,
+        工會法: 工會法,
+        船員法: 船員法,
+        高級中等學校建教合作實施及建教生權益保障法: 高級中等學校建教合作實施及建教生權益保障法,
       };
 
       if (id) {
