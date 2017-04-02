@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import _fixYear from '../_fixYear.js';
 
 class ArticleList extends Component {
 
@@ -162,7 +163,7 @@ class ArticleList extends Component {
         <h2 className="ui header">
           {this.state.lawData.title}
           <div className="sub header">
-            {this.state.lawData.versions.join("　")}
+            {this.state.lawData.versions.map((string)=>{return _fixYear(string);}).join(", ")}
           </div>
         </h2>
         <table className="ui table">
