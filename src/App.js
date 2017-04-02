@@ -133,7 +133,7 @@ class App extends Component {
         高級中等學校建教合作實施及建教生權益保障法: 高級中等學校建教合作實施及建教生權益保障法,
       };
 
-      if (id) {
+      if (id && law[id]) {
         return (
           <ArticleList
             lawData={law[id]} 

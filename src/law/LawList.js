@@ -30,6 +30,7 @@ class ArticleList extends Component {
 
         const lawData = this.state.law[law];
 
+        // 法條名稱為 key，法條關連為 value（set）
         let dependency = new Map();
         lawData.law_data.forEach((article) => {
           if (article.relates) {
@@ -42,25 +43,53 @@ class ArticleList extends Component {
             });
           }
         });
-        const dependencyJSX = Array.from(dependency).map((pack, index) =>{
-          let icon;
-          if ( pack[1].has("被引用條文") && pack[1].has("引用條文") ) {
-            icon = "exchange";
-          } else if (pack[1].has("被引用條文")) {
-            icon = "right arrow";
-          } else if (pack[1].has("引用條文")) {
-            icon = "left arrow";
+        // 法條依關係群組
+        let relatedLaws = {
+          ioLaws: [],
+          sourceLaws: [],
+          targetLaws: [],
+        }
+        dependency.forEach((relationSet, lawName) => {
+          if ( relationSet.has("被引用條文") && relationSet.has("引用條文") ) {
+            relatedLaws.ioLaws.push(lawName);
+          } else if (relationSet.has("被引用條文")) {
+            relatedLaws.targetLaws.push(lawName);
+          } else if (relationSet.has("引用條文")) {
+            relatedLaws.sourceLaws.push(lawName);
           }
-          return (
-            <div key={index} className="item">
-              <i className={"icon " + icon} />
-              <div className="content">
-                <Link to={"/law/" + pack[0]}>
-                { pack[0] }
-                </Link>
+        });
+        const dependencyJSX = Object.keys(relatedLaws).map((relationType) => {
+          if (relatedLaws[relationType].length > 0 ) {
+            let icon;
+            if (relationType === "ioLaws") {
+              icon = "exchange";
+            } else if (relationType === "sourceLaws") {
+              icon = "arrow left";
+            } else if (relationType === "targetLaws") {
+              icon = "arrow right";
+            }
+            const relationTypeJSX = relatedLaws[relationType].map((lawName, index) => {
+              return (
+                <div key={index} className="item">
+                  <i className={"icon " + icon} />
+                  <div className="content">
+                    <Link to={"/law/" + lawName}>
+                    { lawName }
+                    </Link>
+                  </div>
+                </div>
+              );
+            });
+            return (
+              <div key={relationType} className="ui vertical segment">
+                <div className="ui relaxed list">
+                { relationTypeJSX }
+                </div>
               </div>
-            </div>
-          );
+            );
+          } else {
+            return null;
+          }
         });
 
         const versionJSX = lawData.versions ? lawData.versions.map((string, index) => {
@@ -100,9 +129,7 @@ class ArticleList extends Component {
               </div>
             </td>
             <td className="top aligned">
-              <div className="ui relaxed divided list">
               { dependencyJSX }
-              </div>
             </td>
           </tr>
         );
