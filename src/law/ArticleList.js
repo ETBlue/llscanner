@@ -121,7 +121,7 @@ class ArticleList extends Component {
             });
           }
 
-          const preview = article.content.replace("　　","").split("\n");
+          const preview = article.content.replace(/　　/g,"").split("\n");
           const paragraphJSX = preview.map((paragraph, part) => {
             return (
               <div key={part} className="item">
