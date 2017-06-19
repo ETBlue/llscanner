@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import _fixYear from '../_fixYear.js';
+import _fixYear from '../_shared/_fixYear.js'
 
 class ArticleList extends Component {
 

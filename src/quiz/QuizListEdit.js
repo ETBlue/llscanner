@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 
-import _copyNested from '../_copyNested'
+import _copyNested from '../_shared/_copyNested'
 
 class QuizListEdit extends Component {
 
