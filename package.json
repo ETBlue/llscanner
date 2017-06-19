@@ -1,7 +1,11 @@
 {
   "name": "llscanner",
+  "repository" : {
+    "type" : "git",
+    "url" : "git@github.com:ETBlue/llscanner.git"
+  },
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "firebase": "^3.7.0",
     "firebaseui": "^1.0.0",
