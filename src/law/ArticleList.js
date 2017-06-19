@@ -3,6 +3,7 @@ import {HashLink as Link} from 'react-router-hash-link'
 import _fixYear from '../_shared/_fixYear'
 import _parseArticleID from '../_shared/_parseArticleID'
 import _getLogic from '../_shared/_getLogic'
+import './ArticleList.css'
 
 class ArticleList extends Component {
 
@@ -150,7 +151,7 @@ class ArticleList extends Component {
           )
         } else if (article.section_name) {
           return (
-            <tr key={article.section_name}>
+            <tr className='header' key={article.section_name}>
               <td className='top aligned'>
                 <h4 className='ui header'>
                   {article.section_name.split('  ')[0]}
@@ -159,10 +160,9 @@ class ArticleList extends Component {
                   </div>
                 </h4>
               </td>
-              <td className='top aligned'>
-              </td>
-              <td className='top aligned'>
-              </td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           )
         } else {
