@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
+import {HashLink as Link} from 'react-router-hash-link'
 import _fixYear from '../_shared/_fixYear'
 import _parseArticleID from '../_shared/_parseArticleID'
 import _getLogic from '../_shared/_getLogic'
@@ -26,7 +26,7 @@ class ArticleList extends Component {
                     <div key={number} className='item'>
                       <i className={'icon arrow ' + (relation === '被引用條文' ? 'right' : 'left')} />
                       <div className='content'>
-                        <Link to={'/law/' + item.law_name + '/' + _parseArticleID(number)} >
+                        <Link to={'/law/' + item.law_name + '#' + _parseArticleID(number)} >
                           {`${item.law_name}　${number}`}
                         </Link>
                       </div>
@@ -124,7 +124,7 @@ class ArticleList extends Component {
           }
 
           return (
-            <tr key={article.rule_no}>
+            <tr key={article.rule_no} id={id}>
               <td className='top aligned'>
                 <h4 className='ui header'>
                   <Link to={'/law/' + lawData.title + '/' + id}>
