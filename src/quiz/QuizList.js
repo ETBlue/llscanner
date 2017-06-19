@@ -1,74 +1,69 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react'
+import {Link} from 'react-router-dom'
 
 class QuizList extends Component {
-
-  constructor(props) {
-
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      quiz: this.props.quiz,
-    };
-
+      quiz: this.props.quiz
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => {
       return {
-        quiz: nextProps.quiz,
-      };
-    });
+        quiz: nextProps.quiz
+      }
+    })
   }
 
-  render() {
-
-    let quizListJSX;
-    const quiz = this.state.quiz;
+  render () {
+    let quizListJSX
+    const quiz = this.state.quiz
 
     if (quiz) {
-      quizListJSX = Object.keys(quiz).map( (id) => {
-
-        const item = quiz[id];
+      quizListJSX = Object.keys(quiz).map((id) => {
+        const item = quiz[id]
 
         return (
           <tr key={id}>
-            <td className="top aligned">
-              <h4 className="ui header">
-              <Link to={"/quiz/" + id}>{item.title}</Link>
+            <td className='top aligned'>
+              <h4 className='ui header'>
+                <Link to={'/quiz/' + id}>{item.title}</Link>
               </h4>
             </td>
-            <td className="top aligned"><code className="code">{item.type}</code></td>
-            <td className="top aligned"><code className="code">{item.id}</code></td>
+            <td className='top aligned'><code className='code'>{item.type}</code></td>
+            <td className='top aligned'><code className='code'>{item.id}</code></td>
           </tr>
         )
       })
     }
 
     return (
-      <div className="QuizList ui basic segment">
-        <h2 className="ui header">測驗題列表</h2>
-        <table className="ui table">
+      <div className='QuizList ui basic segment'>
+        <h2 className='ui header'>測驗題列表</h2>
+        <table className='ui table'>
           <thead>
             <tr>
               <th>題目</th>
-              <th className="two wide">類型</th>
+              <th className='two wide'>類型</th>
               <th>代號</th>
             </tr>
           </thead>
           <tbody>
-          { quizListJSX }
+            { quizListJSX }
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={3} className="right aligned">
-                <div className="ui mini buttons">
-                  <Link to="/quiz/new" className="ui icon labeled green button" >
-                    <i className="icon add" />
+              <th colSpan={3} className='right aligned'>
+                <div className='ui mini buttons'>
+                  <Link to='/quiz/new' className='ui icon labeled green button' >
+                    <i className='icon add' />
                     New Quiz
                   </Link>
-                  <Link to="/quiz/edit" className="ui icon labeled button" >
-                    <i className="icon pencil" />
+                  <Link to='/quiz/edit' className='ui icon labeled button' >
+                    <i className='icon pencil' />
                     Edit List
                   </Link>
                 </div>
@@ -77,9 +72,8 @@ class QuizList extends Component {
           </tfoot>
         </table>
       </div>
-    );
+    )
   }
-
 }
 
-export default QuizList;
+export default QuizList
