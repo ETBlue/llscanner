@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
-import {Link} from 'react-router-dom'
+import {HashLink as Link} from 'react-router-hash-link'
 
 import _copyNested from '../_shared/_copyNested'
 import ActionButton from '../_shared/ActionButton'
