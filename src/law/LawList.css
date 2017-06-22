@@ -1,0 +1,8 @@
+.DependencyList.ui.list .item .list {
+  padding: 0;
+}
+
+.DependencyList.ui.list .list>.item>i.icon,
+.DependencyList.ui.list>.item>i.icon {
+  padding-top: 0;
+}

@@ -7,7 +7,7 @@ export default (precondition) => {
   if (precondition && precondition.rule) {
 
     return (
-      <div className='PreconditionView ui relaxed list'>
+      <div className='_viewPrecondition ui relaxed list'>
         {_viewRule(precondition.rule, precondition.logic)}
         <div className='item'>的情況下，顯示本題</div>
       </div>

@@ -125,6 +125,7 @@ class App extends Component {
 
       const lawData = _laws[id]
       const lawObject = {}
+
       if (lawData && lawData.law_data) {
         lawData.law_data.forEach((entry) => {
           if (!entry.rule_no) {
@@ -134,28 +135,54 @@ class App extends Component {
         })
       }
 
-      if (id && lawData && !article_id) {
-        return <ArticleList lawData={lawData} ruleData={law[id]}/>
+      if (id && !article_id) {
+        if (lawData) {
+          return <ArticleList lawData={lawData} rulesData={law[id]}/>
+        } else {
+          return null
+        }
       }
 
-      if (id && lawData && article_id && !action) {
-        return <ArticleView 
-            lawID={id} 
-            articleID={article_id} 
-            rules={law[id][article_id]} 
-            articleContent={lawObject[article_id]}
-          />
+      if (id && article_id && action !== 'edit') {
+        if (lawData && law[id] && law[id][article_id]) {
+          return (
+            <section className='Article'>
+              <ArticleView 
+                lawID={id} 
+                articleID={article_id} 
+                ruleData={law[id][article_id]} 
+                articleData={lawObject[article_id]}
+              />
+              <Link to={'/law/' + id + '/' + article_id + '/edit'} className='ui mini icon button' >
+                <i className='icon pencil' />
+              </Link>
+            </section>
+          )
+        } else {
+          return null
+        }
       }
 
-      if (id && lawData && article_id && action === 'edit') {
-        return (
-          <ArticleEdit 
-            lawID={id} 
-            articleID={article_id} 
-            rules={law[id][article_id]} 
-            articleContent={lawObject[article_id]}
-          />
-        )
+      if (id && article_id && action === 'edit') {
+        if (lawData && law[id] && law[id][article_id]) {
+          return (
+            <section className='Article'>
+              <ArticleView 
+                lawID={id} 
+                articleID={article_id} 
+                ruleData={law[id][article_id]} 
+                articleData={lawObject[article_id]}
+              />
+              <ArticleEdit 
+                lawID={id} 
+                articleID={article_id} 
+                ruleData={law[id][article_id]} 
+              />
+            </section>
+          )
+        } else {
+          return null
+        }
       }
 
       return <LawList law={_laws}/>

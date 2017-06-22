@@ -4,9 +4,9 @@ import {HashLink as Link} from 'react-router-hash-link'
 import _fixYear from '../_shared/_fixYear'
 import _parseArticleID from '../_shared/_parseArticleID'
 
-import ContentView from './ContentView'
-import ConditionView from './ConditionView'
-import RelationView from './RelationView'
+import _viewCondition from './_viewCondition'
+import _viewContent from './_viewContent'
+import _viewRelation from './_viewRelation'
 import './ArticleList.css'
 
 class ArticleList extends Component {
@@ -14,12 +14,13 @@ class ArticleList extends Component {
   render () {
     let articleListJSX
     const lawData = this.props.lawData
-    const ruleData = this.props.ruleData
+    const rulesData = this.props.rulesData
 
     if (lawData && lawData.law_data) {
       articleListJSX = lawData.law_data.map((article, index) => {
         if (article.rule_no) {
           const id = _parseArticleID(article.rule_no)
+          const ruleData = rulesData? rulesData[id] : null
           return (
             <tr key={article.rule_no} id={id}>
               <td className='top aligned'>
@@ -33,13 +34,13 @@ class ArticleList extends Component {
                 </h4>
               </td>
               <td className='top aligned'>
-                <ContentView articleContent={article.content} />
+                {_viewContent(article.content)}
               </td>
               <td className='top aligned'>
-                <ConditionView ruleData={ruleData} articleID={id} />
+                {_viewCondition(ruleData, id)}
               </td>
               <td className='top aligned'>
-                <RelationView relationData={article.relates} currentLaw={lawData.title} />
+                {_viewRelation(article.relates, lawData.title)}
               </td>
             </tr>
           )

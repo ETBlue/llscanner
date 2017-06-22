@@ -11,7 +11,7 @@ export default (route) => {
       )
     })
     return (
-      <div className='RouteView ui divided relaxed list'>
+      <div className='_viewRoute ui divided relaxed list'>
         {listJSX}
       </div>
     )

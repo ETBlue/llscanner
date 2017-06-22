@@ -1,29 +1,16 @@
 import React, { Component } from 'react'
 import {HashLink as Link} from 'react-router-hash-link'
 import _fixYear from '../_shared/_fixYear.js'
+import './LawList.css'
 
-class ArticleList extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      law: this.props.law
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.setState((prevState, props) => {
-      prevState.law = nextProps.law
-      return prevState
-    })
-  }
+class LawList extends Component {
 
   render () {
     let lawListJSX
 
-    if (this.state.law) {
-      lawListJSX = Object.keys(this.state.law).map((law) => {
-        const lawData = this.state.law[law]
+    if (this.props.law) {
+      lawListJSX = Object.keys(this.props.law).map((law) => {
+        const lawData = this.props.law[law]
 
         // 法條名稱為 key，法條關連為 value（set）
         let dependency = new Map()
@@ -76,8 +63,8 @@ class ArticleList extends Component {
               )
             })
             return (
-              <div key={relationType} className='ui vertical segment'>
-                <div className='ui relaxed list'>
+              <div key={relationType} className='item'>
+                <div className='list'>
                   { relationTypeJSX }
                 </div>
               </div>
@@ -123,7 +110,9 @@ class ArticleList extends Component {
               </div>
             </td>
             <td className='top aligned'>
-              { dependencyJSX }
+              <div className="DependencyList ui relaxed divided list">
+                { dependencyJSX }
+              </div>
             </td>
           </tr>
         )
@@ -131,7 +120,7 @@ class ArticleList extends Component {
     }
 
     return (
-      <div className='ArticleList ui basic segment'>
+      <div className='LawList ui basic segment'>
         <h2 className='ui header'>法規列表</h2>
         <table className='ui table'>
           <thead>
@@ -150,4 +139,4 @@ class ArticleList extends Component {
   }
 }
 
-export default ArticleList
+export default LawList
