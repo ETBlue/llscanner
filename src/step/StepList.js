@@ -7,27 +7,10 @@ import _viewPrecondition from './_viewPrecondition'
 import './StepList.css'
 
 class StepList extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      step: this.props.step,
-      quiz: this.props.quiz
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.setState((prevState, props) => {
-      return {
-        step: nextProps.step,
-        quiz: nextProps.quiz
-      }
-    })
-  }
 
   render () {
     let stepListJSX
-    const step = this.state.step
+    const step = this.props.step
 
     if (step) {
       stepListJSX = Object.keys(step).map((id) => {
@@ -44,7 +27,7 @@ class StepList extends Component {
                   </code>
                 </Link>
                 <div className='sub header'>
-                  {this.state.quiz[item.quiz].title}
+                  {this.props.quiz[item.quiz].title}
                 </div>
               </h4>
             </td>

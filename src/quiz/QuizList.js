@@ -2,25 +2,10 @@ import React, { Component } from 'react'
 import {HashLink as Link} from 'react-router-hash-link'
 
 class QuizList extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      quiz: this.props.quiz
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.setState((prevState, props) => {
-      return {
-        quiz: nextProps.quiz
-      }
-    })
-  }
 
   render () {
     let quizListJSX
-    const quiz = this.state.quiz
+    const quiz = this.props.quiz
 
     if (quiz) {
       quizListJSX = Object.keys(quiz).map((id) => {

@@ -3,27 +3,10 @@ import {HashLink as Link} from 'react-router-hash-link'
 import './StepView.css'
 
 class StepView extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      stepData: this.props.stepData,
-      quizData: this.props.quizData
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.setState((prevState, props) => {
-      return {
-        stepData: nextProps.stepData,
-        quizData: nextProps.quizData
-      }
-    })
-  }
 
   render () {
-    const step = this.state.stepData
-    const quiz = this.state.quizData
+    const step = this.props.stepData
+    const quiz = this.props.quizData
 
     let conditionJSX
     let routeJSX
