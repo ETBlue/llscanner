@@ -102,6 +102,23 @@ class App extends Component {
     })
     const newStepID = Math.max(...stepIDs) + 10
 
+    // collect quiz ids and answer values for step validation
+    let quizIDs = []
+    let answerValues = []
+    Object.keys(quiz).forEach((id) => {
+      quizIDs.push(id)
+      if (quiz[id].type === 'select') {
+        if (quiz[id].option) {
+          Object.keys(quiz[id].option).forEach((optionID) => {
+            const ans = quiz[id].option[optionID].value
+            if (ans.length > 0) {
+              answerValues.push(ans)
+            }
+          })
+        }
+      }
+    })
+
     const HomePage = () => {
 
       const id = this.state.first
@@ -124,65 +141,64 @@ class App extends Component {
     const LawPage = ({id, article_id, action}) => {
 
       const lawData = _laws[id]
+      if (!id || !lawData || !lawData.law_data) {
+        return <LawList law={_laws}/>
+      }
+
       const lawObject = {}
-
-      if (lawData && lawData.law_data) {
-        lawData.law_data.forEach((entry) => {
-          if (!entry.rule_no) {
-            return
-          }
-          lawObject[_parseArticleID(entry.rule_no)] = entry
-        })
-      }
-
-      if (id && !article_id) {
-        if (lawData) {
-          return <ArticleList lawData={lawData} rulesData={law[id]}/>
-        } else {
-          return null
+      lawData.law_data.forEach((entry) => {
+        if (!entry.rule_no) {
+          return
         }
+        lawObject[_parseArticleID(entry.rule_no)] = entry
+      })
+
+      const rulesData = law[id] || []
+
+      if (!article_id) {
+        return (
+          <ArticleList 
+            lawData={lawData} 
+            rulesData={rulesData}
+          />
+        )
       }
 
-      if (id && article_id && action !== 'edit') {
-        if (lawData && law[id] && law[id][article_id]) {
-          return (
-            <section className='Article'>
-              <ArticleView 
-                lawID={id} 
-                articleID={article_id} 
-                ruleData={law[id][article_id]} 
-                articleData={lawObject[article_id]}
-              />
+      if (article_id && !action) {
+        return (
+          <section className='Article'>
+            <ArticleView 
+              lawID={id} 
+              articleID={article_id} 
+              articleData={lawObject[article_id]}
+              ruleData={rulesData[article_id]} 
+            />
+            <div className='ui basic segment'>
               <Link to={'/law/' + id + '/' + article_id + '/edit'} className='ui mini icon button' >
                 <i className='icon pencil' />
               </Link>
-            </section>
-          )
-        } else {
-          return null
-        }
+            </div>
+          </section>
+        )
       }
 
-      if (id && article_id && action === 'edit') {
-        if (lawData && law[id] && law[id][article_id]) {
-          return (
-            <section className='Article'>
-              <ArticleView 
-                lawID={id} 
-                articleID={article_id} 
-                ruleData={law[id][article_id]} 
-                articleData={lawObject[article_id]}
-              />
-              <ArticleEdit 
-                lawID={id} 
-                articleID={article_id} 
-                ruleData={law[id][article_id]} 
-              />
-            </section>
-          )
-        } else {
-          return null
-        }
+      if (article_id && action === 'edit') {
+        return (
+          <section className='Article'>
+            <ArticleView 
+              lawID={id} 
+              articleID={article_id} 
+              articleData={lawObject[article_id]}
+              ruleData={rulesData[article_id]} 
+            />
+            <ArticleEdit 
+              lawID={id} 
+              articleID={article_id} 
+              ruleData={rulesData[article_id]} 
+              quizIDs={quizIDs}
+            />
+          </section>
+        )
       }
 
       return <LawList law={_laws}/>
@@ -191,31 +207,19 @@ class App extends Component {
 
     const StepPage = ({ id, action }) => {
 
-      // collect quiz ids and answer values for step validation
-      let quizIDs = []
-      let answerValues = []
-      Object.keys(quiz).forEach((id) => {
-        quizIDs.push(id)
-        if (quiz[id].type === 'select') {
-          if (quiz[id].option) {
-            Object.keys(quiz[id].option).forEach((optionID) => {
-              const ans = quiz[id].option[optionID].value
-              if (ans.length > 0) {
-                answerValues.push(ans)
-              }
-            })
-          }
-        }
-      })
-
       if (id === 'new') {
         return (
-          <StepAdd
-            step={step}
-            quiz={quiz}
-            stepID={newStepID}
-            quizIDs={quizIDs}
-          />
+          <section className='Step'>
+            <div className='ui marginless basic segment'>
+              <h2 className='ui header'>新增測驗步驟</h2>
+            </div>
+            <StepAdd
+              step={step}
+              quiz={quiz}
+              stepID={newStepID}
+              quizIDs={quizIDs}
+            />
+          </section>
         )
       }
       if (id === 'edit') {
@@ -229,7 +233,7 @@ class App extends Component {
       if (step[id]) {
         if (action === 'edit') {
           return (
-            <section key={id}>
+            <section className='Step'>
               <StepView
                 stepData={step[id]}
                 quizData={quiz[step[id].quiz]}
@@ -244,7 +248,7 @@ class App extends Component {
           )
         } else {
           return (
-            <section key={id}>
+            <section className='Step'>
               <StepView
                 stepData={step[id]}
                 quizData={quiz[step[id].quiz]}
@@ -268,10 +272,15 @@ class App extends Component {
 
       if (id === 'new') {
         return (
-          <QuizAdd
-            quiz={quiz}
-            stepID={newStepID}
-          />
+          <section className='Quiz'>
+            <div className='ui marginless basic segment'>
+              <h2 className='ui header'>新增測驗題</h2>
+            </div>
+            <QuizAdd
+              quiz={quiz}
+              stepID={newStepID}
+            />
+          </section>
         )
       }
 
@@ -289,7 +298,7 @@ class App extends Component {
       if (quiz[id]) {
         if (action === 'edit') {
           return (
-            <section key={id}>
+            <section className='Quiz'>
               <QuizView
                 {...quiz[id]}
                 order={order[id]}
@@ -302,7 +311,7 @@ class App extends Component {
           )
         } else {
           return (
-            <section key={id} className='Quiz'>
+            <section className='Quiz'>
               <QuizView
                 {...quiz[id]}
                 order={order[id]}

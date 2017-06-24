@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {HashLink as Link} from 'react-router-hash-link'
+
 import _parseArticleID from '../_shared/_parseArticleID'
+
 import './_viewRelation.css'
 
 export default (relationData, currentLaw) => {

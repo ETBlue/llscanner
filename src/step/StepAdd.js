@@ -83,8 +83,7 @@ class StepAdd extends Component {
     const valid = this.state.valid ? '' : ' disabled'
 
     return (
-      <div className='NewStep ui basic segment'>
-        <h2 className='ui header'>新增測驗步驟</h2>
+      <div className='FormWrapper ui basic segment'>
         <div className='new ui segment'>
           <form className='Form ui form'>
             <StepForm

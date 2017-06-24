@@ -36,7 +36,6 @@ class ArticleView extends Component {
               {_viewCondition(ruleData, articleID)}
             </div>
           </div>
-          <hr className='ui hidden divider' />
         </div>
       </section>
     )

@@ -8,8 +8,6 @@ import ActionButton from '../_shared/ActionButton'
 import QuizForm from './QuizForm'
 import OptionForm from './OptionForm'
 
-import './QuizEdit.css'
-
 class QuizEdit extends Component {
   constructor (props) {
     super(props)

@@ -3,7 +3,6 @@ import firebase from 'firebase'
 import {HashLink as Link} from 'react-router-hash-link'
 
 import QuizForm from './QuizForm'
-import './QuizAdd.css'
 
 class QuizAdd extends Component {
   constructor (props) {
@@ -79,9 +78,8 @@ class QuizAdd extends Component {
     const valid = this.state.valid ? '' : ' disabled'
 
     return (
-      <div className='NewQuiz ui basic segment'>
-        <h2 className='ui header'>新增測驗題</h2>
-        <div className='new ui segment'>
+      <div className='FormWrapper ui basic segment'>
+        <div className='NewQuiz ui segment'>
           <form className='Form ui form'>
             <QuizForm
               {...this.state.quizData}

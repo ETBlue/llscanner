@@ -4,20 +4,17 @@ import './ConditionForm.css'
 
 class ConditionForm extends Component {
   render () {
-    const ruleJSX = !this.props.rules ? '' : Object.keys(this.props.rules).map((id) => {
+    const ruleJSX = !this.props.rules ? [] : this.props.rules.map((ruleContent, ruleID) => {
       return (
         <RuleForm
-          key={id}
-          number={id}
-          focus={this.props.focus}
-          conditionID={this.props.id}
-          checkedItem={this.props.rules[id].condition}
-          {...this.props.rules[id]}
-          onRuleAdd={this.props.onRuleAdd}
-          onRuleDelete={this.props.onRuleDelete}
-          onInputChange={this.props.onInputChange}
-          onRadioSelect={this.props.onRadioSelect}
-          quizIDs={this.props.quizIDs}
+          key={ruleID}
+          ruleID={ruleID}
+          {...ruleContent}
+          quizIDs={quizIDs}
+          changeInput={this._changeInput}
+          changeRadio={this._changeRadio}
+          selectRadio={this._selectRadio}
+          deleteRule={this._deleteRule}
         />
       )
     })

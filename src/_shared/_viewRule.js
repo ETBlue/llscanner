@@ -1,6 +1,6 @@
 import React from 'react'
 
-import _getLogic from './_getLogic'
+import _viewLogic from './_viewLogic'
 import _viewListString from './_viewListString'
 
 export default (list, logic) => {
@@ -16,7 +16,7 @@ export default (list, logic) => {
     }
     return (
       <div className='item' key={index}>
-        { prefixText } <code className='code'>{ rule.target }</code> { _getLogic(rule.logic) } {_viewListString(rule.value)}
+        { prefixText } <code className='code'>{ rule.target }</code> { _viewLogic(rule.logic) } {_viewListString(rule.value)}
       </div>
     )
   })

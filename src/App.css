@@ -40,9 +40,44 @@
   font-size: 0.8rem;
 }
 
-.ui.header {
-}
 .ui.header .sub.header {
   margin-top: 0.5em!important;
   line-height: inherit!important;
+}
+
+.FormWrapper {
+  margin: 0!important;
+}
+
+.FormWrapper>.ui.segment {
+  background: #fffaf3!important;
+}
+
+.FormWrapper ._header {
+  position: relative;
+}
+.FormWrapper ._cors._header {
+  padding-top: 1em;
+}
+
+.FormWrapper ._header ._rightTopFloated {
+  position: absolute!important;
+  right: 0;
+  top: 0;
+}
+
+.FormWrapper .inline.field {
+  margin: 0 0.5em!important;
+}
+
+.FormWrapper .inline.field:first-child {
+  margin-left: 1em!important;
+}
+
+.FormWrapper .inline.field:last-child {
+  margin-right: 1em!important;
+}
+
+.marginless {
+  margin: 0!important;
 }
