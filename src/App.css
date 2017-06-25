@@ -45,36 +45,36 @@
   line-height: inherit!important;
 }
 
-.FormWrapper {
+._formWrapper {
   margin: 0!important;
 }
 
-.FormWrapper>.ui.segment {
+._formWrapper>.ui.segment {
   background: #fffaf3!important;
 }
 
-.FormWrapper ._header {
+._formWrapper ._header {
   position: relative;
 }
-.FormWrapper ._cors._header {
+._formWrapper ._cors._header {
   padding-top: 1em;
 }
 
-.FormWrapper ._header ._rightTopFloated {
+._formWrapper ._header ._rightTopFloated {
   position: absolute!important;
   right: 0;
   top: 0;
 }
 
-.FormWrapper .inline.field {
+._formWrapper .inline.field {
   margin: 0 0.5em!important;
 }
 
-.FormWrapper .inline.field:first-child {
+._formWrapper .inline.field:first-child {
   margin-left: 1em!important;
 }
 
-.FormWrapper .inline.field:last-child {
+._formWrapper .inline.field:last-child {
   margin-right: 1em!important;
 }
 

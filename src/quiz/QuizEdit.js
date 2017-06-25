@@ -236,7 +236,7 @@ class QuizEdit extends Component {
     }
 
     return (
-      <div className='FormWrapper basic ui segment'>
+      <div className='_formWrapper basic ui segment'>
         <div className='QuizEdit ui segment'>
           {action}
           <hr className='ui divider' />

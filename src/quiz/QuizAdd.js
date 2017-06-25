@@ -78,7 +78,7 @@ class QuizAdd extends Component {
     const valid = this.state.valid ? '' : ' disabled'
 
     return (
-      <div className='FormWrapper ui basic segment'>
+      <div className='_formWrapper ui basic segment'>
         <div className='NewQuiz ui segment'>
           <form className='Form ui form'>
             <QuizForm

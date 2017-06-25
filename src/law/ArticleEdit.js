@@ -473,7 +473,7 @@ class ArticleEdit extends Component {
 
     return (
 
-      <div className='ArticleEdit FormWrapper basic ui segment'>
+      <div className='ArticleEdit _formWrapper basic ui segment'>
         <div className='ui segment'>
           {actionJSX}
           <hr className='ui divider' />

@@ -338,7 +338,7 @@ class StepEdit extends Component {
     }
 
     return (
-      <div className='FormWrapper basic ui segment'>
+      <div className='_formWrapper basic ui segment'>
         <div className='StepEdit ui segment'>
           {action}
           <hr className='ui divider' />
