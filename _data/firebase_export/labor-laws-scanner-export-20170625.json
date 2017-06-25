@@ -1,0 +1,347 @@
+{
+  "answer" : {
+    "consent_of_labor_union_for_regular_working_hour" : "no",
+    "has_labor_union" : "no",
+    "industry" : "misc",
+    "labor_management_conference_for_regular_working_hour" : "no",
+    "local_authority_order_permit_for_regular_working_hour" : "no",
+    "monthly_salary" : "180000",
+    "type_of_employment" : "full_time",
+    "type_of_regular_working_hour" : "unsure"
+  },
+  "law" : {
+    "勞動基準法" : {
+      "0" : "placeholder",
+      "9" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "belong_to",
+            "target" : "contract_term",
+            "value" : "fixed, non_fixed"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "belong_to",
+            "target" : "job_nature",
+            "value" : "temporary, short-term, seasonal, specific"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "contract_term",
+            "value" : "non_fixed"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "job_nature",
+            "value" : "continuous"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "contract_term",
+            "value" : "non_fixed"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "event-fixed_term_contract_expiration",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "event-fixed_term_contract_expiration-worker_continue",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "event-fixed_term_contract_expiration-worker_continue-employer_immediate_objection",
+            "value" : "false"
+          }, {
+            "logic" : "not_belong_to",
+            "target" : "job_nature",
+            "value" : "seasonal, specific"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "contract_term",
+            "value" : "non_fixed"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "event-fixed_term_contract_expiration",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "event-fixed_term_contract_expiration-new_fixed_term_contract",
+            "value" : "true"
+          }, {
+            "logic" : "greater_than",
+            "target" : "event-fixed_term_contract_expiration-old_new_fixed_term_contract-together_period_day",
+            "value" : "90"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "event-fixed_term_contract_expiration-old_new_fixed_term_contract-between_period_day",
+            "value" : "30"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "2"
+        }
+      } ]
+    }
+  },
+  "quiz" : {
+    "consent_of_labor_union_for_regular_working_hour" : {
+      "description" : "",
+      "id" : "consent_of_labor_union_for_regular_working_hour",
+      "option" : [ null, {
+        "id" : 1,
+        "title" : "有",
+        "value" : "yes"
+      }, {
+        "id" : 2,
+        "title" : "沒有",
+        "value" : "no"
+      }, {
+        "id" : 3,
+        "title" : "我不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "勞資雙方約定的工時制度，是否有經過工會同意？",
+      "type" : "select"
+    },
+    "has_labor_union" : {
+      "description" : "",
+      "id" : "has_labor_union",
+      "option" : [ null, {
+        "id" : 1,
+        "title" : "有工會",
+        "value" : "yes"
+      }, {
+        "id" : 2,
+        "title" : "沒有工會",
+        "value" : "no"
+      }, {
+        "id" : 3,
+        "title" : "我不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "員工是否有組織工會？",
+      "type" : "select"
+    },
+    "industry" : {
+      "description" : "",
+      "id" : "industry",
+      "option" : [ null, {
+        "id" : 1,
+        "title" : "農業",
+        "value" : "agriculture"
+      }, {
+        "id" : 2,
+        "title" : "礦業",
+        "value" : "mining"
+      }, {
+        "id" : 3,
+        "title" : "其他",
+        "value" : "misc"
+      } ],
+      "title" : "所屬的產業是？",
+      "type" : "select"
+    },
+    "keep_contract_on_both_sides" : {
+      "description" : "",
+      "id" : "keep_contract_on_both_sides",
+      "title" : "問題",
+      "type" : "select"
+    },
+    "labor_management_conference_for_regular_working_hour" : {
+      "description" : "",
+      "id" : "labor_management_conference_for_regular_working_hour",
+      "option" : [ null, {
+        "id" : 1,
+        "title" : "有",
+        "value" : "yes"
+      }, {
+        "id" : 2,
+        "title" : "沒有",
+        "value" : "no"
+      }, {
+        "id" : 3,
+        "title" : "我不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "勞資雙方約定的工時制度，是否有經過勞資會議討論後徵求勞工同意？",
+      "type" : "select"
+    },
+    "local_authority_order_permit_for_regular_working_hour" : {
+      "description" : "",
+      "id" : "local_authority_order_permit_for_regular_working_hour",
+      "title" : "問題",
+      "type" : "select"
+    },
+    "monthly_salary" : {
+      "description" : "沒扣掉勞健保自付額 etc.",
+      "id" : "monthly_salary",
+      "option" : [ null, {
+        "id" : 1,
+        "title" : "選項",
+        "value" : ""
+      } ],
+      "title" : "每個月的底薪是？",
+      "type" : "input"
+    },
+    "type_of_employment" : {
+      "description" : "全職的定義：blahblah... ，兼職的定義：blahblah...",
+      "id" : "type_of_employment",
+      "option" : [ null, {
+        "id" : "1",
+        "title" : "全職",
+        "value" : "full_time"
+      }, {
+        "id" : 2,
+        "title" : "兼職",
+        "value" : "part_time"
+      }, {
+        "id" : 3,
+        "title" : "不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "這個職務是全職或兼職？",
+      "type" : "select"
+    },
+    "type_of_regular_working_hour" : {
+      "description" : "（說明各種工時制度的不同）",
+      "id" : "type_of_regular_working_hour",
+      "option" : [ null, {
+        "id" : 1,
+        "title" : "一般工時（無變形）",
+        "value" : "default"
+      }, {
+        "id" : 2,
+        "title" : "兩週變形工時",
+        "value" : "transformed_2w"
+      }, {
+        "id" : 3,
+        "title" : "四週變形工時",
+        "value" : "transformed_4w"
+      }, {
+        "id" : 4,
+        "title" : "八週變形工時",
+        "value" : "transformed_8w"
+      }, {
+        "id" : 5,
+        "title" : "責任制",
+        "value" : "duty"
+      }, {
+        "id" : 6,
+        "title" : "不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "勞資雙方約定採用哪種工時制度？",
+      "type" : "select"
+    }
+  },
+  "step" : {
+    "1" : {
+      "id" : 1,
+      "quiz" : "type_of_employment"
+    },
+    "3" : {
+      "id" : "3",
+      "quiz" : "monthly_salary"
+    },
+    "5" : {
+      "id" : "5",
+      "quiz" : "type_of_regular_working_hour",
+      "route" : [ {
+        "answer" : "duty",
+        "next" : "industry"
+      }, {
+        "answer" : "transformed_2w",
+        "next" : "has_labor_union"
+      }, {
+        "answer" : "transformed_4w",
+        "next" : "has_labor_union"
+      }, {
+        "answer" : "transformed_8w",
+        "next" : "has_labor_union"
+      } ]
+    },
+    "7" : {
+      "id" : "7",
+      "precondition" : {
+        "logic" : "and",
+        "rule" : [ {
+          "logic" : "belong_to",
+          "target" : "type_of_regular_working_hour",
+          "value" : "transformed_2w, transformed_4w, transformed_8w"
+        }, {
+          "logic" : "not_belong_to",
+          "target" : "labor_management_conference_for_regular_working_hour",
+          "value" : "eee"
+        } ]
+      },
+      "quiz" : "has_labor_union",
+      "route" : [ {
+        "answer" : "no",
+        "next" : "labor_management_conference_for_regular_working_hour"
+      }, {
+        "answer" : "yes",
+        "next" : "consent_of_labor_union_for_regular_working_hour"
+      } ]
+    },
+    "11" : {
+      "id" : "11",
+      "quiz" : "consent_of_labor_union_for_regular_working_hour"
+    },
+    "13" : {
+      "id" : "13",
+      "quiz" : "labor_management_conference_for_regular_working_hour"
+    },
+    "20" : {
+      "id" : 20,
+      "quiz" : "industry"
+    },
+    "30" : {
+      "id" : 30,
+      "quiz" : "local_authority_order_permit_for_regular_working_hour"
+    },
+    "40" : {
+      "id" : 40,
+      "quiz" : "keep_contract_on_both_sides"
+    }
+  }
+}
