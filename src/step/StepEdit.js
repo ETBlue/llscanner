@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
-import {HashLink as Link} from 'react-router-hash-link'
 
 import _copyNested from '../_shared/_copyNested'
 import ActionButton from '../_shared/ActionButton'
@@ -24,12 +23,6 @@ class StepEdit extends Component {
       stepData: _copyNested(this.props.stepData),
     }
 
-    this._reference = {
-      quizData: this.props.quizData,
-      quizIDs: this.props.quizIDs,
-      answerValues: this.props.answerValues,
-    }
-
     this._basic = {
       condition: {
         logic: 'and',
@@ -44,6 +37,10 @@ class StepEdit extends Component {
         answer: '',
         next: '',
       },
+      stepData: {
+        id: '',
+        quiz: '',
+      }
     }
 
     this._addRule = this._addRule.bind(this)
@@ -265,103 +262,133 @@ class StepEdit extends Component {
 
   render () {
 
+    const valid = this.state.valid
+    let stepData = this.state.stepData
 
+    const quizIDs = this.props.quizIDs
+    const answerValues = this.props.answerValues
 
     const actionJSX = (
       <ActionButton
         link={'/step/' + this.state.stepData.id}
         save={this._save}
-        class={this.state.valid ? '' : ' disabled'}
+        className={valid ? '' : ' disabled'}
         refresh={this._refresh}
       />
     )
 
-    let conditionFormJSX
+    if (!stepData) {
+      stepData = _copyNested(this._basic.stepData)
+    }
 
-    const condition = this.state.stepData.precondition
-    if (precondition && Object.keys(precondition).length > 0) {
-      preconditionFormJSX = Object.keys(precondition).map((key) => {
-        if (precondition[key]) {
-          return (
-            <ConditionForm
-              key={key}
-              id={key}
-              rules={precondition[key]}
-              focus={this.state.focus}
-              onConditionDelete={this._onConditionDelete}
-              onRuleAdd={this._addRule}
-              onRuleDelete={this._deleteRule}
-              onInputChange={this._changeInput}
-              onRadioSelect={this._selectRadio}
-              quizIDs={this._reference.quizIDs}
-            />
-          )
-        } else {
-          return null
+    let ruleFormJSX
+
+    if (stepData.precondition && stepData.precondition.rule) {
+
+      ruleFormJSX = stepData.precondition.rule.map((ruleContent, ruleID) => {
+        if (!ruleContent) {
+          return false
         }
+        return (
+          <RuleForm
+            key={ruleID}
+            ruleID={ruleID}
+            {...ruleContent}
+            quizIDs={quizIDs}
+            changeInput={this._changeInput}
+            changeRadio={this._changeRadio}
+            selectRadio={this._selectRadio}
+            deleteRule={this._deleteRule}
+          />
+        )
       })
+
     }
 
     let routeFormJSX
 
-    const route = this.state.stepData.route
-    if (route && Object.keys(route).length > 0) {
-      let answers
-      const option = this._reference.quizData.option
-      if (option) {
-        answers = Object.keys(option).map((id) => {
-          if (option[id]) {
-            return option[id].value
-          } else {
-            return null
-          }
-        })
-      }
-      routeFormJSX = Object.keys(route).map((key) => {
-        if (route[key]) {
-          return (
-            <RouteForm
-              key={key}
-              number={key}
-              {...route[key]}
-              focus={this.state.focus}
-              onRouteDelete={this._deleteRoute}
-              onInputChange={this._changeInput}
-              quizIDs={this._reference.quizIDs}
-              quizAnswers={answers}
-            />
-          )
-        } else {
-          return null
+    if (stepData.route) {
+
+      routeFormJSX = stepData.route.map((routeContent, routeID) => {
+        if (!routeContent) {
+          return false
         }
+        return (
+          <RouteForm
+            key={routeID}
+            routeID={routeID}
+            {...routeContent}
+            quizIDs={quizIDs}
+            answerValues={answerValues}
+            changeInput={this._changeInput}
+            deleteRoute={this._deleteRoute}
+          />
+        )
       })
     }
 
     return (
       <div className='_formWrapper basic ui segment'>
         <div className='StepEdit ui segment'>
-          {action}
+          {actionJSX}
           <hr className='ui divider' />
           <form ref='form' className='Form ui form'>
             <div className='ui two column divided stackable grid'>
-              <div className='column'>
-                { conditionFormJSX }
-                <a onClick={this._onConditionAdd} className='ui green icon labeled mini button'>
+              <div className='left aligned column'>
+                <h4 className='ui header'>進入條件</h4>
+                <p>
+                  進入此步驟需
+                  <span>
+                  <span className='inline field'>
+                    <span className='ui radio checkbox'>
+                      <input
+                        type='radio'
+                        value='and'
+                        checked={stepData.precondition.logic === 'and'}
+                        onClick={this._selectRadio}
+                        onChange={this._changeRadio}
+                      />
+                      <label>
+                        同時
+                      </label>
+                    </span>
+                  </span>
+                  <span className='inline field'>
+                    <span className='ui radio checkbox'>
+                      <input
+                        type='radio'
+                        value='or'
+                        checked={stepData.precondition.logic === 'or'}
+                        onClick={this._selectRadio}
+                        onChange={this._changeRadio}
+                      />
+                      <label>
+                        擇一
+                      </label>
+                    </span>
+                  </span>
+                  </span>
+                  符合以下條件
+                </p>
+                <hr className='ui divider' />
+                { ruleFormJSX }
+                <a onClick={this._addRule} className='ui green icon labeled mini button'>
                   <i className='icon add' />
-                    新增進入條件
-                  </a>
+                  新增進入條件
+                </a>
               </div>
-              <div className='column'>
+              <div className='left aligned column'>
+                <h4 className='ui header'>離開路徑</h4>
                 { routeFormJSX }
                 <a onClick={this._addRoute} className='ui green icon labeled mini button'>
                   <i className='icon add' />
-                    新增離開路徑
-                  </a>
+                  新增離開路徑
+                </a>
               </div>
             </div>
           </form>
           <hr className='ui divider' />
-          {action}
+          {actionJSX}
         </div>
       </div>
     )

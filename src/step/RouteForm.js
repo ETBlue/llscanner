@@ -1,62 +1,69 @@
 import React, { Component } from 'react'
-import './RouteForm.css'
 
 class RouteForm extends Component {
+
   render () {
-    const quizAnswerJSX = !this.props.quizAnswers ? '' : this.props.quizAnswers.map((answer) => {
+
+    const routeID = this.props.routeID
+    const answer = this.props.answer
+    const next = this.props.next
+
+    const quizIDs = this.props.quizIDs
+    const answerValues = this.props.answerValues
+
+    const changeInput = this.props.changeInput
+    const deleteRoute = this.props.deleteRoute
+
+    const answerOptionJSX = !answerValues ? [] : answerValues.map((answer, index) => {
       return (
-        <option key={answer} value={answer} />
+        <option key={index} value={answer} />
       )
     })
 
-    const quizIDsJSX = this.props.quizIDs.map((quizID) => {
+    const quizOptionJSX = !quizIDs ? [] : quizIDs.map((quizID, index) => {
       return (
-        <option key={quizID} value={quizID} />
+        <option key={index} value={quizID} />
       )
     })
 
     return (
       <div className='RouteForm' >
-        <h4 className='ui header'>編輯離開路徑</h4>
-        <a className='ui right top floated red icon labeled mini button'
-          title='route'
-          id={this.props.number}
-          onClick={this.props.onRouteDelete}
-        >
-          <i className='icon trash' />
-          刪除此路徑
-        </a>
-        <div className={'field ' + (this.props.id ? '' : 'error')}>
+        <header className='_header'>
+          <h5 className='ui header'>路徑 {routeID}</h5>
+          <a className='ui _rightTopFloated red icon labeled mini button'
+            data-routeID={routeID}
+            onClick={deleteRoute}
+          >
+            <i className='icon trash' />
+            刪除路徑 {routeID}
+          </a>
+        </header>
+        <div className={'field ' + (answer ? '' : 'error')}>
           <label>答案值 *</label>
           <input
             type='text'
-            title='route'
-            id={this.props.number}
-            name='id'
-            value={this.props.id}
-            onChange={this.props.onInputChange}
-            placeholder='請輸入答案值'
-            autoFocus={!!(this.props.focus.manual && this.props.focus.id === this.props.number)}
-            list='quizAnswers'
+            data-routeID={routeID}
+            value={answer}
+            onChange={changeInput}
+            placeholder='此題的答案值'
+            list='answerValues'
           />
-          <datalist id='quizAnswers'>
-            { quizAnswerJSX }
+          <datalist id='answerValues'>
+            { answerOptionJSX }
           </datalist>
         </div>
         <div className='field'>
           <label>題目代號</label>
           <input
             type='text'
-            title='route'
-            id={this.props.number}
-            name='quiz'
-            value={this.props.quiz}
-            onChange={this.props.onInputChange}
+            data-routeID={routeID}
+            value={next}
+            onChange={changeInput}
             placeholder='將前往的下一題代號'
             list='quizIDs'
           />
           <datalist id='quizIDs'>
-            { quizIDsJSX }
+            { quizOptionJSX }
           </datalist>
         </div>
         <hr className='ui divider' />

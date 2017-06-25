@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import _getLogic from '../_shared/_getLogic'
 import _viewLogic from '../_shared/_viewLogic'
 
-import './RuleForm.css'
-
 class RuleForm extends Component {
   render () {
 
@@ -47,10 +45,9 @@ class RuleForm extends Component {
 
     return (
       <div className='RuleForm'>
-        <hr className='ui divider' />
-        <header className='header'>
+        <header className='_header'>
           <h5 className='ui header'>條件 {ruleID}</h5>
-          <a className='ui _rightTopFloated orange icon labeled mini button'
+          <a className='ui _rightTopFloated red icon labeled mini button'
             data-ruleID={ruleID}
             onClick={deleteRule}
           >

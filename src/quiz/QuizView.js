@@ -73,14 +73,21 @@ class QuizView extends Component {
   render () {
     let answerJSX
 
+    let route = {}
+    if (this.state.route) {
+      this.state.route.forEach((entry) => {
+        route[entry.answer] = entry.next
+      })
+    }
+
     if (this.state.quiz.type === 'select') {
       const option = this.state.option
       if (option) {
         const optionJSX = Object.keys(option).map((key) => {
           const item = option[key]
           const className = this.state.answer === item.value ? 'active' : ''
-          const next = this.state.route && this.state.route[item.value]
-            ? this.state.route[item.value].quiz
+          const next = route[item.value]
+            ? route[item.value]
             : (this.state.order && this.state.order.next ? this.state.order.next
             : '')
           return (

@@ -2,11 +2,11 @@ import React from 'react'
 
 export default (route) => {
 
-  if (route) {
-    const listJSX = Object.keys(route).map((key) => {
+  if (route && route.map) {
+    const listJSX = route.map((entry, index) => {
       return (
-        <div key={key} className='item'>
-          回答 <code className='code'>{route[key].id}</code> 則導向 <code className='code'>{route[key].quiz}</code>
+        <div key={index} className='item'>
+          回答 <code className='code'>{entry.answer}</code> 則導向 <code className='code'>{entry.next}</code>
         </div>
       )
     })

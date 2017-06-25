@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
-import {HashLink as Link} from 'react-router-hash-link'
 
 import _copyNested from '../_shared/_copyNested'
 import ActionButton from '../_shared/ActionButton'
@@ -128,7 +127,7 @@ class QuizEdit extends Component {
     const target = event.target
 
     const title = target.title
-    const id = target.id
+    //const id = target.id
     const name = target.name
     const value = target.type === 'checkbox' ? target.checked : target.value
 

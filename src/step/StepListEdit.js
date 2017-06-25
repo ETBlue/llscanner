@@ -3,7 +3,6 @@ import firebase from 'firebase'
 import {HashLink as Link} from 'react-router-hash-link'
 
 import _copyNested from '../_shared/_copyNested'
-import './StepList.css'
 
 class StepListEdit extends Component {
   constructor (props) {
@@ -254,7 +253,7 @@ class StepListEdit extends Component {
     }
 
     return (
-      <div className='QuizList ui basic segment'>
+      <div className='StepListEdit ui basic segment'>
         <h2 className='ui header'>編輯步驟列表</h2>
         <table className='ui unstackable table'>
           <thead>

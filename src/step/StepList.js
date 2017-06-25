@@ -4,8 +4,6 @@ import {HashLink as Link} from 'react-router-hash-link'
 import _viewRoute from './_viewRoute'
 import _viewPrecondition from './_viewPrecondition'
 
-import './StepList.css'
-
 class StepList extends Component {
 
   render () {

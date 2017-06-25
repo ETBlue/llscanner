@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Link,
   NavLink
 } from 'react-router-dom'
 import firebase from 'firebase'
@@ -206,21 +205,15 @@ class App extends Component {
 
     const StepPage = ({ id, action }) => {
 
-      if (id === 'new') {
+      if (!id) {
         return (
-          <section className='Step'>
-            <div className='ui marginless basic segment'>
-              <h2 className='ui header'>新增測驗步驟</h2>
-            </div>
-            <StepAdd
-              step={step}
-              quiz={quiz}
-              stepID={newStepID}
-              quizIDs={quizIDs}
-            />
-          </section>
+          <StepList
+            step={step}
+            quiz={quiz}
+          />
         )
       }
+
       if (id === 'edit') {
         return (
           <StepListEdit
@@ -229,39 +222,48 @@ class App extends Component {
           />
         )
       }
-      if (step[id]) {
-        if (action === 'edit') {
-          return (
-            <section className='Step'>
-              <StepView
-                stepData={step[id]}
-                quizData={quiz[step[id].quiz]}
-              />
-              <StepEdit
-                stepData={step[id]}
-                quizData={quiz[step[id].quiz]}
-                quizIDs={quizIDs}
-                answerValues={answerValues}
-              />
-            </section>
-          )
-        } else {
-          return (
-            <section className='Step'>
-              <StepView
-                stepData={step[id]}
-                quizData={quiz[step[id].quiz]}
-              />
-              <Link to={'/step/' + id + '/edit'} className='ui mini icon button' >
-                <i className='icon pencil' />
-              </Link>
-            </section>
-          )
-        }
+
+      if (id === 'new') {
+        return (
+          <StepAdd
+            step={step}
+            quiz={quiz}
+            stepID={newStepID}
+            quizIDs={quizIDs}
+          />
+        )
       }
+
+      if (step[id] && !action) {
+        return (
+          <section className='Step'>
+            <StepView
+              stepData={step[id]}
+              quizData={quiz[step[id].quiz]}
+            />
             <EditButton 
               link={'/step/' + id + '/edit'} 
             />
+          </section>
+        )
+      }
+
+      if (step[id] && action === 'edit') {
+        return (
+          <section className='Step'>
+            <StepView
+              stepData={step[id]}
+              quizData={quiz[step[id].quiz]}
+            />
+            <StepEdit
+              stepData={step[id]}
+              quizIDs={quizIDs}
+              answerValues={answerValues}
+            />
+          </section>
+        )
+      }
+
       return (
         <StepList
           step={step}

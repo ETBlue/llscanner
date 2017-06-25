@@ -14,27 +14,25 @@ class ArticleView extends Component {
     const lawID = this.props.lawID
 
     return (
-      <section className='ArticleView'>
-        <div className='Article ui basic segment'>
-          <h2 className='ui header'>
-            <Link to={'/law/' + lawID}>{lawID}</Link>
-          </h2>
-          <h3 className='ui header'>
-            {articleData.rule_no}
-            <div className='sub header'>
-            {articleData.note.replace('(', '').replace(')', '')}
-            </div>
-          </h3>
-          <hr className='ui hidden divider' />
-          <div className='ui two column stackable grid'>
-            <div className='left aligned column'>
-              <h4 className='ui dividing header'>條文</h4>
-              {_viewContent(articleData.content)}
-            </div>
-            <div className='left aligned column'>
-              <h4 className='ui dividing header'>規則</h4>
-              {_viewCondition(ruleData, articleID)}
-            </div>
+      <section className='ArticleView ui basic segment'>
+        <h2 className='ui header'>
+          <Link to={'/law/' + lawID}>{lawID}</Link>
+        </h2>
+        <h3 className='ui header'>
+          {articleData.rule_no}
+          <div className='sub header'>
+          {articleData.note.replace('(', '').replace(')', '')}
+          </div>
+        </h3>
+        <hr className='ui hidden divider' />
+        <div className='ui two column stackable grid'>
+          <div className='left aligned column'>
+            <h4 className='ui dividing header'>條文</h4>
+            {_viewContent(articleData.content)}
+          </div>
+          <div className='left aligned column'>
+            <h4 className='ui dividing header'>規則</h4>
+            {_viewCondition(ruleData, articleID)}
           </div>
         </div>
       </section>

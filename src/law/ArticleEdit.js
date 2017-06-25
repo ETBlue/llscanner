@@ -254,16 +254,18 @@ class ArticleEdit extends Component {
 
   render () {
 
+    const ruleData = this.state.ruleData
+    const valid = this.state.valid
+
     const lawID = this.props.lawID
     const articleID = this.props.articleID
-    const ruleData = this.state.ruleData
     const quizIDs = this.props.quizIDs
 
     const actionJSX = (
       <ActionButton
         link={'/law/' + lawID + '/' + articleID}
         save={this._save}
-        class={this.state.valid ? '' : ' disabled'}
+        className={valid ? '' : ' disabled'}
         refresh={this._refresh}
       />
     )
@@ -289,6 +291,9 @@ class ArticleEdit extends Component {
       reference.subparagraph = reference.subparagraph || ''
 
       const conditionJSX = condition.rule.map((ruleContent, ruleID) => {
+        if (!ruleContent) {
+          return false
+        }
         return (
           <RuleForm
             ruleSetID={ruleSetID}
@@ -306,6 +311,9 @@ class ArticleEdit extends Component {
       })
 
       const preconditionJSX = precondition.rule.map((ruleContent, ruleID) => {
+        if (!ruleContent) {
+          return false
+        }
         return (
           <RuleForm
             ruleSetID={ruleSetID}
@@ -406,6 +414,7 @@ class ArticleEdit extends Component {
                 </span>
                 符合以下條件
               </p>
+              <hr className='ui divider' />
               {preconditionJSX}
               <a className='ui olive icon labeled mini button'
                 data-ruleSetID={ruleSetID}
@@ -455,6 +464,7 @@ class ArticleEdit extends Component {
                 </span>
                 符合以下條件
               </p>
+              <hr className='ui divider' />
               {conditionJSX}
               <a className='ui olive icon labeled mini button'
                 data-ruleSetID={ruleSetID}

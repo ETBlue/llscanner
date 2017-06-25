@@ -83,6 +83,10 @@ class StepAdd extends Component {
     const valid = this.state.valid ? '' : ' disabled'
 
     return (
+      <section className='Step'>
+      <div className='ui marginless basic segment'>
+        <h2 className='ui header'>新增測驗步驟</h2>
+      </div>
       <div className='_formWrapper ui basic segment'>
         <div className='new ui segment'>
           <form className='Form ui form'>
@@ -110,6 +114,7 @@ class StepAdd extends Component {
           </form>
         </div>
       </div>
+      </section>
     )
   }
 }
