@@ -9,6 +9,7 @@ import {
 import firebase from 'firebase'
 
 import _parseArticleID from './_shared/_parseArticleID'
+import EditButton from './_shared/EditButton'
 
 import _laws from './law/_laws'
 import LawList from './law/LawList'
@@ -131,9 +132,9 @@ class App extends Component {
             condition={condition[id]}
             answer={answer[id]}
           />
-          <Link to={'/quiz/' + id + '/edit'} className='ui mini icon button' >
-            <i className='icon pencil' />
-          </Link>
+          <EditButton 
+            link={'/quiz/' + id + '/edit'} 
+          />
         </section>
       )
     }
@@ -173,11 +174,9 @@ class App extends Component {
               articleData={lawObject[article_id]}
               ruleData={rulesData[article_id]} 
             />
-            <div className='ui basic segment'>
-              <Link to={'/law/' + id + '/' + article_id + '/edit'} className='ui mini icon button' >
-                <i className='icon pencil' />
-              </Link>
-            </div>
+            <EditButton 
+              link={'/law/' + id + '/' + article_id + '/edit'} 
+            />
           </section>
         )
       }
@@ -260,6 +259,9 @@ class App extends Component {
           )
         }
       }
+            <EditButton 
+              link={'/step/' + id + '/edit'} 
+            />
       return (
         <StepList
           step={step}
@@ -319,9 +321,9 @@ class App extends Component {
                 condition={condition[id]}
                 answer={answer[id]}
               />
-              <Link to={'/quiz/' + id + '/edit'} className='ui mini icon button' >
-                <i className='icon pencil' />
-              </Link>
+              <EditButton 
+                link={'/quiz/' + id + '/edit'} 
+              />
             </section>
           )
         }
