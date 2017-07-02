@@ -16,7 +16,7 @@ class ArticleView extends Component {
     return (
       <section className='ArticleView ui basic segment'>
         <h2 className='ui header'>
-          <Link to={'/law/' + lawID}>{lawID}</Link>
+          <Link to={`/law/${lawID}#${articleID}`}>{lawID}</Link>
         </h2>
         <h3 className='ui header'>
           {articleData.rule_no}
