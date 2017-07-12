@@ -10,6 +10,9 @@ import firebase from 'firebase'
 import _parseArticleID from './_shared/_parseArticleID'
 import EditButton from './_shared/EditButton'
 
+import AnswerList from './answer/AnswerList'
+import AnswerView from './answer/AnswerView'
+
 import _laws from './law/_laws'
 import LawList from './law/LawList'
 import ArticleList from './law/ArticleList'
@@ -136,6 +139,25 @@ class App extends Component {
           />
         </section>
       )
+    }
+
+    const AnswerPage = ({id, action}) => {
+
+      if (!id || id !== "testdata") {
+        return (
+          <AnswerList
+          />
+        )
+      }
+
+      return (
+
+        <AnswerView
+          answerData={answer}
+          law={law}
+        />
+      )
+
     }
 
     const LawPage = ({id, article_id, action}) => {
@@ -364,7 +386,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/' render={HomePage} />
               <Route path='/quiz/:id?/:action?' render={({match}) => QuizPage(match.params)} />
-              <Route path='/answer' render={() => <p>answer</p>} />
+              <Route path='/answer/:id?/:action?' render={({match}) => AnswerPage(match.params)} />
               <Route path='/step/:id?/:action?' render={({match}) => StepPage(match.params)} />
               <Route path='/law/:id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
               <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
