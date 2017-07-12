@@ -9,6 +9,11 @@ class AnswerView extends Component {
 
     const answerData = this.props.answerData
     const lawData = this.props.law['勞動基準法']
+    let count = {
+      'passed': 0,
+      'failed': 0,
+      'NA': 0
+    }
 
     let answerDataJSX
     if (answerData) {
@@ -41,18 +46,41 @@ class AnswerView extends Component {
             return
           }
 
-          if (ruleSet.precondition && _evaluateCondition(ruleSet.precondition, answerData) !== 'passed') {
-            return
-          }
-
           let evaluateConditionJSX
+          let hintJSX
 
-          if (_evaluateCondition(ruleSet.condition, answerData) === 'passed') {
-            evaluateConditionJSX = <span className='ui green basic tiny label'><i className='icon checkmark' />passed</span>
-          }
+          if (ruleSet.precondition && _evaluateCondition(ruleSet.precondition, answerData) !== 'passed') {
 
-          if (_evaluateCondition(ruleSet.condition, answerData) === 'failed') {
-            evaluateConditionJSX = <span className='ui red tiny label'><i className='icon remove' />failed</span>
+            evaluateConditionJSX = '不適用'
+            count.NA += 1
+
+          } else {
+
+            if (_evaluateCondition(ruleSet.condition, answerData) === 'passed') {
+              evaluateConditionJSX = <span className='ui green basic tiny label'><i className='icon checkmark' />通過</span>
+              count.passed += 1
+            }
+
+            if (_evaluateCondition(ruleSet.condition, answerData) === 'failed') {
+              evaluateConditionJSX = <span className='ui red tiny label'><i className='icon remove' />不通過</span>
+              count.failed += 1
+            }
+
+            const targetListJSX = ruleSet.condition.rule.map((item, index, arr) => {
+              return (
+                <div className='item' key={index}>
+                <span className='code'>
+                  {item.target}
+                </span>
+                </div>
+              )
+            })
+
+            hintJSX = (
+              <div className='ui list'>
+                {targetListJSX}
+              </div>
+            )
           }
 
           return (
@@ -62,6 +90,7 @@ class AnswerView extends Component {
                 { ruleSet.reference.paragraph.length > 0 ? `第 ${ruleSet.reference.paragraph} 項` : ''}
                 { ruleSet.reference.subparagraph.length > 0 ? `第 ${ruleSet.reference.subparagraph} 款` : ''}
               </div>
+              {hintJSX}
               <div className='right floated content'>
                 {evaluateConditionJSX}
               </div>
@@ -87,6 +116,26 @@ class AnswerView extends Component {
           </div>
           <div className='left aligned column'>
             <h4 className='ui dividing header'>掃描結果</h4>
+            <div className='ui secondary three item menu' style={{marginTop: "-1rem"}}>
+              <a className='item'>
+                通過
+                <span className='ui green mini label'>
+                  {count.passed}
+                </span>
+              </a>
+              <a className='item'>
+                不通過
+                <span className='ui red mini label'>
+                  {count.failed}
+                </span>
+              </a>
+              <a className='item'>
+                不適用
+                <span className='ui mini label'>
+                  {count.NA}
+                </span>
+              </a>
+            </div>
             <div className='ui divided relaxed list'>
               {resultJSX}
             </div>
