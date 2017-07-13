@@ -150,11 +150,22 @@ class App extends Component {
         )
       }
 
+      const lawObject = {}
+      if (_laws['勞動基準法']) {
+        _laws['勞動基準法'].law_data.forEach((entry) => {
+          if (!entry.rule_no) {
+            return
+          }
+          lawObject[_parseArticleID(entry.rule_no)] = entry
+        })
+      }
+
       return (
 
         <AnswerView
           answerData={answer}
           law={law}
+          lawObject={lawObject}
         />
       )
 

@@ -3,12 +3,15 @@ import {HashLink as Link} from 'react-router-hash-link'
 
 import _evaluateCondition from './_evaluateCondition'
 
+import './AnswerView.css'
+
 class AnswerView extends Component {
 
   render () {
 
     const answerData = this.props.answerData
-    const lawData = this.props.law['勞動基準法']
+    const rulesData = this.props.law['勞動基準法']
+    const lawObject = this.props.lawObject
     let count = {
       'passed': 0,
       'failed': 0,
@@ -34,14 +37,14 @@ class AnswerView extends Component {
     }
 
     let resultJSX
-    if (answerData && lawData) {
-      resultJSX = Object.keys(lawData).map((key) => {
+    if (answerData && rulesData) {
+      resultJSX = Object.keys(rulesData).map((key) => {
 
         if (key === '0') {
           return
         }
 
-        return lawData[key].map((ruleSet, index) => {
+        return rulesData[key].map((ruleSet, index) => {
           if (!ruleSet) {
             return
           }
@@ -66,9 +69,9 @@ class AnswerView extends Component {
               count.failed += 1
             }
 
-            const targetListJSX = ruleSet.condition.rule.map((item, index, arr) => {
+            const targetListJSX = ruleSet.condition.rule.map((item, number, arr) => {
               return (
-                <div className='item' key={index}>
+                <div className='item' key={number}>
                 <span className='code'>
                   {item.target}
                 </span>
@@ -85,12 +88,17 @@ class AnswerView extends Component {
 
           return (
             <div className='item' key={index}>
-              <div className='header'>
-                勞動基準法第 {key} 條
-                { ruleSet.reference.paragraph.length > 0 ? `第 ${ruleSet.reference.paragraph} 項` : ''}
-                { ruleSet.reference.subparagraph.length > 0 ? `第 ${ruleSet.reference.subparagraph} 款` : ''}
+              <div className='content'>
+                <header className='header'>
+                  勞動基準法第 {key} 條
+                  { ruleSet.reference.paragraph.length > 0 ? `第 ${ruleSet.reference.paragraph} 項` : ''}
+                  { ruleSet.reference.subparagraph.length > 0 ? `第 ${ruleSet.reference.subparagraph} 款` : ''}
+                </header>
+                <p className='meta'>
+                  {lawObject[key].note.replace('(','').replace(')','')}
+                </p>
+                {hintJSX}
               </div>
-              {hintJSX}
               <div className='right floated content'>
                 {evaluateConditionJSX}
               </div>
