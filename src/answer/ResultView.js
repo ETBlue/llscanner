@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {HashLink as Link} from 'react-router-hash-link'
 
 import _evaluateCondition from './_evaluateCondition'
+import LawChooser from './LawChooser'
 
 import './ResultView.css'
 
@@ -17,6 +18,7 @@ class ResultView extends Component {
     }
 
     this._filter = this._filter.bind(this)
+    this._toggleChooser = this._toggleChooser.bind(this)
 
   }
 
@@ -45,6 +47,10 @@ class ResultView extends Component {
     const rulesData = this.props.rulesData
     const lawObject = this.props.lawObject
     const lawTitle = this.props.lawTitle
+    const laws = this.props.laws
+    const answerID = this.props.answerID
+    const lawID = this.props.lawID
+
     let count = {
       'all': 0,
       'passed': 0,
@@ -61,6 +67,7 @@ class ResultView extends Component {
         }
 
         return rulesData[key].map((ruleSet, index) => {
+
           if (!ruleSet) {
             return
           }
@@ -141,16 +148,33 @@ class ResultView extends Component {
       })
     }
 
+    let chooserJSX
+    if (this.state.chooser) {
+      chooserJSX = <LawChooser
+        currentLaw={lawID}
+        answerID={answerID}
+        laws={laws}
+        _toggleChooser={this._toggleChooser}
+      />
+    }
+
     return (
       <section className='ResultView'>
-        <h4 className='ui dividing header'
-          data-filter='all'
-          onClick={this._filter}
-        >
-          {lawTitle}掃描結果（共 {count.all} 條規則）
+        {chooserJSX}
+        <h4 className='ui dividing header'>
+          <span style={{cursor: "pointer"}}
+            data-filter='all'
+            onClick={this._filter}
+          >
+            掃描結果（共 {count.all} 條規則）
+          </span>
+          <span style={{cursor: "pointer", float: "right"}}
+            onClick={this._toggleChooser}>
+            <i className='setting icon' style={{margin: '0', color: 'inherit'}} />
+          </span>
         </h4>
         <div className='ui secondary three item menu' style={{marginTop: "-1rem"}}>
-          <a className='item'
+          <a className={'item' + (this.state.filter === 'passed' ? ' active' : '')}
             data-filter='passed'
             onClick={this._filter}
           >
@@ -161,7 +185,7 @@ class ResultView extends Component {
               {count.passed}
             </span>
           </a>
-          <a className='item'
+          <a className={'item' + (this.state.filter === 'failed' ? ' active' : '')}
             data-filter='failed'
             onClick={this._filter}
           >
@@ -172,7 +196,7 @@ class ResultView extends Component {
               {count.failed}
             </span>
           </a>
-          <a className='item'
+          <a className={'item' + (this.state.filter === 'NA' ? ' active' : '')}
             data-filter='NA'
             onClick={this._filter}
           >

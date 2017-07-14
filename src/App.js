@@ -50,6 +50,8 @@ class App extends Component {
       answer: {},
       first: '',
     }
+
+    this._getLawObject = this._getLawObject.bind(this)
   }
 
   componentWillMount () {
@@ -86,6 +88,23 @@ class App extends Component {
         }
       })
     })
+  }
+
+  _getLawObject (lawData) {
+
+    let lawObject = {}
+
+    if (lawData && lawData.law_data) {
+      lawData.law_data.forEach((entry) => {
+        if (!entry.rule_no) {
+          return
+        }
+        lawObject[_parseArticleID(entry.rule_no)] = entry
+      })
+    }
+
+    return lawObject
+
   }
 
   render () {
@@ -141,52 +160,56 @@ class App extends Component {
       )
     }
 
-    const AnswerPage = ({id, action}) => {
+    const AnswerPage = ({answer_id, law_id}) => {
 
-      if (!id || id !== "testdata") {
+      if (!answer_id || answer_id !== "testdata") {
         return (
           <AnswerList
           />
         )
       }
 
-      const lawObject = {}
-      if (_laws['勞動基準法']) {
-        _laws['勞動基準法'].law_data.forEach((entry) => {
-          if (!entry.rule_no) {
-            return
-          }
-          lawObject[_parseArticleID(entry.rule_no)] = entry
-        })
+      if (answer_id && !law_id) {
+
+        return (
+
+          <AnswerView
+            answerData={answer}
+            laws={_laws}
+            answerID={answer_id}
+            status='choose_law'
+          />
+
+        )
       }
+
+      const lawObject = this._getLawObject(_laws[law_id])
 
       return (
 
         <AnswerView
           answerData={answer}
+          laws={_laws}
           law={law}
           lawObject={lawObject}
+          answerID={answer_id}
+          lawID={law_id}
+          status='view_result'
         />
       )
 
     }
 
-    const LawPage = ({id, article_id, action}) => {
+    const LawPage = ({law_id, article_id, action}) => {
 
-      const lawData = _laws[id]
-      if (!id || !lawData || !lawData.law_data) {
-        return <LawList law={_laws}/>
+      const lawData = _laws[law_id]
+      if (!law_id || !lawData || !lawData.law_data) {
+        return <LawList laws={_laws}/>
       }
 
-      const lawObject = {}
-      lawData.law_data.forEach((entry) => {
-        if (!entry.rule_no) {
-          return
-        }
-        lawObject[_parseArticleID(entry.rule_no)] = entry
-      })
+      const lawObject = this._getLawObject(lawData)
 
-      const rulesData = law[id] || []
+      const rulesData = law[law_id] || []
 
       if (!article_id) {
         return (
@@ -201,13 +224,13 @@ class App extends Component {
         return (
           <section className='Article'>
             <ArticleView 
-              lawID={id} 
+              lawID={law_id} 
               articleID={article_id} 
               articleData={lawObject[article_id]}
               ruleData={rulesData[article_id]} 
             />
             <EditButton 
-              link={'/law/' + id + '/' + article_id + '/edit'} 
+              link={'/law/' + law_id + '/' + article_id + '/edit'} 
             />
           </section>
         )
@@ -217,13 +240,13 @@ class App extends Component {
         return (
           <section className='Article'>
             <ArticleView 
-              lawID={id} 
+              lawID={law_id} 
               articleID={article_id} 
               articleData={lawObject[article_id]}
               ruleData={rulesData[article_id]} 
             />
             <ArticleEdit 
-              lawID={id} 
+              lawID={law_id} 
               articleID={article_id} 
               ruleData={rulesData[article_id]} 
               quizIDs={quizIDs}
@@ -232,13 +255,13 @@ class App extends Component {
         )
       }
 
-      return <LawList law={_laws}/>
+      return <LawList laws={_laws}/>
 
     }
 
-    const StepPage = ({ id, action }) => {
+    const StepPage = ({ step_id, action }) => {
 
-      if (!id) {
+      if (!step_id) {
         return (
           <StepList
             step={step}
@@ -247,7 +270,7 @@ class App extends Component {
         )
       }
 
-      if (id === 'edit') {
+      if (step_id === 'edit') {
         return (
           <StepListEdit
             step={step}
@@ -256,7 +279,7 @@ class App extends Component {
         )
       }
 
-      if (id === 'new') {
+      if (step_id === 'new') {
         return (
           <StepAdd
             step={step}
@@ -267,29 +290,29 @@ class App extends Component {
         )
       }
 
-      if (step[id] && !action) {
+      if (step[step_id] && !action) {
         return (
           <section className='Step'>
             <StepView
-              stepData={step[id]}
-              quizData={quiz[step[id].quiz]}
+              stepData={step[step_id]}
+              quizData={quiz[step[step_id].quiz]}
             />
             <EditButton 
-              link={'/step/' + id + '/edit'} 
+              link={'/step/' + step_id + '/edit'} 
             />
           </section>
         )
       }
 
-      if (step[id] && action === 'edit') {
+      if (step[step_id] && action === 'edit') {
         return (
           <section className='Step'>
             <StepView
-              stepData={step[id]}
-              quizData={quiz[step[id].quiz]}
+              stepData={step[step_id]}
+              quizData={quiz[step[step_id].quiz]}
             />
             <StepEdit
-              stepData={step[id]}
+              stepData={step[step_id]}
               quizIDs={quizIDs}
               answerValues={answerValues}
             />
@@ -305,9 +328,9 @@ class App extends Component {
       )
     }
 
-    const QuizPage = ({ id, action }) => {
+    const QuizPage = ({ quiz_id, action }) => {
 
-      if (id === 'new') {
+      if (quiz_id === 'new') {
         return (
           <section className='Quiz'>
             <div className='ui marginless basic segment'>
@@ -321,7 +344,7 @@ class App extends Component {
         )
       }
 
-      if (id === 'edit') {
+      if (quiz_id === 'edit') {
         return (
           <QuizListEdit
             quiz={quiz}
@@ -332,32 +355,32 @@ class App extends Component {
         )
       }
 
-      if (quiz[id]) {
+      if (quiz[quiz_id]) {
         if (action === 'edit') {
           return (
             <section className='Quiz'>
               <QuizView
-                {...quiz[id]}
-                order={order[id]}
-                route={route[id]}
-                condition={condition[id]}
-                answer={answer[id]}
+                {...quiz[quiz_id]}
+                order={order[quiz_id]}
+                route={route[quiz_id]}
+                condition={condition[quiz_id]}
+                answer={answer[quiz_id]}
               />
-              <QuizEdit {...quiz[id]} />
+              <QuizEdit {...quiz[quiz_id]} />
             </section>
           )
         } else {
           return (
             <section className='Quiz'>
               <QuizView
-                {...quiz[id]}
-                order={order[id]}
-                route={route[id]}
-                condition={condition[id]}
-                answer={answer[id]}
+                {...quiz[quiz_id]}
+                order={order[quiz_id]}
+                route={route[quiz_id]}
+                condition={condition[quiz_id]}
+                answer={answer[quiz_id]}
               />
               <EditButton 
-                link={'/quiz/' + id + '/edit'} 
+                link={'/quiz/' + quiz_id + '/edit'} 
               />
             </section>
           )
@@ -396,10 +419,10 @@ class App extends Component {
           <div className='App-body'>
             <Switch>
               <Route exact path='/' render={HomePage} />
-              <Route path='/quiz/:id?/:action?' render={({match}) => QuizPage(match.params)} />
-              <Route path='/answer/:id?/:action?' render={({match}) => AnswerPage(match.params)} />
-              <Route path='/step/:id?/:action?' render={({match}) => StepPage(match.params)} />
-              <Route path='/law/:id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
+              <Route path='/quiz/:quiz_id?/:action?' render={({match}) => QuizPage(match.params)} />
+              <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
+              <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
+              <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
               <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
               {/* <Route path="/login" render={() => <div className="auth"></div>} />
                           */}
