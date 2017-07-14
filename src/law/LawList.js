@@ -6,11 +6,14 @@ import './LawList.css'
 class LawList extends Component {
 
   render () {
+
+    const laws = this.props.laws
+
     let lawListJSX
 
-    if (this.props.law) {
-      lawListJSX = Object.keys(this.props.law).map((law) => {
-        const lawData = this.props.law[law]
+    if (laws) {
+      lawListJSX = Object.keys(laws).map((law) => {
+        const lawData = laws[law]
 
         // 法條名稱為 key，法條關連為 value（set）
         let dependency = new Map()
