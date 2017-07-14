@@ -69,6 +69,7 @@ class ArticleEdit extends Component {
         precondition: _copyNested(this._basic.condition),
         reference: _copyNested(this._basic.reference)
       })
+      return prevState
     })
 
   }
