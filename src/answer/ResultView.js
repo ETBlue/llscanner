@@ -162,15 +162,15 @@ class ResultView extends Component {
       <section className='ResultView'>
         {chooserJSX}
         <h4 className='ui dividing header'>
+          <span style={{cursor: "pointer", float: "right"}}
+            onClick={this._toggleChooser}>
+            <i className='setting icon' style={{margin: '0', color: 'inherit'}} />
+          </span>
           <span style={{cursor: "pointer"}}
             data-filter='all'
             onClick={this._filter}
           >
-            掃描結果（共 {count.all} 條規則）
-          </span>
-          <span style={{cursor: "pointer", float: "right"}}
-            onClick={this._toggleChooser}>
-            <i className='setting icon' style={{margin: '0', color: 'inherit'}} />
+            掃描結果（{lawID}，共 {count.all} 條規則）
           </span>
         </h4>
         <div className='ui secondary three item menu' style={{marginTop: "-1rem"}}>
