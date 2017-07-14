@@ -162,9 +162,9 @@ class ResultView extends Component {
       <section className='ResultView'>
         {chooserJSX}
         <h4 className='ui dividing header'>
-          <span style={{cursor: "pointer", float: "right"}}
+          <span style={{cursor: "pointer", float: "right", margin: '-0.5em', padding: '0.5em', opacity: (this.state.chooser ? "1" : "0.5")}}
             onClick={this._toggleChooser}>
-            <i className='setting icon' style={{margin: '0', color: 'inherit'}} />
+            <i className='setting icon' style={{margin: 0}} />
           </span>
           <span style={{cursor: "pointer"}}
             data-filter='all'
