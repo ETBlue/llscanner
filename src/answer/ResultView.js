@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {HashLink as Link} from 'react-router-hash-link'
 
+import _viewLogic from '../_shared/_viewLogic'
+
 import _evaluateCondition from './_evaluateCondition'
 import LawChooser from './LawChooser'
 
@@ -78,68 +80,102 @@ class ResultView extends Component {
           }
 
           let evaluateConditionJSX
+          let targetListJSX
           let hintJSX
+
+          const preconditionOutput = _evaluateCondition(ruleSet.precondition, answerData)
+          const conditionOutput = _evaluateCondition(ruleSet.condition, answerData)
 
           // 遇到不適用的條款時
 
-          if (ruleSet.precondition && _evaluateCondition(ruleSet.precondition, answerData) !== 'passed') {
+          if (ruleSet.precondition && preconditionOutput.result !== 'passed') {
 
-            count.NA += 1
-            count.all += 1
+            if (preconditionOutput.result === 'unknown') {
 
-            // 被 filter 擋掉的話，直接不 render
-            if (this.state.filter !== 'all' && this.state.filter !== 'NA') {
-              return
-            } 
+              count.unknown += 1
+              count.all += 1
 
-            // 沒被 filter 擋掉的話，正常 render
-            evaluateConditionJSX = '不適用'
+              // 被 filter 擋掉的話，直接不 render
+              if (this.state.filter !== 'all' && this.state.filter !== 'unknown') {
+                return
+              } 
+
+              evaluateConditionJSX = '可能不適用'
+
+            }
+
+            if (preconditionOutput.result === 'failed') {
+
+              count.NA += 1
+              count.all += 1
+
+              // 被 filter 擋掉的話，直接不 render
+              if (this.state.filter !== 'all' && this.state.filter !== 'NA') {
+                return
+              } 
+
+              evaluateConditionJSX = '不適用'
+
+            }
+
+          // 遇到適用的條款時
 
           } else {
 
-            const resultValue = _evaluateCondition(ruleSet.condition, answerData)
-
-            if (resultValue === 'passed') {
+            if (conditionOutput.result === 'passed') {
               count.passed += 1
               count.all += 1
 
               evaluateConditionJSX = <span className='ui green basic tiny label'><i className='icon checkmark' />通過</span>
             }
 
-            if (resultValue === 'failed') {
+            if (conditionOutput.result === 'failed') {
               count.failed += 1
               count.all += 1
 
               evaluateConditionJSX = <span className='ui red tiny label'><i className='icon remove' />不通過</span>
             }
 
-            if (resultValue === 'unknown') {
+            if (conditionOutput.result === 'unknown') {
               count.unknown += 1
               count.all += 1
 
               evaluateConditionJSX = <span className='ui yellow basic tiny label'><i className='icon help' />未知</span>
             }
 
-            if (this.state.filter !== 'all' && this.state.filter !== resultValue) {
+            // 被 filter 擋掉的話，不 render
+            if (this.state.filter !== 'all' && this.state.filter !== conditionOutput.result) {
               return
             } 
+          }
 
-            const targetListJSX = ruleSet.condition.rule.map((item, number, arr) => {
-              return (
-                <div className='item' key={number}>
-                <span className='code'>
-                  {item.target}
-                </span>
+          targetListJSX = conditionOutput.hint.map((item, number) => {
+            return (
+              <div className='item' key={number}>
+                <header className='header'>
+                  <span className='code'>
+                    {item.name}
+                  </span>
+                </header>
+                <div className='meta'>
+                  期望
+                  <span className='code'>
+                    {item.target}
+                  </span>
+                  {_viewLogic(item.logic)}
+                  <span className='code'>
+                    {item.value}
+                  </span>
                 </div>
-              )
-            })
-
-            hintJSX = (
-              <div className='ui list'>
-                {targetListJSX}
               </div>
             )
-          }
+          })
+
+          hintJSX = (
+            <div className='ui list'>
+              {targetListJSX}
+            </div>
+          )
 
           return (
             <div className='item' key={index}>
