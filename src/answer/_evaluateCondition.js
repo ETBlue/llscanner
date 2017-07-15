@@ -1,7 +1,7 @@
 import _evaluateString from './_evaluateString'
 
 export default (condition, answerData) => {
-
+console.log(`--- a new condition ---`)
   if (!condition || !condition.logic || !condition.rule || !answerData) {
     return 'unknown'
   }
@@ -15,7 +15,13 @@ export default (condition, answerData) => {
     const target = _evaluateString(answerData[item.target], answerData)
     const value = _evaluateString(item.value, answerData)
 
-    if (!target || !value) {
+console.log(`${item.target} -> ${target} | ${item.logic} | ${item.value} -> ${value}`)
+    if (!target && target !== 0) {
+console.log(`result: unknown`)
+      return 'unknown'
+    }
+    if (!value && value !== 0) {
+console.log(`result: unknown`)
       return 'unknown'
     }
 
@@ -34,14 +40,16 @@ export default (condition, answerData) => {
       include: targetArray.includes(value) ? 'passed' : 'failed',
       not_include: !targetArray.includes(value) ? 'passed' : 'failed',
     }
+console.log(`result: ${itemMap[item.logic]}`)
     return itemMap[item.logic]
   })
 
   const map = {
-    and: ruleResult.includes('failed') ? 'failed' : 'passed',
-    or: ruleResult.includes('passed') ? 'failed' : 'passed',
+    and: ruleResult.includes('failed') ? 'failed' : ruleResult.includes('unknown') ? 'unknown' : 'passed',
+    or: ruleResult.includes('passed') ? 'passed' : ruleResult.includes('unknown') ? 'unknown' : 'failed',
   }
 
+console.log(`rules above tested by ${condition.logic.toUpperCase()}: ${map[condition.logic]}`)
   return map[condition.logic]
 
 }

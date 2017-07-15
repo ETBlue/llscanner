@@ -55,6 +55,7 @@ class ResultView extends Component {
       'all': 0,
       'passed': 0,
       'failed': 0,
+      'unknown': 0,
       'NA': 0
     }
 
@@ -62,9 +63,13 @@ class ResultView extends Component {
     if (answerData && rulesData) {
       resultJSX = Object.keys(rulesData).map((key) => {
 
-        if (key === '0') {
+        // 略過 placeholder
+
+        if (key === '0' || rulesData[key] === 'placeholder' ) {
           return
         }
+
+        // 處理正常的資料
 
         return rulesData[key].map((ruleSet, index) => {
 
@@ -75,15 +80,19 @@ class ResultView extends Component {
           let evaluateConditionJSX
           let hintJSX
 
+          // 遇到不適用的條款時
+
           if (ruleSet.precondition && _evaluateCondition(ruleSet.precondition, answerData) !== 'passed') {
 
             count.NA += 1
             count.all += 1
 
+            // 被 filter 擋掉的話，直接不 render
             if (this.state.filter !== 'all' && this.state.filter !== 'NA') {
               return
             } 
 
+            // 沒被 filter 擋掉的話，正常 render
             evaluateConditionJSX = '不適用'
 
           } else {
@@ -102,6 +111,13 @@ class ResultView extends Component {
               count.all += 1
 
               evaluateConditionJSX = <span className='ui red tiny label'><i className='icon remove' />不通過</span>
+            }
+
+            if (resultValue === 'unknown') {
+              count.unknown += 1
+              count.all += 1
+
+              evaluateConditionJSX = <span className='ui yellow basic tiny label'><i className='icon help' />未知</span>
             }
 
             if (this.state.filter !== 'all' && this.state.filter !== resultValue) {
@@ -173,7 +189,7 @@ class ResultView extends Component {
             掃描結果（{lawID}，共 {count.all} 條規則）
           </span>
         </h4>
-        <div className='ui secondary three item menu' style={{marginTop: "-1rem"}}>
+        <div className='ui secondary four item menu' style={{marginTop: "-1rem"}}>
           <a className={'item' + (this.state.filter === 'passed' ? ' active' : '')}
             data-filter='passed'
             onClick={this._filter}
@@ -194,6 +210,17 @@ class ResultView extends Component {
               data-filter='failed'
             >
               {count.failed}
+            </span>
+          </a>
+          <a className={'item' + (this.state.filter === 'unknown' ? ' active' : '')}
+            data-filter='unknown'
+            onClick={this._filter}
+          >
+            未知
+            <span className='ui yellow mini label'
+              data-filter='unknown'
+            >
+              {count.unknown}
             </span>
           </a>
           <a className={'item' + (this.state.filter === 'NA' ? ' active' : '')}
