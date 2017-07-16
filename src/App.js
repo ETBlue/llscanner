@@ -412,7 +412,7 @@ class App extends Component {
               <NavLink to='/step' className='item'>Step</NavLink>
               <NavLink to='/law' className='item'>Law</NavLink>
               <NavLink to='/answer' className='item'>Answer</NavLink>
-              {/* <NavLink to="/login" className="item">Login</NavLink> */}
+              <NavLink to="/login" className="item">Login</NavLink>
             </nav>
           </header>
 
@@ -423,11 +423,11 @@ class App extends Component {
               <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
               <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
               <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
+              <Route path="/login" render={() => <div className="auth"></div>} />
               <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
-              {/* <Route path="/login" render={() => <div className="auth"></div>} />
-                          */}
             </Switch>
           </div>
+
         </div>
       </Router>
     )
