@@ -6,6 +6,7 @@ import {
   NavLink
 } from 'react-router-dom'
 import firebase from 'firebase'
+import { Sidebar, Segment, Modal } from 'semantic-ui-react'
 
 import _parseArticleID from './_shared/_parseArticleID'
 import EditButton from './_shared/EditButton'
@@ -49,9 +50,11 @@ class App extends Component {
       law: {},
       answer: {},
       first: '',
+      showSidebar: false,
     }
 
     this._getLawObject = this._getLawObject.bind(this)
+    this._toggleSidebar = this._toggleSidebar.bind(this)
   }
 
   componentWillMount () {
@@ -104,6 +107,16 @@ class App extends Component {
     }
 
     return lawObject
+
+  }
+
+  _toggleSidebar () {
+    this.setState((prevState, props) => {
+
+      prevState.showSidebar = !prevState.showSidebar
+
+      return prevState
+    })
 
   }
 
@@ -396,39 +409,90 @@ class App extends Component {
 
       <Router basename='/llscanner'>
 
-        <div className='App'>
+        <Sidebar.Pushable className='App'>
 
-          <header className='App-header ui center aligned basic inverted segment'>
-            <h1 className='ui inverted header'>
-              <img src={logo} className='App-logo ui image' alt='logo' />
-              <div className='content'>
-              Labor Laws Scanner
-              <span className='ui horizontal black label'>alpha</span>
-              </div>
-            </h1>
-            <nav className='ui inverted compact secondary pointing menu'>
-              <NavLink exact to='/' className='item'>Home</NavLink>
-              <NavLink to='/quiz' className='item'>Quiz</NavLink>
-              <NavLink to='/step' className='item'>Step</NavLink>
-              <NavLink to='/law' className='item'>Law</NavLink>
-              <NavLink to='/answer' className='item'>Answer</NavLink>
-              <NavLink to="/login" className="item">Login</NavLink>
+          <Sidebar as={Segment}
+            animation='push'
+            direction='right'
+            visible={this.state.showSidebar}
+            color='grey'
+            inverted={true}
+            basic={true}
+            style={{padding: "1rem 0"}}
+          >
+            <nav className='ui basic fluid vertical grey inverted menu'>
+              <NavLink exact to='/' className='item'
+                onClick={this._toggleSidebar}
+              >
+                首頁
+              </NavLink>
+              <NavLink to='/quiz/' className='item'
+                onClick={this._toggleSidebar}
+              >
+                測驗題
+              </NavLink>
+              <NavLink to='/step/' className='item'
+                onClick={this._toggleSidebar}
+              >
+                故事線
+              </NavLink>
+              <NavLink to='/law/' className='item'
+                onClick={this._toggleSidebar}
+              >
+                掃描規則
+              </NavLink>
+              <NavLink to='/answer/' className='item'
+                onClick={this._toggleSidebar}
+              >
+                我的答案
+              </NavLink>
+              <NavLink to='/login/' className='item'
+                onClick={this._toggleSidebar}
+              >
+                Login
+              </NavLink>
             </nav>
-          </header>
 
-          <div className='App-body'>
-            <Switch>
-              <Route exact path='/' render={HomePage} />
-              <Route path='/quiz/:quiz_id?/:action?' render={({match}) => QuizPage(match.params)} />
-              <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
-              <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
-              <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
-              <Route path="/login" render={() => <div className="auth"></div>} />
-              <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
-            </Switch>
-          </div>
+          </Sidebar>
 
-        </div>
+          <Sidebar.Pusher>
+
+            <header className='App-header ui center aligned basic inverted black segment'>
+
+              <div className='ui right floated black icon button'
+                onClick={this._toggleSidebar}
+                >
+                <i className='sidebar icon' />
+              </div>
+
+              <h1 className='ui inverted marginless header'>
+                <img src={logo} className='App-logo ui image' alt='logo' />
+                <div className='content'>
+                勞基法掃描器
+                <span className='ui horizontal black label'>開發到一半預覽版</span>
+                </div>
+              </h1>
+
+            </header>
+
+            <div className='App-body'>
+              <Switch>
+                <Route exact path='/' render={HomePage} />
+                <Route path='/quiz/:quiz_id?/:action?' render={({match}) => QuizPage(match.params)} />
+                <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
+                <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
+                <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
+                <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
+              </Switch>
+            </div>
+
+          </Sidebar.Pusher>
+
+          <Modal size='fullscreen' dimmer='blurring' open={this.state.showModal}>
+            <div className='auth' />
+          </Modal>
+
+        </Sidebar.Pushable>
       </Router>
     )
   }
