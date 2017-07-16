@@ -58,7 +58,7 @@ class LawList extends Component {
                 <div key={index} className='item'>
                   <i className={'icon ' + icon} />
                   <div className='content'>
-                    <Link to={'/law/' + lawName}>
+                    <Link to={`/law/${lawName}/`}>
                       { lawName }
                     </Link>
                   </div>
@@ -102,7 +102,7 @@ class LawList extends Component {
           <tr key={law}>
             <td className='top aligned'>
               <h4 className='ui header'>
-                <Link to={'/law/' + lawData.title}>
+                <Link to={`/law/${lawData.title}/`}>
                   {lawData.title}
                 </Link>
               </h4>

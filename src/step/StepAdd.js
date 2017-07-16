@@ -99,14 +99,14 @@ class StepAdd extends Component {
             <hr className='ui divider' />
             <div className='ui mini buttons'>
               <Link
-                to={'/step/' + this.state.stepData.id + '/edit'}
+                to={`/step/${this.state.stepData.id}/edit/`}
                 onClick={this._save}
                 className={'ui icon labeled teal button ' + valid}
                 >
                 <i className='icon checkmark' />
                   送出
                 </Link>
-              <Link to='/step' className='ui icon labeled button'>
+              <Link to='/step/' className='ui icon labeled button'>
                 <i className='icon cancel' />
                   取消
                 </Link>

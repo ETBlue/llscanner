@@ -24,7 +24,7 @@ class LawChooser extends Component {
         //})
 
         return (
-          <Link to={`/answer/${answerID}/${lawTitle}`} 
+          <Link to={`/answer/${answerID}/${lawTitle}/`} 
             className={'item' + (currentLawID === lawTitle ? ' active' : '')}
             key={key}
             onClick={_toggleChooser}

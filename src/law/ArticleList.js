@@ -25,7 +25,7 @@ class ArticleList extends Component {
             <tr key={article.rule_no} id={id}>
               <td className='top aligned'>
                 <h4 className='ui header'>
-                  <Link to={'/law/' + lawData.title + '/' + id}>
+                  <Link to={`/law/${lawData.title}/${id}/`}>
                     {article.rule_no.replace(' ', '')}
                   </Link>
                   <div className='sub header'>

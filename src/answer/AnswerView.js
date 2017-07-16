@@ -58,7 +58,7 @@ class AnswerView extends Component {
     return (
       <section className='AnswerView ui basic segment'>
         <h2 className='ui header'>
-          <Link to={`/answer/${answerID}`}>
+          <Link to={`/answer/${answerID}/`}>
           testdata
           </Link>
         </h2>

@@ -271,11 +271,11 @@ class StepListEdit extends Component {
             <tr>
               <th colSpan={4} className='right aligned'>
                 <div className='ui mini buttons'>
-                  <Link to='/step' onClick={this._save} className={'ui icon labeled teal button ' + valid} >
+                  <Link to='/step/' onClick={this._save} className={'ui icon labeled teal button ' + valid} >
                     <i className='icon checkmark' />
                     Save
                   </Link>
-                  <Link to='/step' className='ui icon labeled button' >
+                  <Link to='/step/' className='ui icon labeled button' >
                     <i className='icon cancel' />
                     Cancel
                   </Link>

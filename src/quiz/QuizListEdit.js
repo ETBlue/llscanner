@@ -157,7 +157,7 @@ class QuizListEdit extends Component {
           <tr key={id}>
             <td className='top aligned'>
               <h4 className='ui header'>
-                <Link to={'/quiz/' + id}>{item.title}</Link>
+                <Link to={`/quiz/${id}/`}>{item.title}</Link>
               </h4>
             </td>
             <td className='top aligned'><code className='code'>{item.type}</code></td>
@@ -204,11 +204,11 @@ class QuizListEdit extends Component {
             <tr>
               <th colSpan={4} className='right aligned'>
                 <div className='ui mini buttons'>
-                  <Link to='/quiz' onClick={this._save} className={'ui icon labeled teal button ' + valid} >
+                  <Link to='/quiz/' onClick={this._save} className={'ui icon labeled teal button ' + valid} >
                     <i className='icon checkmark' />
                     Save
                   </Link>
-                  <Link to='/quiz' className='ui icon labeled button' >
+                  <Link to='/quiz/' className='ui icon labeled button' >
                     <i className='icon cancel' />
                     Cancel
                   </Link>

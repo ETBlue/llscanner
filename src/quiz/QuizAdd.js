@@ -88,15 +88,14 @@ class QuizAdd extends Component {
               />
             <hr className='ui divider' />
             <div className='ui mini buttons'>
-              <Link
-                to={'/quiz/' + this.state.quizData.id + '/edit'}
+              <Link to={`/quiz/${this.state.quizData.id}/edit/`}
                 onClick={this._save}
                 className={'ui icon labeled teal button ' + valid}
                 >
                 <i className='icon checkmark' />
                   送出
                 </Link>
-              <Link to='/quiz' className='ui icon labeled button'>
+              <Link to='/quiz/' className='ui icon labeled button'>
                 <i className='icon cancel' />
                   取消
                 </Link>

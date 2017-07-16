@@ -60,11 +60,11 @@ class StepList extends Component {
             <tr>
               <th colSpan={4} className='right aligned'>
                 <div className='ui mini buttons'>
-                  <Link to='/step/new' className='ui icon labeled green button' >
+                  <Link to='/step/new/' className='ui icon labeled green button' >
                     <i className='icon add' />
                     New Step
                   </Link>
-                  <Link to='/step/edit' className='ui icon labeled button' >
+                  <Link to='/step/edit/' className='ui icon labeled button' >
                     <i className='icon pencil' />
                     Edit List
                   </Link>

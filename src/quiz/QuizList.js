@@ -43,11 +43,11 @@ class QuizList extends Component {
             <tr>
               <th colSpan={3} className='right aligned'>
                 <div className='ui mini buttons'>
-                  <Link to='/quiz/new' className='ui icon labeled green button' >
+                  <Link to='/quiz/new/' className='ui icon labeled green button' >
                     <i className='icon add' />
                     New Quiz
                   </Link>
-                  <Link to='/quiz/edit' className='ui icon labeled button' >
+                  <Link to='/quiz/edit/' className='ui icon labeled button' >
                     <i className='icon pencil' />
                     Edit List
                   </Link>
