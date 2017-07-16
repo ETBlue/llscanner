@@ -1,7 +1,7 @@
 import _evaluateString from './_evaluateString'
 
 export default (condition, answerData) => {
-  console.log(`--- a new condition ---`)
+//  console.log(`--- a new condition ---`)
 
   let output = {
     result: '',
@@ -29,13 +29,13 @@ export default (condition, answerData) => {
       logic: item.logic
     })
 
-    console.log(`${item.target} -> ${target} | ${item.logic} | ${item.value} -> ${value}`)
+//    console.log(`${item.target} -> ${target} | ${item.logic} | ${item.value} -> ${value}`)
     if (!target && target !== 0) {
-      console.log(`result: unknown`)
+//      console.log(`result: unknown`)
       return 'unknown'
     }
     if (!value && value !== 0) {
-      console.log(`result: unknown`)
+//      console.log(`result: unknown`)
       return 'unknown'
     }
 
@@ -54,7 +54,7 @@ export default (condition, answerData) => {
       include: targetArray.includes(value) ? 'passed' : 'failed',
       not_include: !targetArray.includes(value) ? 'passed' : 'failed',
     }
-    console.log(`result: ${itemMap[item.logic]}`)
+//    console.log(`result: ${itemMap[item.logic]}`)
 
     return itemMap[item.logic]
   })
@@ -64,7 +64,7 @@ export default (condition, answerData) => {
     or: ruleResult.includes('passed') ? 'passed' : ruleResult.includes('unknown') ? 'unknown' : 'failed',
   }
 
-  console.log(`rules above tested by ${condition.logic.toUpperCase()}: ${map[condition.logic]}`)
+//  console.log(`rules above tested by ${condition.logic.toUpperCase()}: ${map[condition.logic]}`)
   output.result = map[condition.logic]
   return output
 
