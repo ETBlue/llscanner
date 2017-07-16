@@ -6,6 +6,9 @@ import {
   NavLink
 } from 'react-router-dom'
 import firebase from 'firebase'
+import firebaseui from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
+
 import { Sidebar, Segment, Modal } from 'semantic-ui-react'
 
 import _parseArticleID from './_shared/_parseArticleID'
@@ -50,6 +53,8 @@ class App extends Component {
       law: {},
       answer: {},
       first: '',
+
+      authenticated: false,
       showSidebar: false,
     }
 
@@ -60,7 +65,44 @@ class App extends Component {
   componentWillMount () {
     const data = firebase.database().ref()
 
-    data.on('value', snapshot => {
+    const uiConfig = {
+      callbacks: {
+        // Called when the user has been successfully signed in.
+        signInSuccess: function(user, credential, redirectUrl) {
+          // Do not redirect.
+          return false;
+        },
+      },
+      //singInSuccessUrl: "/welcome",
+      signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID
+      ],
+      tosUrl: "/"
+    };
+
+    firebase.auth().onAuthStateChanged((user) => {
+
+      this.setState((prevState, props) => {
+
+        if (user) {
+          prevState.authenticated = true
+          console.log(user.displayName)
+
+        } else {
+          prevState.authenticated = false
+          let ui = new firebaseui.auth.AuthUI(firebase.auth());
+          ui.start('.auth', uiConfig);
+        }
+
+        return prevState
+      })
+    })
+
+    firebase.database().ref().on('value', snapshot => {
       this.setState((prevState, props) => {
 
         const step = snapshot.val().step
@@ -77,18 +119,11 @@ class App extends Component {
         })
         prevState.first = step[ list[ 0 ] ].quiz
 
-        return {
-          quiz: snapshot.val().quiz,
-
-          step: step,
-          order: prevState.order,
-          route: prevState.route,
-          condition: prevState.condition,
-
-          law: snapshot.val().law,
-          answer: snapshot.val().answer,
-          first: prevState.first
-        }
+        prevState.quiz = snapshot.val().quiz
+        prevState.step = step
+        prevState.law = snapshot.val().law
+        prevState.answer = snapshot.val().answer
+        return prevState
       })
     })
   }
@@ -121,6 +156,8 @@ class App extends Component {
   }
 
   render () {
+    const authenticated = this.state.authenticated
+
     const quiz = this.state.quiz
 
     const step = this.state.step
@@ -166,9 +203,11 @@ class App extends Component {
             condition={condition[id]}
             answer={answer[id]}
           />
+          {authenticated ?
           <EditButton 
             link={'/quiz/' + id + '/edit'} 
-          />
+          /> : null
+          }
         </section>
       )
     }
@@ -242,9 +281,11 @@ class App extends Component {
               articleData={lawObject[article_id]}
               ruleData={rulesData[article_id]} 
             />
-            <EditButton 
-              link={'/law/' + law_id + '/' + article_id + '/edit'} 
-            />
+            {authenticated ?
+              <EditButton 
+                link={'/law/' + law_id + '/' + article_id + '/edit'} 
+              /> : null
+            }
           </section>
         )
       }
@@ -310,9 +351,11 @@ class App extends Component {
               stepData={step[step_id]}
               quizData={quiz[step[step_id].quiz]}
             />
-            <EditButton 
-              link={'/step/' + step_id + '/edit'} 
-            />
+            {authenticated ?
+              <EditButton 
+                link={'/step/' + step_id + '/edit'} 
+              /> : null
+            }
           </section>
         )
       }
@@ -392,9 +435,11 @@ class App extends Component {
                 condition={condition[quiz_id]}
                 answer={answer[quiz_id]}
               />
-              <EditButton 
-                link={'/quiz/' + quiz_id + '/edit'} 
-              />
+              {authenticated ?
+                <EditButton 
+                  link={'/quiz/' + quiz_id + '/edit'} 
+                /> : null
+              }
             </section>
           )
         }
