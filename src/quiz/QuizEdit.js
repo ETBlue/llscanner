@@ -203,7 +203,7 @@ class QuizEdit extends Component {
       <ActionButton
         link={'/quiz/' + this.state.quizData.id}
         save={this._save}
-        class={this.state.valid ? '' : ' disabled'}
+        className={this.state.valid ? '' : ' disabled'}
         refresh={this._refresh}
       />
     )
