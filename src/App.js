@@ -10,7 +10,7 @@ import firebase from 'firebase'
 import firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
 
-import { Sidebar, Segment, Modal } from 'semantic-ui-react'
+import { Sidebar, Segment } from 'semantic-ui-react'
 
 import _parseArticleID from './_shared/_parseArticleID'
 import EditButton from './_shared/EditButton'
@@ -59,11 +59,16 @@ class App extends Component {
       user: {},
 
       showSidebar: false,
-      showModal: false
+      showModal: false,
+      showAccountInfo: false
     }
 
     this._getLawObject = this._getLawObject.bind(this)
     this._toggleSidebar = this._toggleSidebar.bind(this)
+    this._toggleAccountInfo = this._toggleAccountInfo.bind(this)
+    this._signOut = this._signOut.bind(this)
+    this._showModal = this._showModal.bind(this)
+    this._hideModal = this._hideModal.bind(this)
   }
 
   componentWillMount () {
@@ -79,10 +84,10 @@ class App extends Component {
       //singInSuccessUrl: "/welcome",
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
+        //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        //firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        //firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       tosUrl: "/"
     };
@@ -158,10 +163,42 @@ class App extends Component {
   }
 
   _toggleSidebar () {
+
     this.setState((prevState, props) => {
-
       prevState.showSidebar = !prevState.showSidebar
+      return prevState
+    })
 
+  }
+
+  _toggleAccountInfo () {
+
+    this.setState((prevState, props) => {
+      prevState.showAccountInfo = !prevState.showAccountInfo
+      return prevState
+    })
+
+  }
+
+  _signOut () {
+
+    firebase.auth().signOut()
+
+  }
+
+  _showModal () {
+
+    this.setState((prevState, props) => {
+      prevState.showModal = true
+      return prevState
+    })
+
+  }
+
+  _hideModal () {
+
+    this.setState((prevState, props) => {
+      prevState.showModal = false
       return prevState
     })
 
@@ -169,6 +206,7 @@ class App extends Component {
 
   render () {
     const authenticated = this.state.authenticated
+    const user = this.state.user
 
     const quiz = this.state.quiz
 
@@ -226,9 +264,9 @@ class App extends Component {
 
     const AnswerPage = ({answer_id, law_id}) => {
 
-//      if (!authenticated) {
-//        return <p></p>
-//      }
+      //if (!authenticated) {
+      //  return <p></p>
+      //}
 
       if (!answer_id || answer_id !== "testdata") {
         return (
@@ -471,94 +509,140 @@ class App extends Component {
       )
     }
 
+    const profileJSX = !authenticated ? null :
+      <div style={{cursor: "pointer"}}
+        onClick={this._toggleAccountInfo}
+      >
+        <div className='ui bordered tiny circular image'
+          style={{border: "2px solid #fff"}}
+        >
+          <img src={user.photoURL} />
+        </div>
+        <p>
+          {user.displayName}
+        </p>
+      </div>
+
+    const accountJSX = !authenticated || !this.state.showAccountInfo ? null :
+      <div className='ui inverted grey basic marginless segment'>
+        <div className='ui center aligned list'>
+          <div className='item' style={{display: "inline-block"}}>
+            <i className='mail icon' />
+            <div className='content'>
+              {user.email}
+            </div>
+          </div>
+        </div>
+        <button className='ui fluid small basic inverted button'
+          onClick={this._signOut}
+        >
+          登出
+        </button>
+      </div>
+
+    const loginButtonJSX = authenticated ? null :
+      <div className='ui inverted grey basic marginless segment'>
+        <button className='ui fluid small basic inverted button'
+          onClick={this._showModal}
+        >
+          登入
+        </button>
+      </div>
+
     return (
 
       <Router basename='/llscanner'>
 
-        <Sidebar.Pushable className='App'>
+          <Sidebar.Pushable className='App'>
 
-          <Sidebar as={Segment}
-            animation='push'
-            direction='right'
-            visible={this.state.showSidebar}
-            color='grey'
-            inverted={true}
-            basic={true}
-            style={{padding: "1rem 0"}}
-          >
-            <nav className='ui basic fluid vertical grey inverted menu'>
-              <NavLink exact to='/' className='item'
-                onClick={this._toggleSidebar}
-              >
-                首頁
-              </NavLink>
-              <NavLink to='/quiz/' className='item'
-                onClick={this._toggleSidebar}
-              >
-                測驗題
-              </NavLink>
-              <NavLink to='/step/' className='item'
-                onClick={this._toggleSidebar}
-              >
-                故事線
-              </NavLink>
-              <NavLink to='/law/' className='item'
-                onClick={this._toggleSidebar}
-              >
-                掃描規則
-              </NavLink>
-              <NavLink to='/answer/' className='item'
-                onClick={this._toggleSidebar}
-              >
-                我的答案
-              </NavLink>
-              {/*<NavLink to='/login/' className='item'
-                onClick={this._toggleSidebar}
-              >
-                Login
-              </NavLink>*/}
-            </nav>
+            <section className='ui dimmer modals visible active' style={this.state.showModal ? {'zIndex': '1000', 'opacity': '1'} : {'zIndex': '-1', 'opacity': '0'} } onClick={this._hideModal}>
+              <div className='auth ui modal visible active' />
+            </section>
 
-          </Sidebar>
+            <Sidebar as={Segment}
+              animation='push'
+              direction='right'
+              visible={this.state.showSidebar}
+              color='grey'
+              inverted={true}
+              basic={true}
+              style={{padding: "1rem 0"}}
+            >
 
-          <Sidebar.Pusher>
+              {profileJSX}
+              {accountJSX}
+              {loginButtonJSX}
 
-            <header className='App-header ui center aligned basic inverted black segment'>
-
-              <div className='ui right floated black icon button'
-                onClick={this._toggleSidebar}
+              <nav className='ui basic fluid vertical grey inverted menu'>
+                <NavLink exact to ='/' className='item'
+                  onClick={this._toggleSidebar}
                 >
-                <i className='sidebar icon' />
+                  首頁
+                </NavLink>
+                <NavLink to='/quiz/' className='item'
+                  onClick={this._toggleSidebar}
+                >
+                  測驗題
+                </NavLink>
+                <NavLink to='/step/' className='item'
+                  onClick={this._toggleSidebar}
+                >
+                  故事線
+                </NavLink>
+                <NavLink to='/law/' className='item'
+                  onClick={this._toggleSidebar}
+                >
+                  掃描規則
+                </NavLink>
+                <NavLink to='/answer/' className='item'
+                  onClick={this._toggleSidebar}
+                >
+                  我的答案
+                </NavLink>
+                {/*<NavLink to='/login/' className='item'
+                  onClick={this._toggleSidebar}
+                >
+                  Login
+                </NavLink>*/}
+              </nav>
+
+            </Sidebar>
+
+            <Sidebar.Pusher>
+
+              <header className='App-header ui center aligned basic inverted black segment'>
+
+                <div className='ui right floated black icon button'
+                  onClick={this._toggleSidebar}
+                  >
+                  <i className='sidebar icon' />
+                </div>
+
+                <h1 className='ui inverted marginless header'>
+                  <img src={logo} className='App-logo ui image' alt='logo' />
+                  <div className='content'>
+                  勞基法掃描器
+                  <span className='ui horizontal black label'>開發到一半預覽版</span>
+                  </div>
+                </h1>
+
+              </header>
+
+              <div className='App-body'>
+                <Switch>
+                  <Route exact path='/' render={HomePage} />
+                  <Route path='/quiz/:quiz_id?/:action?' render={({match}) => QuizPage(match.params)} />
+                  <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
+                  <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
+                  <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
+                  <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
+                </Switch>
               </div>
 
-              <h1 className='ui inverted marginless header'>
-                <img src={logo} className='App-logo ui image' alt='logo' />
-                <div className='content'>
-                勞基法掃描器
-                <span className='ui horizontal black label'>開發到一半預覽版</span>
-                </div>
-              </h1>
+            </Sidebar.Pusher>
 
-            </header>
+          </Sidebar.Pushable>
 
-            <div className='App-body'>
-              <Switch>
-                <Route exact path='/' render={HomePage} />
-                <Route path='/quiz/:quiz_id?/:action?' render={({match}) => QuizPage(match.params)} />
-                <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
-                <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
-                <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
-                <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />
-              </Switch>
-            </div>
-
-          </Sidebar.Pusher>
-
-          <Modal size='fullscreen' dimmer='blurring' open={this.state.showModal}>
-            <div className='auth' />
-          </Modal>
-
-        </Sidebar.Pushable>
       </Router>
     )
   }
