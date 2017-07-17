@@ -5,6 +5,7 @@ import {
   Switch,
   NavLink
 } from 'react-router-dom'
+
 import firebase from 'firebase'
 import firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
@@ -55,7 +56,10 @@ class App extends Component {
       first: '',
 
       authenticated: false,
+      user: {},
+
       showSidebar: false,
+      showModal: false
     }
 
     this._getLawObject = this._getLawObject.bind(this)
@@ -63,7 +67,6 @@ class App extends Component {
   }
 
   componentWillMount () {
-    const data = firebase.database().ref()
 
     const uiConfig = {
       callbacks: {
@@ -90,10 +93,19 @@ class App extends Component {
 
         if (user) {
           prevState.authenticated = true
-          console.log(user.displayName)
-
+          prevState.user = {
+            displayName: user.displayName,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            photoURL: user.photoURL,
+            uid: user.uid,
+            phoneNumber: user.phoneNumber,
+            providerData: user.providerData,
+            accessToken: user.getToken().then((accessToken) => accessToken)
+          }
         } else {
           prevState.authenticated = false
+          prevState.user = {}
           let ui = new firebaseui.auth.AuthUI(firebase.auth());
           ui.start('.auth', uiConfig);
         }
@@ -214,6 +226,10 @@ class App extends Component {
 
     const AnswerPage = ({answer_id, law_id}) => {
 
+//      if (!authenticated) {
+//        return <p></p>
+//      }
+
       if (!answer_id || answer_id !== "testdata") {
         return (
           <AnswerList
@@ -290,7 +306,7 @@ class App extends Component {
         )
       }
 
-      if (article_id && action === 'edit') {
+      if (article_id && action === 'edit' && authenticated) {
         return (
           <section className='Article'>
             <ArticleView 
@@ -320,11 +336,12 @@ class App extends Component {
           <StepList
             step={step}
             quiz={quiz}
+            authenticated={authenticated}
           />
         )
       }
 
-      if (step_id === 'edit') {
+      if (step_id === 'edit' && authenticated) {
         return (
           <StepListEdit
             step={step}
@@ -333,7 +350,7 @@ class App extends Component {
         )
       }
 
-      if (step_id === 'new') {
+      if (step_id === 'new' && authenticated) {
         return (
           <StepAdd
             step={step}
@@ -360,7 +377,7 @@ class App extends Component {
         )
       }
 
-      if (step[step_id] && action === 'edit') {
+      if (step[step_id] && action === 'edit' && authenticated) {
         return (
           <section className='Step'>
             <StepView
@@ -380,13 +397,14 @@ class App extends Component {
         <StepList
           step={step}
           quiz={quiz}
+          authenticated={authenticated}
         />
       )
     }
 
     const QuizPage = ({ quiz_id, action }) => {
 
-      if (quiz_id === 'new') {
+      if (quiz_id === 'new' && authenticated) {
         return (
           <section className='Quiz'>
             <div className='ui marginless basic segment'>
@@ -400,7 +418,7 @@ class App extends Component {
         )
       }
 
-      if (quiz_id === 'edit') {
+      if (quiz_id === 'edit' && authenticated) {
         return (
           <QuizListEdit
             quiz={quiz}
@@ -412,7 +430,7 @@ class App extends Component {
       }
 
       if (quiz[quiz_id]) {
-        if (action === 'edit') {
+        if (action === 'edit' && authenticated) {
           return (
             <section className='Quiz'>
               <QuizView
@@ -446,7 +464,10 @@ class App extends Component {
       }
 
       return (
-        <QuizList quiz={quiz} />
+        <QuizList
+          quiz={quiz}
+          authenticated={authenticated}
+        />
       )
     }
 
@@ -491,11 +512,11 @@ class App extends Component {
               >
                 我的答案
               </NavLink>
-              <NavLink to='/login/' className='item'
+              {/*<NavLink to='/login/' className='item'
                 onClick={this._toggleSidebar}
               >
                 Login
-              </NavLink>
+              </NavLink>*/}
             </nav>
 
           </Sidebar>

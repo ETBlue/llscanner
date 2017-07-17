@@ -8,7 +8,9 @@ class StepList extends Component {
 
   render () {
     let stepListJSX
+    const quiz = this.props.quiz
     const step = this.props.step
+    const authenticated = this.props.authenticated
 
     if (step) {
       stepListJSX = Object.keys(step).map((id) => {
@@ -25,7 +27,7 @@ class StepList extends Component {
                   </code>
                 </Link>
                 <div className='sub header'>
-                  {this.props.quiz[item.quiz].title}
+                  {quiz[item.quiz].title}
                 </div>
               </h4>
             </td>
@@ -56,6 +58,7 @@ class StepList extends Component {
           <tbody>
             { stepListJSX }
           </tbody>
+          {authenticated ?
           <tfoot>
             <tr>
               <th colSpan={4} className='right aligned'>
@@ -68,10 +71,11 @@ class StepList extends Component {
                     <i className='icon pencil' />
                     Edit List
                   </Link>
-                </div>
+                </div> 
               </th>
             </tr>
-          </tfoot>
+          </tfoot>: null
+          }
         </table>
       </div>
     )

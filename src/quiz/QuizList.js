@@ -6,6 +6,7 @@ class QuizList extends Component {
   render () {
     let quizListJSX
     const quiz = this.props.quiz
+    const authenticated = this.props.authenticated
 
     if (quiz) {
       quizListJSX = Object.keys(quiz).map((id) => {
@@ -39,6 +40,7 @@ class QuizList extends Component {
           <tbody>
             { quizListJSX }
           </tbody>
+          {authenticated ?
           <tfoot>
             <tr>
               <th colSpan={3} className='right aligned'>
@@ -54,7 +56,8 @@ class QuizList extends Component {
                 </div>
               </th>
             </tr>
-          </tfoot>
+          </tfoot> : null
+          }
         </table>
       </div>
     )
