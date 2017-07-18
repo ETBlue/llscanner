@@ -68,7 +68,7 @@ class App extends Component {
 
     this._getLawObject = this._getLawObject.bind(this)
     this._toggleSidebar = this._toggleSidebar.bind(this)
-    this._toggleAccountInfo = this._toggleAccountInfo.bind(this)
+    //this._toggleAccountInfo = this._toggleAccountInfo.bind(this)
     this._signOut = this._signOut.bind(this)
     this._showModal = this._showModal.bind(this)
     this._hideModal = this._hideModal.bind(this)
@@ -195,14 +195,14 @@ class App extends Component {
 
   }
 
-  _toggleAccountInfo () {
+  //_toggleAccountInfo () {
 
-    this.setState((prevState, props) => {
-      prevState.showAccountInfo = !prevState.showAccountInfo
-      return prevState
-    })
+  //  this.setState((prevState, props) => {
+  //    prevState.showAccountInfo = !prevState.showAccountInfo
+  //    return prevState
+  //  })
 
-  }
+  //}
 
   _signOut () {
 
@@ -526,9 +526,7 @@ class App extends Component {
     }
 
     const profileJSX = !authenticated ? null :
-      <div style={{cursor: "pointer"}}
-        onClick={this._toggleAccountInfo}
-      >
+      <div className='ui inverted grey basic marginless segment'>
         <div className='ui bordered tiny circular image'
           style={{border: "2px solid #fff"}}
         >
@@ -537,6 +535,11 @@ class App extends Component {
         <p>
           {user.displayName}
         </p>
+        <button className='ui fluid small basic inverted button'
+          onClick={this._signOut}
+        >
+          登出
+        </button>
       </div>
 
     const accountJSX = !authenticated || !this.state.showAccountInfo ? null :
@@ -549,11 +552,6 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <button className='ui fluid small basic inverted button'
-          onClick={this._signOut}
-        >
-          登出
-        </button>
       </div>
 
     const loginButtonJSX = authenticated ? null :
@@ -586,7 +584,7 @@ class App extends Component {
             >
 
               {profileJSX}
-              {accountJSX}
+              {/*accountJSX*/}
               {loginButtonJSX}
 
               <nav className='ui basic fluid vertical grey inverted menu'>
