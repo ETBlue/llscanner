@@ -63,6 +63,8 @@ class App extends Component {
       showAccountInfo: false
     }
 
+    this.ui =  new firebaseui.auth.AuthUI(firebase.auth())
+
     this._getLawObject = this._getLawObject.bind(this)
     this._toggleSidebar = this._toggleSidebar.bind(this)
     this._toggleAccountInfo = this._toggleAccountInfo.bind(this)
@@ -108,11 +110,12 @@ class App extends Component {
             providerData: user.providerData,
             accessToken: user.getToken().then((accessToken) => accessToken)
           }
+          this.ui.reset();
+
         } else {
           prevState.authenticated = false
           prevState.user = {}
-          let ui = new firebaseui.auth.AuthUI(firebase.auth());
-          ui.start('.auth', uiConfig);
+          this.ui.start('.auth', uiConfig);
         }
 
         return prevState
