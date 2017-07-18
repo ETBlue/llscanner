@@ -18,6 +18,7 @@ class QuizView extends Component {
       },
       option: this.props.option || (this.props.type === 'select' ? this._basicOptionData : {}),
       answer: this.props.answer || '', // 使用者選擇的答案
+      answerOwner: this.props.answerOwner,
 
       order: this.props.order,
       route: this.props.route,
@@ -40,6 +41,7 @@ class QuizView extends Component {
         },
         option: nextProps.option || (nextProps.type === 'select' ? this._basicOptionData : {}),
         answer: nextProps.answer || '', // 使用者選擇的答案
+        answerOwner: nextProps.answerOwner,
 
         order: nextProps.order,
         route: nextProps.route,
@@ -58,12 +60,12 @@ class QuizView extends Component {
   }
 
   _onInputSubmit (event) {
-    firebase.database().ref('answer/' + this.props.id).set(this.state.answer)
+    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(this.state.answer)
   }
 
   _onSelect (event) {
     const answer = event.target.getAttribute('data-value')
-    firebase.database().ref('answer/' + this.props.id).set(answer)
+    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(answer)
 
     this.setState((prevState, props) => {
       return {answer: answer}

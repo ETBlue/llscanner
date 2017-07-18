@@ -57,6 +57,7 @@ class App extends Component {
 
       authenticated: false,
       user: {},
+      answerOwner: '',
 
       showSidebar: false,
       showModal: false,
@@ -110,11 +111,16 @@ class App extends Component {
             providerData: user.providerData,
             accessToken: user.getToken().then((accessToken) => accessToken)
           }
+          prevState.answerOwner = user.uid
+          if (prevState.answer !== {} && !prevState.answer[user.uid]) {
+            firebase.database().ref('answer/' + user.uid).set({placeholder: 'true'})
+          }
           this.ui.reset();
 
         } else {
           prevState.authenticated = false
           prevState.user = {}
+          prevState.answerOwner = 'public'
           this.ui.start('.auth', uiConfig);
         }
 
@@ -142,7 +148,22 @@ class App extends Component {
         prevState.quiz = snapshot.val().quiz
         prevState.step = step
         prevState.law = snapshot.val().law
-        prevState.answer = snapshot.val().answer
+        if (prevState.user !== {} && prevState.user.uid) {
+          if (snapshot.val().answer) {
+            if (snapshot.val().answer[prevState.user.uid]) {
+              prevState.answer = snapshot.val().answer[prevState.user.uid]
+            } else {
+              firebase.database().ref('answer/' + prevState.user.uid).set({placeholder: 'true'})
+            }
+            prevState.answerOwner = prevState.user.uid
+          }
+        } else {
+          if (snapshot.val().answer && snapshot.val().answer.public) {
+            prevState.answer = snapshot.val().answer.public
+            prevState.answerOwner = 'public'
+          }
+        }
+
         return prevState
       })
     })
@@ -220,6 +241,7 @@ class App extends Component {
 
     const law = this.state.law
     const answer = this.state.answer
+    const answerOwner = this.state.answerOwner
 
     // generate new step id, used by both quizadd and stepadd
     const stepIDs = Object.keys(step).map((id) => {
@@ -255,6 +277,7 @@ class App extends Component {
             route={route[id]}
             condition={condition[id]}
             answer={answer[id]}
+            answerOwner={answerOwner}
           />
           {authenticated ?
           <EditButton 
@@ -468,6 +491,7 @@ class App extends Component {
                 route={route[quiz_id]}
                 condition={condition[quiz_id]}
                 answer={answer[quiz_id]}
+                answerOwner={answerOwner}
               />
               <QuizEdit {...quiz[quiz_id]} />
             </section>
@@ -481,6 +505,7 @@ class App extends Component {
                 route={route[quiz_id]}
                 condition={condition[quiz_id]}
                 answer={answer[quiz_id]}
+                answerOwner={answerOwner}
               />
               {authenticated ?
                 <EditButton 
