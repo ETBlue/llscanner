@@ -262,30 +262,19 @@ class App extends Component {
       )
     }
 
-    const AnswerPage = ({answer_id, law_id}) => {
+    const AnswerPage = ({law_id}) => {
 
       //if (!authenticated) {
       //  return <p></p>
       //}
 
-      if (!answer_id || answer_id !== "testdata") {
+      if (!law_id) {
         return (
-          <AnswerList
-          />
-        )
-      }
-
-      if (answer_id && !law_id) {
-
-        return (
-
           <AnswerView
             answerData={answer}
             laws={_laws}
-            answerID={answer_id}
             status='choose_law'
           />
-
         )
       }
 
@@ -298,7 +287,6 @@ class App extends Component {
           laws={_laws}
           law={law}
           lawObject={lawObject}
-          answerID={answer_id}
           lawID={law_id}
           status='view_result'
         />
@@ -632,7 +620,7 @@ class App extends Component {
                 <Switch>
                   <Route exact path='/' render={HomePage} />
                   <Route path='/quiz/:quiz_id?/:action?' render={({match}) => QuizPage(match.params)} />
-                  <Route path='/answer/:answer_id?/:law_id?' render={({match}) => AnswerPage(match.params)} />
+                  <Route path='/answer/:law_id?' render={({match}) => AnswerPage(match.params)} />
                   <Route path='/step/:step_id?/:action?' render={({match}) => StepPage(match.params)} />
                   <Route path='/law/:law_id?/:article_id?/:action?' render={({match}) => LawPage(match.params)} />
                   <Route path='/:endpoint' render={({match}) => <p>{match.params.endpoint} page is not found</p>} />

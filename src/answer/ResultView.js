@@ -50,7 +50,6 @@ class ResultView extends Component {
     const lawObject = this.props.lawObject
     const lawTitle = this.props.lawTitle
     const laws = this.props.laws
-    const answerID = this.props.answerID
     const lawID = this.props.lawID
 
     let count = {
@@ -204,7 +203,6 @@ class ResultView extends Component {
     if (this.state.chooser) {
       chooserJSX = <LawChooser
         currentLaw={lawID}
-        answerID={answerID}
         laws={laws}
         _toggleChooser={this._toggleChooser}
       />

@@ -8,7 +8,6 @@ class LawChooser extends Component {
   render () {
 
     const laws = this.props.laws
-    const answerID = this.props.answerID
     const currentLawID = this.props.currentLaw
     const _toggleChooser = this.props._toggleChooser
 
@@ -24,7 +23,7 @@ class LawChooser extends Component {
         //})
 
         return (
-          <Link to={`/answer/${answerID}/${lawTitle}/`} 
+          <Link to={`/answer/${lawTitle}/`} 
             className={'item' + (currentLawID === lawTitle ? ' active' : '')}
             key={key}
             onClick={_toggleChooser}

@@ -11,7 +11,6 @@ class AnswerView extends Component {
     const status = this.props.status
     const answerData = this.props.answerData
     const laws = this.props.laws
-    const answerID = this.props.answerID
     const lawID = this.props.lawID
 
     let answerDataJSX
@@ -45,22 +44,19 @@ class AnswerView extends Component {
         lawObject={lawObject}
         lawTitle={lawID}
         laws={laws}
-        answerID={answerID}
         lawID={lawID}
       />
 
     }
 
     if (status === 'choose_law') {
-      rightColumnJSX = <LawChooser currentLaw={lawID} answerID={answerID} laws={laws} />
+      rightColumnJSX = <LawChooser currentLaw={lawID} laws={laws} />
     }
 
     return (
       <section className='AnswerView ui basic segment'>
         <h2 className='ui header'>
-          <Link to={`/answer/${answerID}/`}>
-          testdata
-          </Link>
+          我的答案
         </h2>
         <hr className='ui hidden divider' />
         <div className='ui two column stackable grid'>
