@@ -66,10 +66,6 @@ class QuizView extends Component {
   _onSelect (event) {
     const answer = event.target.getAttribute('data-value')
     firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(answer)
-
-    this.setState((prevState, props) => {
-      return {answer: answer}
-    })
   }
 
   render () {

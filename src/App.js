@@ -57,7 +57,7 @@ class App extends Component {
 
       authenticated: false,
       user: {},
-      answerOwner: '',
+      answerOwner: 'public',
 
       showSidebar: false,
       showModal: false,
@@ -97,9 +97,12 @@ class App extends Component {
 
     firebase.auth().onAuthStateChanged((user) => {
 
-      this.setState((prevState, props) => {
+      if (user) {
 
-        if (user) {
+        this.ui.reset();
+
+        this.setState((prevState, props) => {
+
           prevState.authenticated = true
           prevState.user = {
             displayName: user.displayName,
@@ -112,26 +115,69 @@ class App extends Component {
             accessToken: user.getToken().then((accessToken) => accessToken)
           }
           prevState.answerOwner = user.uid
-          if (prevState.answer !== {} && !prevState.answer[user.uid]) {
-            firebase.database().ref('answer/' + user.uid).set({placeholder: 'true'})
-          }
-          this.ui.reset();
 
-        } else {
+          return prevState
+        })
+
+        firebase.database().ref(`answer/${user.uid}`).on('value', snapshot => {
+
+          this.setState((prevState, props) => {
+
+            if (snapshot.val()) {
+              prevState.answer = snapshot.val()
+            } else {
+              firebase.database().ref(`answer/${user.uid}`).set({placeholder: 'true'})
+            }
+            return prevState
+          })
+
+        }, (error) => {
+          console.log(error)
+        })
+
+      } else {
+
+        this.ui.start('.auth', uiConfig);
+
+        this.setState((prevState, props) => {
+
           prevState.authenticated = false
           prevState.user = {}
           prevState.answerOwner = 'public'
-          this.ui.start('.auth', uiConfig);
-        }
 
+          return prevState
+        })
+
+        firebase.database().ref(`answer/public`).on('value', snapshot => {
+
+          this.setState((prevState, props) => {
+
+            if (snapshot.val()) {
+              prevState.answer = snapshot.val()
+            } else {
+              firebase.database().ref(`answer/public`).set({placeholder: 'true'})
+            }
+            return prevState
+          })
+
+        }, (error) => {
+          console.log(error)
+        })
+      }
+
+    })
+
+
+    firebase.database().ref('quiz').on('value', snapshot => {
+      this.setState((prevState, props) => {
+        prevState.quiz = snapshot.val()
         return prevState
       })
     })
 
-    firebase.database().ref().on('value', snapshot => {
+    firebase.database().ref('step').on('value', snapshot => {
       this.setState((prevState, props) => {
-
-        const step = snapshot.val().step
+        const step = snapshot.val()
         const list = Object.keys(step)
         list.forEach((key, index) => {
           prevState.order[ step[ key ].quiz ] = {
@@ -145,28 +191,18 @@ class App extends Component {
         })
         prevState.first = step[ list[ 0 ] ].quiz
 
-        prevState.quiz = snapshot.val().quiz
         prevState.step = step
-        prevState.law = snapshot.val().law
-        if (prevState.user !== {} && prevState.user.uid) {
-          if (snapshot.val().answer) {
-            if (snapshot.val().answer[prevState.user.uid]) {
-              prevState.answer = snapshot.val().answer[prevState.user.uid]
-            } else {
-              firebase.database().ref('answer/' + prevState.user.uid).set({placeholder: 'true'})
-            }
-            prevState.answerOwner = prevState.user.uid
-          }
-        } else {
-          if (snapshot.val().answer && snapshot.val().answer.public) {
-            prevState.answer = snapshot.val().answer.public
-            prevState.answerOwner = 'public'
-          }
-        }
-
         return prevState
       })
     })
+
+    firebase.database().ref('law').on('value', snapshot => {
+      this.setState((prevState, props) => {
+        prevState.law = snapshot.val()
+        return prevState
+      })
+    })
+
   }
 
   _getLawObject (lawData) {
@@ -269,6 +305,7 @@ class App extends Component {
     const HomePage = () => {
 
       const id = this.state.first
+
       return (
         <section className='Quiz'>
           <QuizView
@@ -289,10 +326,6 @@ class App extends Component {
     }
 
     const AnswerPage = ({law_id}) => {
-
-      //if (!authenticated) {
-      //  return <p></p>
-      //}
 
       if (!law_id) {
         return (
