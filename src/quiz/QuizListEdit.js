@@ -24,7 +24,7 @@ class QuizListEdit extends Component {
 
     // data initialization
     this._initialQuiz = _copyNested(this.props.quiz)
-    this._answer = _copyNested(this.props.answer)
+    //this._answer = _copyNested(this.props.answer)
     this._step = _copyNested(this.props.step)
     this._order = _copyNested(this.props.order)
     this._initialAnswer = _copyNested(this.props.answer)
@@ -36,10 +36,10 @@ class QuizListEdit extends Component {
     this.setState((prevState, props) => {
       // data initialization... again
       this._initialQuiz = _copyNested(nextProps.quiz)
-      this._answer = _copyNested(nextProps.answer)
+      //this._answer = _copyNested(nextProps.answer)
       this._step = _copyNested(nextProps.step)
       this._order = _copyNested(nextProps.order)
-      this._initialAnswer = _copyNested(nextProps.answer)
+      //this._initialAnswer = _copyNested(nextProps.answer)
       this._initialStep = _copyNested(nextProps.step)
       this._initialOrder = _copyNested(nextProps.order)
       return {
@@ -50,7 +50,7 @@ class QuizListEdit extends Component {
 
   _refresh () {
     this.setState((prevState, props) => {
-      this._answer = _copyNested(this._initialAnswer)
+      //this._answer = _copyNested(this._initialAnswer)
       this._step = _copyNested(this._initialStep)
       this._order = _copyNested(this._initialOrder)
 
@@ -65,7 +65,7 @@ class QuizListEdit extends Component {
   _save () {
     if (this.state.valid) {
       firebase.database().ref('quiz').set(this.state.quiz)
-      firebase.database().ref('answer').set(this._answer)
+      //firebase.database().ref('answer').set(this._answer)
       firebase.database().ref('step').set(this._step)
     }
   }
@@ -92,7 +92,7 @@ class QuizListEdit extends Component {
     const id = event.target.id
     this.setState((prevState, props) => {
       delete prevState.quiz[id]
-      delete this._answer[id]
+      //delete this._answer[id]
       if (this._order[id]) { delete this._step[this._order[id].id] }
 
       delete this._order[id]
@@ -125,8 +125,8 @@ class QuizListEdit extends Component {
             prevState.focus = value
             delete prevState.quiz[id]
 
-            this._answer[value] = this._answer[id] || ''
-            delete this._answer[id]
+            //this._answer[value] = this._answer[id] || ''
+            //delete this._answer[id]
 
             if (this._order[id]) {
               this._step[this._order[id].id].quiz = value
