@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {HashLink as Link} from 'react-router-hash-link'
 
 import _viewLogic from '../_shared/_viewLogic'
 
@@ -67,7 +66,7 @@ class ResultView extends Component {
         // 略過 placeholder
 
         if (key === '0' || rulesData[key] === 'placeholder' ) {
-          return
+          return null
         }
 
         // 處理正常的資料
@@ -75,7 +74,7 @@ class ResultView extends Component {
         return rulesData[key].map((ruleSet, index) => {
 
           if (!ruleSet) {
-            return
+            return null
           }
 
           let evaluateConditionJSX
@@ -96,7 +95,7 @@ class ResultView extends Component {
 
               // 被 filter 擋掉的話，直接不 render
               if (this.state.filter !== 'all' && this.state.filter !== 'unknown') {
-                return
+                return null
               } 
 
               evaluateConditionJSX = '可能不適用'
@@ -110,7 +109,7 @@ class ResultView extends Component {
 
               // 被 filter 擋掉的話，直接不 render
               if (this.state.filter !== 'all' && this.state.filter !== 'NA') {
-                return
+                return null
               } 
 
               evaluateConditionJSX = '不適用'
@@ -144,7 +143,7 @@ class ResultView extends Component {
 
             // 被 filter 擋掉的話，不 render
             if (this.state.filter !== 'all' && this.state.filter !== conditionOutput.result) {
-              return
+              return null
             } 
           }
 

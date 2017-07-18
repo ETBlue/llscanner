@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {HashLink as Link} from 'react-router-hash-link'
 
 import ResultView from './ResultView'
 import LawChooser from './LawChooser'
