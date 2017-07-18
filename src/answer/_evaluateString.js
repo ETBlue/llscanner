@@ -47,7 +47,7 @@ export default (string, answerData) => {
         } else {
           value = cart
         }
-console.log(parseFloat(cart) + ', ' + parseFloat(answerData[cart]) + ', ' + cart + ' -> ' + value)
+        // console.log(parseFloat(cart) + ', ' + parseFloat(answerData[cart]) + ', ' + cart + ' -> ' + value)
         result = _getResult(level, result, operator, value)
         operator[level] = ''
         cart = ''
@@ -67,7 +67,7 @@ console.log(parseFloat(cart) + ', ' + parseFloat(answerData[cart]) + ', ' + cart
       } else {
         value = cart
       }
-console.log(parseFloat(cart) + ', ' + parseFloat(answerData[cart]) + ', ' + cart + ' -> ' + value)
+        // console.log(parseFloat(cart) + ', ' + parseFloat(answerData[cart]) + ', ' + cart + ' -> ' + value)
       result = _getResult(level, result, operator, value)
       operator[level] = ''
       cart = ''
