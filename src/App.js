@@ -45,7 +45,7 @@ class App extends Component {
     this.state = {
       quiz: {},
 
-      step: {},
+      step: [],
       order: {},
       route: {},
       condition: {},
@@ -268,6 +268,7 @@ class App extends Component {
     const answerOwner = this.state.answerOwner
 
     // generate new step id, used by both quizadd and stepadd
+
     const stepIDs = Object.keys(step).map((id) => {
       return parseInt(id, 10)
     })

@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default (route) => {
+export default (item) => {
 
-  if (route && route.map) {
-    const listJSX = route.map((entry, index) => {
+  if (item && item.route && item.route.map) {
+    const listJSX = item.route.map((entry, index) => {
       return (
         <div key={index} className='item'>
           回答 <code className='code'>{entry.answer}</code> 則導向 <code className='code'>{entry.next}</code>

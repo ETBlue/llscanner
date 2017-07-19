@@ -13,30 +13,25 @@ class StepList extends Component {
     const authenticated = this.props.authenticated
 
     if (step) {
-      stepListJSX = Object.keys(step).map((id) => {
 
-        const item = step[id]
+      stepListJSX = step.map((item, id) => {
 
         return (
           <tr key={id}>
             <td className='top aligned'>
               <h4 className='ui header'>
-                <Link to={'/step/' + item.id}>
-                  <code>
-                    {item.quiz}
+                <Link to={'/step/' + item}>
+                  <code className='code'>
+                    {item}
                   </code>
                 </Link>
-                <div className='sub header'>
-                  {quiz[item.quiz].title}
-                </div>
               </h4>
             </td>
-            <td className='top aligned'>{item.id}</td>
             <td className='top aligned'>
-              {_viewPrecondition(item.precondition)}
+              {_viewPrecondition(quiz[item])}
             </td>
             <td className='top aligned'>
-              {_viewRoute(item.route)}
+              {_viewRoute(quiz[item])}
             </td>
           </tr>
         )
@@ -45,12 +40,11 @@ class StepList extends Component {
 
     return (
       <div className='StepList ui basic segment'>
-        <h2 className='ui header'>步驟列表</h2>
+        <h2 className='ui header'>故事線</h2>
         <table className='ui table'>
           <thead>
             <tr>
-              <th className='four wide'>題目</th>
-              <th className='two wide'>排序</th>
+              <th className='six wide'>題目</th>
               <th className='five wide'>進入條件</th>
               <th className='five wide'>離開路徑</th>
             </tr>
@@ -61,20 +55,17 @@ class StepList extends Component {
           {authenticated ?
           <tfoot>
             <tr>
-              <th colSpan={4} className='right aligned'>
+              <th colSpan={3} className='right aligned'>
                 <div className='ui mini buttons'>
-                  <Link to='/step/new/' className='ui icon labeled green button' >
-                    <i className='icon add' />
-                    New Step
-                  </Link>
                   <Link to='/step/edit/' className='ui icon labeled button' >
                     <i className='icon pencil' />
-                    Edit List
+                    編輯清單
                   </Link>
                 </div> 
               </th>
             </tr>
-          </tfoot>: null
+          </tfoot>
+          : null
           }
         </table>
       </div>

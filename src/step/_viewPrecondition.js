@@ -2,21 +2,15 @@ import React from 'react'
 
 import _viewRule from '../_shared/_viewRule'
 
-export default (precondition) => {
+export default (item) => {
 
-  if (!precondition || !precondition.rule) {
-    return (
-      <div className='_viewPrecondition ui relaxed list'>
-        <div className='item'>
-          無
-        </div>
-      </div>
-    )
+  if (!item || !item.precondition || !item.precondition.rule) {
+    return '無'
   }
 
   return (
     <div className='_viewPrecondition ui relaxed list'>
-      {_viewRule(precondition.rule, precondition.logic)}
+      {_viewRule(item.precondition.rule, item.precondition.logic)}
       <div className='item'>的情況下，顯示本題</div>
     </div>
   )
