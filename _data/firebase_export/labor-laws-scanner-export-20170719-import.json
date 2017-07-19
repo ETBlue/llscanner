@@ -1,0 +1,2018 @@
+{
+  "answer" : {
+    "public" : {
+      "consent_of_labor_union_for_regular_working_hour" : "unsure",
+      "勞工：工會？" : "unsure",
+      "工作所屬產業" : "misc",
+      "labor_management_conference_for_regular_working_hour" : "unsure",
+      "monthly_salary" : "42009",
+      "type_of_employment" : "full_time",
+      "type_of_regular_working_hour" : "default",
+      "個案：延長工作時間：勞工正當理由不接受？" : "false",
+      "個案：延長工作時間：非突發：休息日（時數）" : "4",
+      "個案：延長工作時間：非突發：休息日：工資（金額）" : "1000",
+      "個案：延長工作時間：非突發：休息日？" : "true",
+      "個案：延長工作時間：非突發：勞資會議同意？" : "unknown",
+      "個案：延長工作時間：非突發：國定假日：勞工同意？" : "unknown",
+      "個案：延長工作時間：非突發：國定假日：工資（金額，每小時）" : "300",
+      "個案：延長工作時間：非突發：國定假日？" : "false",
+      "個案：延長工作時間：非突發：工會同意？" : "unknown",
+      "個案：延長工作時間：非突發：平日（時數）" : "2",
+      "個案：延長工作時間：非突發：平日：工資（金額）" : "300",
+      "個案：延長工作時間：非突發：平日？" : "true",
+      "個案：延長工作時間：非突發：特別休假日：主管機關認有必要？" : "unknown",
+      "個案：延長工作時間：非突發：特別休假日：勞工同意？" : "unsure",
+      "個案：延長工作時間：非突發：特別休假日：工資（金額，每小時）" : "300",
+      "個案：延長工作時間：非突發：特別休假日？" : "true",
+      "個案：延長工作時間：非突發：總工作時間（時數，每日）" : "4",
+      "個案：延長工作時間：非突發：總延長工作時間（時數，每月）" : "40",
+      "個案：延長工作時間：非突發？" : "true",
+      "勞工：假日：休息日：給薪？" : "unknown",
+      "勞工：假日：例假日：給薪？" : "unknown",
+      "勞工：假日：國定假日：放假？" : "unknown",
+      "勞工：假日：國定假日：給薪？" : "unknown",
+      "勞工：假日：特別休假日（日數，每年）" : "unknown",
+      "勞工：假日：特別休假日：給薪？" : "unknown",
+      "勞工：同一雇主繼續工作期間（未滿月數）" : "4",
+      "勞工：同一雇主繼續工作期間（滿年數）" : "0",
+      "勞工：同一雇主繼續工作期間（滿月數）" : "3",
+      "契約約期" : "non_fixed",
+      "契約：競業禁止期間（年數）" : "3",
+      "契約：競業禁止：合理補償？" : "false",
+      "契約：競業禁止：期間、區域、範圍、就業對象合理？" : "true",
+      "契約：競業禁止？" : "true",
+      "工作性質" : "continuous",
+      "契約：競業禁止：勞工工作接觸營業秘密？" : "false",
+      "工作性質：連續性或緊急性？" : "false",
+      "工作所屬產業" : "other",
+      "工作設定：工時制度" : "default",
+      "工作設定：工時制度：兩週變形：勞資會議同意？" : "unknown",
+      "工作設定：工時制度：兩週變形：工會同意？" : "unknown",
+      "工作設定：工時制度：兩週變形：指定行業？" : "unsure",
+      "工作設定：工時制度：兩週變形：正常工作時間（時數，每週）" : "40",
+      "工作設定：工時制度：兩週變形：正常工作時間：分配至其他工作日（日數，每二週）" : "1",
+      "工作設定：工時制度：兩週變形：正常工作時間：自其他工作日分配（時數，每日）" : "1",
+      "工作設定：平日工資（金額，每小時）" : "120",
+      "工作設定：平日工資（金額，每月）" : "30000",
+      "工作設定：班表：休息（分鐘數，每連續四小時）" : "60",
+      "工作設定：工時制度：一般：例假（日數，每七日）" : "1",
+      "工作設定：工時制度：兩週變形：例假（日數，每二週）" : "2",
+      "工作設定：工時制度：一般：放假（日數，每七日）" : "2",
+      "工作設定：工時制度：兩週變形：放假（日數，每二週）" : "4",
+      "工作設定：酬勞計算基準" : "monthly",
+      "契約：競業禁止：雇主有應受保護之正當營業利益？" : "unknown"
+    },
+    "vMFLbNrS4CMxcS3WObvycuJyh2I3" : {
+      "consent_of_labor_union_for_regular_working_hour" : "unsure",
+      "勞工：工會？" : "unsure",
+      "工作所屬產業" : "misc",
+      "labor_management_conference_for_regular_working_hour" : "unsure",
+      "monthly_salary" : "555555",
+      "placeholder" : "true",
+      "type_of_employment" : "unsure",
+      "type_of_regular_working_hour" : "default",
+      "個案：不定期契約停止履行？" : "false",
+      "工作設定：工時制度" : "default",
+      "工作設定：平日工資（金額，每月）" : "33333"
+    }
+  },
+  "law" : {
+    "勞動基準法" : {
+      "0" : "placeholder",
+      "2" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：當日：平均工資（金額，每日）",
+            "value" : "個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月總日數（日數）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "not_belong_to",
+            "target" : "工作設定：酬勞計算基準",
+            "value" : "daily, hourly, piecework"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：當日：平均工資（金額，每日）",
+            "value" : "個案：工作期間工資總額（金額） / 個案：工作期間總日數（日數）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "not_belong_to",
+            "target" : "工作設定：酬勞計算基準",
+            "value" : "daily, hourly, piecework"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：當日：平均工資（金額，每日）",
+            "value" : "( 個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月工作日數（日數） ) * 0.6"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "belong_to",
+            "target" : "工作設定：酬勞計算基準",
+            "value" : "daily, hourly, piecework"
+          }, {
+            "logic" : "less_than",
+            "target" : "個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月總日數（日數）",
+            "value" : "( 個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月工作日數（日數） ) * 0.6"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：當日：平均工資（金額，每日）",
+            "value" : "個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月總日數（日數）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "belong_to",
+            "target" : "工作設定：酬勞計算基準",
+            "value" : "daily, hourly, piecework"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月總日數（日數）",
+            "value" : "( 個案：當日：前六個月工資總額（金額） / 個案：當日：前六個月工作日數（日數） ) * 0.6"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：當日：平均工資（金額，每日）",
+            "value" : "( 個案：工作期間工資總額（金額） / 個案：工作期間工作日數（日數） ) * 0.6"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "belong_to",
+            "target" : "工作設定：酬勞計算基準",
+            "value" : "daily, hourly, piecework"
+          }, {
+            "logic" : "less_than",
+            "target" : "個案：工作期間工資總額（金額） / 個案：工作期間總日數（日數）",
+            "value" : "( 個案：工作期間工資總額（金額） / 個案：工作期間工作日數（日數） ) * 0.6"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：當日：平均工資（金額，每日）",
+            "value" : "個案：工作期間工資總額（金額） / 個案：工作期間總日數（日數）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "belong_to",
+            "target" : "工作設定：酬勞計算基準",
+            "value" : "daily, hourly, piecework"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "個案：工作期間工資總額（金額） / 個案：工作期間總日數（日數）",
+            "value" : "( 個案：工作期間工資總額（金額） / 個案：工作期間工作日數（日數） ) * 0.6"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      } ],
+      "9" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "belong_to",
+            "target" : "工作性質",
+            "value" : "temporary, short_term, seasonal, specific"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約約期",
+            "value" : "fixed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約約期",
+            "value" : "non_fixed"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿：繼續工作？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿：繼續工作：雇主即反對？",
+            "value" : "false"
+          }, {
+            "logic" : "not_belong_to",
+            "target" : "工作性質",
+            "value" : "seasonal, specific"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約約期",
+            "value" : "non_fixed"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿：另訂新約？",
+            "value" : "true"
+          }, {
+            "logic" : "greater_than",
+            "target" : "個案：定期契約屆滿：另訂新約：前後契約工作期間（日數）",
+            "value" : "90"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：定期契約屆滿：另訂新約：前後契約間斷期間（日數）",
+            "value" : "30"
+          }, {
+            "logic" : "not_belong_to",
+            "target" : "工作性質",
+            "value" : "seasonal, specific"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "2"
+        }
+      } ],
+      "10" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿：另訂新約：前後工作年資合併計算？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：定期契約屆滿：另訂新約？",
+            "value" : "true"
+          }, {
+            "logic" : "less_than",
+            "target" : "個案：定期契約屆滿：另訂新約：前後契約間斷期間（月數）",
+            "value" : "3"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：不定期契約停止履行：繼續履行原約：前後工作年資合併計算？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：不定期契約停止履行？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：不定期契約停止履行：另訂新約？",
+            "value" : "true"
+          }, {
+            "logic" : "less_than",
+            "target" : "個案：不定期契約停止履行：另訂新約：前後契約間斷期間（月數）",
+            "value" : "3"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：不定期契約停止履行：繼續履行原約：前後工作年資合併計算？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：不定期契約停止履行？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：不定期契約停止履行：繼續履行原約？",
+            "value" : "true"
+          }, {
+            "logic" : "less_than",
+            "target" : "個案：不定期契約停止履行：繼續履行原約：前後契約間斷期間（月數）",
+            "value" : "3"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "16" : [ {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "greater_than",
+            "target" : "個案：雇主終止勞動契約：預告（日數）",
+            "value" : "10"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約：給付預告期間工資？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約？",
+            "value" : "true"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "3"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "1"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "greater_than",
+            "target" : "個案：雇主終止勞動契約：預告（日數）",
+            "value" : "20"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約：給付預告期間工資？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約？",
+            "value" : "true"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "1"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "3"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "2"
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "greater_than",
+            "target" : "個案：雇主終止勞動契約：預告（日數）",
+            "value" : "30"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約：給付預告期間工資？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約？",
+            "value" : "true"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "3"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "3"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "個案：雇主終止勞動契約：勞工另謀工作請假：時數（日數，每週）",
+            "value" : "2"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約：勞工另謀工作請假：工資照給？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      } ],
+      "17" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：雇主終止勞動契約：資遣費（金額）",
+            "value" : "( 個案：當日：平均工資（金額，每月） * 勞工：同一雇主繼續工作期間（滿年數） ) + ( 個案：當日：平均工資（金額，每月） * 勞工：同一雇主繼續工作期間（未滿月數） / 12  )"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：雇主終止勞動契約：資遣費：終止到發給期間（日數）",
+            "value" : "30"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：雇主終止勞動契約？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "21" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "工作設定：平日工資（金額，每月）",
+            "value" : "21009"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "工作設定：平日工資（金額，每小時）",
+            "value" : "133"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and"
+        },
+        "reference" : {
+          "paragraph" : "1, 2",
+          "subparagraph" : ""
+        }
+      } ],
+      "24" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：平日：工資（金額）",
+            "value" : "個案：延長工作時間：非突發：平日（時數） * 工作設定：平日工資（金額，每小時） * 4 / 3"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：平日？",
+            "value" : "true"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：平日（時數）",
+            "value" : "2"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：平日：工資（金額）",
+            "value" : "( 2 * 工作設定：平日工資（金額，每小時） * 4 / 3 ) + ( ( 個案：延長工作時間：非突發：平日（時數） - 2 ) * 工作設定：平日工資（金額，每小時） * 5 / 3 )"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：平日？",
+            "value" : "true"
+          }, {
+            "logic" : "greater_than",
+            "target" : "個案：延長工作時間：非突發：平日（時數）",
+            "value" : "2"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：平日（時數）",
+            "value" : "4"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "2"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：突發：工資（金額，每小時）",
+            "value" : "2 * 工作設定：平日工資（金額，每小時） * 個案：延長工作時間：突發（時數）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "3"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：休息日：工資（金額）",
+            "value" : "( 2 * 工作設定：平日工資（金額，每小時） * 7 / 3 ) + ( 2 * 工作設定：平日工資（金額，每小時） * 8 / 3 )"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：休息日？",
+            "value" : "true"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：休息日（時數）",
+            "value" : "4"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2, 3",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：休息日：工資（金額）",
+            "value" : "( 2 * 工作設定：平日工資（金額，每小時） * 7 / 3 ) + ( 6 * 工作設定：平日工資（金額，每小時） * 8 / 3 )"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：休息日？",
+            "value" : "true"
+          }, {
+            "logic" : "greater_than",
+            "target" : "個案：延長工作時間：非突發：休息日（時數）",
+            "value" : "4"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：休息日（時數）",
+            "value" : "8"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2, 3",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：休息日：工資（金額）",
+            "value" : "( 2 * 工作設定：平日工資（金額，每小時） * 7 / 3 ) + ( 10 * 工作設定：平日工資（金額，每小時） * 8 / 3 )"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：休息日？",
+            "value" : "true"
+          }, {
+            "logic" : "greater_than",
+            "target" : "個案：延長工作時間：非突發：休息日（時數）",
+            "value" : "8"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：休息日（時數）",
+            "value" : "12"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2, 3",
+          "subparagraph" : ""
+        }
+      } ],
+      "30" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：一般：正常工作時間（時數，每日）",
+            "value" : "8"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：一般：正常工作時間（時數，每週）",
+            "value" : "40"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "default"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：兩週變形：正常工作時間：分配至其他工作日（日數，每二週）",
+            "value" : "2"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：兩週變形：正常工作時間：自其他工作日分配（時數，每日）",
+            "value" : "2"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：兩週變形：正常工作時間（時數，每週）",
+            "value" : "48"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "2w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：八週變形：正常工作時間（時數，每日）",
+            "value" : "8"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：八週變形：正常工作時間（時數，每週）",
+            "value" : "48"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "8w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "3",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：兩週變形：指定行業？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "belong_to",
+            "target" : "工作設定：工時制度",
+            "value" : "2w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "4",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：八週變形：指定行業？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "8w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "4",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：兩週變形：工會同意？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：兩週變形：勞資會議同意？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "2w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：八週變形：工會同意？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：八週變形：勞資會議同意？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "8w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "3",
+          "subparagraph" : ""
+        }
+      } ],
+      "32" : [ {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：勞資會議同意？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：工會同意？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：總工作時間（時數，每日）",
+            "value" : "12"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：總延長工作時間（時數，每月）",
+            "value" : "46"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發：二十四小時內通知工會？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發：二十四小時內報當地主管機關？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "3",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發：事後補休？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "3",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工作場所：坑內：非監視？",
+            "value" : "false"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "4",
+          "subparagraph" : ""
+        }
+      } ],
+      "33" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：主管機關命令調整：公眾生活便利或其他特殊原因？",
+            "value" : "true"
+          }, {
+            "logic" : "not_belong_to",
+            "target" : "工作所屬產業",
+            "value" : "manufacturing, mining"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：主管機關命令調整？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "34" : [ {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：班表：輪班制：每週換班？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "工作設定：班表：輪班制：勞工同意不每週換班？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：班表：輪班制？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：班表：輪班制：換班連續十一小時休息？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：班表：輪班制？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      } ],
+      "35" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "工作設定：班表：休息（分鐘數，每連續四小時）",
+            "value" : "30"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_equal_to",
+            "target" : "工作設定：班表：輪班制？",
+            "value" : "true"
+          }, {
+            "logic" : "not_equal_to",
+            "target" : "工作性質：連續性或緊急性？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "36" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：一般：放假（日數，每七日）",
+            "value" : "2"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "default"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1, 2",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：一般：例假（日數，每七日）",
+            "value" : "1"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：兩週變形：放假（日數，每二週）",
+            "value" : "4"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "2w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：一般：例假（日數，每七日）",
+            "value" : "1"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：八週變形：放假（日數，每八週）",
+            "value" : "16"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "8w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "2"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：兩週變形：例假（日數，每二週）",
+            "value" : "2"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "工作設定：工時制度：四週變形：放假（日數，每四週）",
+            "value" : "8"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "4w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : "3"
+        }
+      } ],
+      "37" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "勞工：假日：國定假日：放假？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and"
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      } ],
+      "38" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "3"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿月數）",
+            "value" : "6"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "1"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "7"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "1"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "2"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "2"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "10"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "2"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "3"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "3"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "14"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "3"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "5"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "4"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "15"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "5"
+          }, {
+            "logic" : "less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "10"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "5"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "勞工：同一雇主繼續工作期間（滿年數） - 10 + 15"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "10"
+          }, {
+            "logic" : "not_greater_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "25"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "6"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "勞工：假日：特別休假日（日數，每年）",
+            "value" : "30"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "greater_than",
+            "target" : "勞工：同一雇主繼續工作期間（滿年數）",
+            "value" : "25"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "6"
+        }
+      } ],
+      "39" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "勞工：假日：例假日：給薪？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "勞工：假日：休息日：給薪？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "勞工：假日：國定假日：給薪？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "勞工：假日：特別休假日：給薪？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and"
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：國定假日：勞工同意？",
+            "value" : "true"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：國定假日：工資（金額，每小時）",
+            "value" : "2 * 工作設定：平日工資（金額，每小時）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：國定假日？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：特別休假日：勞工同意？",
+            "value" : "true"
+          }, {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：特別休假日：工資（金額，每小時）",
+            "value" : "2 * 工作設定：平日工資（金額，每小時）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：特別休假日？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "40" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：突發：工資（金額，每小時）",
+            "value" : "2 * 工作設定：平日工資（金額，每小時）"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發：二十四小時內報當地主管機關？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發？",
+            "value" : "true"
+          }, {
+            "logic" : "belong_to",
+            "target" : "個案：延長工作時間：突發：假日種類",
+            "value" : "rest_day, regular_leave, annual_paid_leave, designated_holiday"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1, 2",
+          "subparagraph" : ""
+        }
+      } ],
+      "41" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_less_than",
+            "target" : "個案：延長工作時間：非突發：特別休假日：工資（金額，每小時）",
+            "value" : "2 * 工作設定：平日工資（金額，每小時）"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作所屬產業",
+            "value" : "public_utility"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：特別休假日：主管機關認有必要？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發：特別休假日？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "42" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_equal_to",
+            "target" : "個案：延長工作時間：勞工正當理由不接受？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：突發？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "個案：延長工作時間：非突發？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "",
+          "subparagraph" : ""
+        }
+      } ],
+      "30-1" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：四週變形：指定行業？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "4w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：四週變形：工會同意？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：四週變形：勞資會議同意？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "4w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "工作設定：工時制度：四週變形：正常工作時間：自其他工作日分配（時數，每日）",
+            "value" : "2"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "4w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "1"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "個案：延長工作時間：非突發：平日：四週變形（時數，每日）",
+            "value" : "2"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "4w_transformed"
+          }, {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度：四週變形：正常工作時間（時數，每日）",
+            "value" : "10"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1",
+          "subparagraph" : "2"
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "belong_to",
+            "target" : "工作所屬產業",
+            "value" : "agriculture, forestry, fishery, animal_husbandry"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "工作設定：工時制度",
+            "value" : "4w_transformed"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      } ],
+      "9-1" : [ {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止：雇主有應受保護之正當營業利益？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止：勞工工作接觸營業秘密？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止：期間、區域、範圍、就業對象合理？",
+            "value" : "true"
+          }, {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止：合理補償？",
+            "value" : "true"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "or",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "1, 3",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "not_greater_than",
+            "target" : "契約：競業禁止期間（年數）",
+            "value" : "2"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "4",
+          "subparagraph" : ""
+        }
+      }, {
+        "condition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止：合理補償：包括工作給付？",
+            "value" : "false"
+          } ]
+        },
+        "precondition" : {
+          "logic" : "and",
+          "rule" : [ {
+            "logic" : "equal_to",
+            "target" : "契約：競業禁止？",
+            "value" : "true"
+          } ]
+        },
+        "reference" : {
+          "paragraph" : "2",
+          "subparagraph" : ""
+        }
+      } ]
+    }
+  },
+  "quiz" : {
+    "勞工：工會？" : {
+      "description" : "",
+      "id" : "勞工：工會？",
+      "option" : [ {
+        "title" : "有工會",
+        "value" : "yes"
+      }, {
+        "title" : "沒有工會",
+        "value" : "no"
+      }, {
+        "title" : "我不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "員工是否有組織工會？",
+      "type" : "select",
+      "precondition" : {
+        "logic" : "and",
+        "rule" : [ {
+          "logic" : "belong_to",
+          "target" : "type_of_regular_working_hour",
+          "value" : "transformed_2w, transformed_4w, transformed_8w"
+        }, {
+          "logic" : "not_belong_to",
+          "target" : "labor_management_conference_for_regular_working_hour",
+          "value" : "eee"
+        } ]
+      },
+      "route" : [ {
+        "answer" : "no",
+        "next" : "labor_management_conference_for_regular_working_hour"
+      }, {
+        "answer" : "yes",
+        "next" : "consent_of_labor_union_for_regular_working_hour"
+      } ]
+    },
+    "個案：不定期契約停止履行？" : {
+      "description" : "",
+      "id" : "個案：不定期契約停止履行？",
+      "option" : [ {
+        "title" : "true",
+        "value" : "true"
+      }, {
+        "title" : "false",
+        "value" : "false"
+      } ],
+      "title" : "個案：不定期契約停止履行？",
+      "type" : "select"
+    },
+    "工作所屬產業" : {
+      "description" : "",
+      "id" : "工作所屬產業",
+      "option" : [ {
+        "title" : "農業",
+        "value" : "agriculture"
+      }, {
+        "title" : "礦業",
+        "value" : "mining"
+      }, {
+        "title" : "其他",
+        "value" : "misc"
+      } ],
+      "title" : "所屬的產業是？",
+      "type" : "select"
+    },
+    "工作設定：工時制度" : {
+      "description" : "（說明各種工時制度的不同）",
+      "id" : "工作設定：工時制度",
+      "option" : [ {
+        "title" : "一般工時（無變形）",
+        "value" : "default"
+      }, {
+        "title" : "兩週變形工時",
+        "value" : "transformed_2w"
+      }, {
+        "title" : "四週變形工時",
+        "value" : "transformed_4w"
+      }, {
+        "title" : "八週變形工時",
+        "value" : "transformed_8w"
+      }, {
+        "title" : "責任制",
+        "value" : "duty"
+      }, {
+        "title" : "不確定",
+        "value" : "unsure"
+      } ],
+      "title" : "勞資雙方約定採用哪種工時制度？",
+      "type" : "select",
+      "route" : [ {
+        "answer" : "duty",
+        "next" : "工作所屬產業"
+      }, {
+        "answer" : "transformed_2w",
+        "next" : "勞工：工會？"
+      }, {
+        "answer" : "transformed_4w",
+        "next" : "勞工：工會？"
+      }, {
+        "answer" : "transformed_8w",
+        "next" : "勞工：工會？"
+      } ]
+    },
+    "工作設定：平日工資（金額，每月）" : {
+      "description" : "沒扣掉勞健保自付額 etc.",
+      "id" : "工作設定：平日工資（金額，每月）",
+      "option" : [ {
+        "title" : "選項",
+        "value" : ""
+      } ],
+      "title" : "每個月的底薪是？",
+      "type" : "input"
+    }
+  },
+  "step" : [
+    "工作性質",
+    "工作所屬產業",
+    "工作設定：酬勞計算基準",
+    "工作設定：平日工資（金額，每月）",
+    "工作設定：平日工資（金額，每小時）",
+    "勞工：假日：休息日：給薪？",
+    "勞工：假日：例假日：給薪？",
+    "勞工：假日：國定假日：放假？",
+    "勞工：假日：國定假日：給薪？",
+    "勞工：假日：特別休假日：給薪？",
+    "契約約期",
+    "勞工：同一雇主繼續工作期間（滿年數）",
+    "勞工：同一雇主繼續工作期間（滿月數）",
+    "勞工：同一雇主繼續工作期間（未滿月數）",
+    "勞工：假日：特別休假日（日數，每年）",
+    "勞工：工會？",
+    "工作設定：工時制度",
+    "工作設定：工時制度：一般：正常工作時間（時數，每日）",
+    "工作設定：工時制度：一般：正常工作時間（時數，每週）",
+    "工作設定：工時制度：一般：例假（日數，每七日）",
+    "工作設定：工時制度：一般：放假（日數，每七日）",
+    "工作設定：工時制度：兩週變形：指定行業？",
+    "工作設定：工時制度：兩週變形：工會同意？",
+    "工作設定：工時制度：兩週變形：勞資會議同意？",
+    "工作設定：工時制度：兩週變形：正常工作時間（時數，每週）",
+    "工作設定：工時制度：兩週變形：正常工作時間：自其他工作日分配（時數，每日）",
+    "工作設定：工時制度：兩週變形：正常工作時間：分配至其他工作日（日數，每二週）",
+    "工作設定：工時制度：兩週變形：例假（日數，每二週）",
+    "工作設定：工時制度：兩週變形：放假（日數，每二週）",
+    "工作設定：工時制度：八週變形：指定行業？",
+    "工作設定：工時制度：八週變形：工會同意？",
+    "工作設定：工時制度：八週變形：勞資會議同意？",
+    "工作設定：工時制度：八週變形：正常工作時間（時數，每日）",
+    "工作設定：工時制度：八週變形：正常工作時間（時數，每週）",
+    "工作設定：工時制度：八週變形：放假（日數，每八週）",
+    "工作設定：工時制度：四週變形：指定行業？",
+    "工作設定：工時制度：四週變形：工會同意？",
+    "工作設定：工時制度：四週變形：勞資會議同意？",
+    "工作設定：工時制度：四週變形：正常工作時間（時數，每日）",
+    "工作設定：工時制度：四週變形：正常工作時間：自其他工作日分配（時數，每日）",
+    "工作設定：工時制度：四週變形：放假（日數，每四週）",
+    "工作設定：工時制度：主管機關命令調整？",
+    "工作設定：工時制度：主管機關命令調整：公眾生活便利或其他特殊原因？",
+    "工作設定：班表：輪班制？",
+    "工作設定：班表：輪班制：每週換班？",
+    "工作設定：班表：輪班制：勞工同意不每週換班？",
+    "工作設定：班表：輪班制：換班連續十一小時休息？",
+    "工作設定：班表：休息（分鐘數，每連續四小時）",
+    "工作設定：工作場所：坑內：非監視？",
+    "契約：競業禁止？",
+    "契約：競業禁止：勞工工作接觸營業秘密？",
+    "契約：競業禁止：雇主有應受保護之正當營業利益？",
+    "契約：競業禁止期間（年數）",
+    "契約：競業禁止：期間、區域、範圍、就業對象合理？",
+    "契約：競業禁止：合理補償？",
+    "契約：競業禁止：合理補償：包括工作給付？",
+    "個案：當日：前六個月總日數（日數）",
+    "個案：當日：前六個月工作日數（日數）",
+    "個案：當日：前六個月工資總額（金額）",
+    "個案：當日：平均工資（金額，每日）",
+    "個案：當日：平均工資（金額，每月）",
+    "個案：雇主終止勞動契約？",
+    "個案：雇主終止勞動契約：預告（日數）",
+    "個案：雇主終止勞動契約：給付預告期間工資？",
+    "個案：雇主終止勞動契約：勞工另謀工作請假：時數（日數，每週）",
+    "個案：雇主終止勞動契約：勞工另謀工作請假：工資照給？",
+    "個案：雇主終止勞動契約：資遣費（金額）",
+    "個案：雇主終止勞動契約：資遣費：終止到發給期間（日數）",
+    "個案：不定期契約停止履行？",
+    "個案：不定期契約停止履行：繼續履行原約？",
+    "個案：不定期契約停止履行：繼續履行原約：前後工作年資合併計算？",
+    "個案：不定期契約停止履行：繼續履行原約：前後契約間斷期間（月數）",
+    "個案：不定期契約停止履行：另訂新約？",
+    "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？",
+    "個案：不定期契約停止履行：另訂新約：前後契約間斷期間（月數）",
+    "個案：定期契約屆滿？",
+    "個案：定期契約屆滿：繼續工作？",
+    "個案：定期契約屆滿：繼續工作：雇主即反對？",
+    "個案：定期契約屆滿：另訂新約？",
+    "個案：定期契約屆滿：另訂新約：前後工作年資合併計算？",
+    "個案：定期契約屆滿：另訂新約：前後契約工作期間（日數）",
+    "個案：定期契約屆滿：另訂新約：前後契約間斷期間（日數）",
+    "個案：定期契約屆滿：另訂新約：前後契約間斷期間（月數）",
+    "個案：工作期間工作日數（日數）",
+    "個案：工作期間工資總額（金額）",
+    "個案：工作期間總日數（日數）",
+    "工作性質：連續性或緊急性？",
+    "個案：延長工作時間：勞工正當理由不接受？",
+    "個案：延長工作時間：突發？",
+    "個案：延長工作時間：突發：假日種類",
+    "個案：延長工作時間：突發：二十四小時內通知工會？",
+    "個案：延長工作時間：突發：二十四小時內報當地主管機關？",
+    "個案：延長工作時間：突發（時數）",
+    "個案：延長工作時間：突發：事後補休？",
+    "個案：延長工作時間：突發：工資（金額，每小時）",
+    "個案：延長工作時間：非突發？",
+    "個案：延長工作時間：非突發：工會同意？",
+    "個案：延長工作時間：非突發：勞資會議同意？",
+    "個案：延長工作時間：非突發：總工作時間（時數，每日）",
+    "個案：延長工作時間：非突發：總延長工作時間（時數，每月）",
+    "個案：延長工作時間：非突發：平日？",
+    "個案：延長工作時間：非突發：平日（時數）",
+    "個案：延長工作時間：非突發：平日：工資（金額）",
+    "個案：延長工作時間：非突發：平日：四週變形（時數，每日）",
+    "個案：延長工作時間：非突發：休息日？",
+    "個案：延長工作時間：非突發：休息日（時數）",
+    "個案：延長工作時間：非突發：休息日：工資（金額）",
+    "個案：延長工作時間：非突發：國定假日？",
+    "個案：延長工作時間：非突發：國定假日：勞工同意？",
+    "個案：延長工作時間：非突發：國定假日：工資（金額，每小時）",
+    "個案：延長工作時間：非突發：特別休假日？",
+    "個案：延長工作時間：非突發：特別休假日：勞工同意？",
+    "個案：延長工作時間：非突發：特別休假日：主管機關認有必要？",
+    "個案：延長工作時間：非突發：特別休假日：工資（金額，每小時）"
+  ]
+}
