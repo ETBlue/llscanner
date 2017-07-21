@@ -16,11 +16,12 @@ class QuizList extends Component {
           <tr key={id}>
             <td className='top aligned'>
               <h4 className='ui header'>
-                <Link to={'/quiz/' + id}>{item.title}</Link>
+                <Link to={'/quiz/' + id}>
+                  <code className='code'>{item.id}</code>
+                </Link>
               </h4>
             </td>
             <td className='top aligned'><code className='code'>{item.type}</code></td>
-            <td className='top aligned'><code className='code'>{item.id}</code></td>
           </tr>
         )
       })
@@ -28,13 +29,12 @@ class QuizList extends Component {
 
     return (
       <div className='QuizList ui basic segment'>
-        <h2 className='ui header'>測驗題列表</h2>
+        <h2 className='ui header'>測驗題</h2>
         <table className='ui table'>
           <thead>
             <tr>
               <th>題目</th>
               <th className='two wide'>類型</th>
-              <th>代號</th>
             </tr>
           </thead>
           <tbody>
@@ -43,15 +43,15 @@ class QuizList extends Component {
           {authenticated ?
           <tfoot>
             <tr>
-              <th colSpan={3} className='right aligned'>
+              <th colSpan={2} className='right aligned'>
                 <div className='ui mini buttons'>
-                  <Link to='/quiz/new/' className='ui icon labeled green button' >
-                    <i className='icon add' />
-                    New Quiz
-                  </Link>
+                  {/*<Link to='/quiz/new/' className='ui icon labeled green button' >
+                                      <i className='icon add' />
+                                      新測驗題
+                                    </Link>*/}
                   <Link to='/quiz/edit/' className='ui icon labeled button' >
                     <i className='icon pencil' />
-                    Edit List
+                    編輯清單
                   </Link>
                 </div>
               </th>
