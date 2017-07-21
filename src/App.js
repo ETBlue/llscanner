@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  NavLink
+  NavLink,
+  Redirect
 } from 'react-router-dom'
 
 import firebase from 'firebase'
@@ -29,6 +30,8 @@ import StepAdd from './step/StepAdd'
 import StepView from './step/StepView'
 import StepEdit from './step/StepEdit'
 
+import _evaluateCondition from './answer/_evaluateCondition'
+
 import QuizList from './quiz/QuizList'
 import QuizListEdit from './quiz/QuizListEdit'
 import QuizAdd from './quiz/QuizAdd'
@@ -45,7 +48,7 @@ class App extends Component {
     this.state = {
       quiz: {},
       route: {},
-      condition: {},
+      precondition: {},
 
       step: [],
       order: {},
@@ -170,7 +173,7 @@ class App extends Component {
         const quiz = snapshot.val()
         Object.keys(quiz).forEach((quiz_id) => {
           prevState.route[ quiz_id ] = quiz[ quiz_id ].route
-          prevState.condition[ quiz_id ] = quiz[ quiz_id ].condition
+          prevState.precondition[ quiz_id ] = quiz[ quiz_id ].precondition
         })
         prevState.quiz = quiz
         return prevState
@@ -280,7 +283,7 @@ class App extends Component {
     const step = this.state.step
     const order = this.state.order
     const route = this.state.route
-    const condition = this.state.condition
+    const precondition = this.state.precondition
 
     const law = this.state.law
     const answer = this.state.answer
@@ -309,29 +312,6 @@ class App extends Component {
         }
       }
     })
-
-    const HomePage = () => {
-
-      const quiz_id = this.state.first
-
-      return (
-        <section className='Quiz'>
-          <QuizView
-            {...quiz[quiz_id]}
-            orderData={order[quiz_id]}
-            routeData={route[quiz_id]}
-            preconditionData={condition[quiz_id]}
-            answerData={answer[quiz_id]}
-            answerOwner={answerOwner}
-          />
-          {authenticated ?
-          <EditButton 
-            link={'/quiz/' + quiz_id + '/edit'} 
-          /> : null
-          }
-        </section>
-      )
-    }
 
     const AnswerPage = ({law_id}) => {
 
@@ -497,6 +477,30 @@ class App extends Component {
       )
     }
 
+    const HomePage = () => {
+
+      const quiz_id = this.state.first
+
+      return (
+        <section className='Quiz'>
+          <QuizView
+            {...quiz[quiz_id]}
+            orderData={order[quiz_id]}
+            routeData={route[quiz_id]}
+            preconditionData={precondition[quiz_id]}
+            answerData={answer[quiz_id]}
+            answerOwner={answerOwner}
+            answer={answer}
+          />
+          {authenticated ?
+          <EditButton 
+            link={'/quiz/' + quiz_id + '/edit'} 
+          /> : null
+          }
+        </section>
+      )
+    }
+
     const QuizPage = ({ quiz_id, action }) => {
 
       if (quiz_id === 'new' && authenticated) {
@@ -532,12 +536,17 @@ class App extends Component {
                 {...quiz[quiz_id]}
                 orderData={order[quiz_id]}
                 routeData={route[quiz_id]}
-                preconditionData={condition[quiz_id]}
+                preconditionData={precondition[quiz_id]}
                 answerData={answer[quiz_id]}
                 answerOwner={answerOwner}
+                answer={answer}
               />
               <QuizEdit {...quiz[quiz_id]} />
             </section>
+          )
+        } else if ( precondition[quiz_id] && _evaluateCondition(precondition[quiz_id], answer).result === 'failed') {
+          return (
+            <Redirect to={`/quiz/${order[quiz_id].next}/`}/>
           )
         } else {
           return (
@@ -546,9 +555,10 @@ class App extends Component {
                 {...quiz[quiz_id]}
                 orderData={order[quiz_id]}
                 routeData={route[quiz_id]}
-                preconditionData={condition[quiz_id]}
+                preconditionData={precondition[quiz_id]}
                 answerData={answer[quiz_id]}
                 answerOwner={answerOwner}
+                answer={answer}
               />
               {authenticated ?
                 <EditButton 
