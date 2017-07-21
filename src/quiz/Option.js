@@ -4,9 +4,11 @@ import './Option.css'
 
 class Option extends Component {
   render () {
+
+    const link = this.props.next ? '/quiz/' + this.props.next : '/answer/'
     return (
       <Link
-        to={'/quiz/' + this.props.next}
+        to={link}
         className={'Option ui button ' + this.props.className}
         data-value={this.props.value}
         id={this.props.id}

@@ -10,19 +10,19 @@ class QuizView extends Component {
     super(props)
 
     this.state = {
-      quiz: {
+      quizData: {
         id: this.props.id,
         title: this.props.title,
         description: this.props.description,
         type: this.props.type
       },
-      option: this.props.option || (this.props.type === 'select' ? this._basicOptionData : {}),
-      answer: this.props.answer || '', // 使用者選擇的答案
+      optionData: this.props.option || (this.props.type === 'select' ? this._basicOptionData : {}),
+      answerData: this.props.answerData || '', // 使用者選擇的答案
       answerOwner: this.props.answerOwner,
 
-      order: this.props.order,
-      route: this.props.route,
-      condition: this.props.condition
+      orderData: this.props.orderData,
+      routeData: this.props.routeData,
+      preconditionData: this.props.preconditionData
     }
 
     this._onInputChange = this._onInputChange.bind(this)
@@ -33,61 +33,59 @@ class QuizView extends Component {
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => {
       return {
-        quiz: {
+        quizData: {
           id: nextProps.id,
           title: nextProps.title,
           description: nextProps.description,
           type: nextProps.type
         },
-        option: nextProps.option || (nextProps.type === 'select' ? this._basicOptionData : {}),
-        answer: nextProps.answer || '', // 使用者選擇的答案
+        optionData: nextProps.option || (nextProps.type === 'select' ? this._basicOptionData : {}),
+        answerData: nextProps.answerData || '', // 使用者選擇的答案
         answerOwner: nextProps.answerOwner,
 
-        order: nextProps.order,
-        route: nextProps.route,
-        condition: nextProps.condition
+        orderData: nextProps.orderData,
+        routeData: nextProps.routeData,
+        preconditionData: nextProps.preconditionData
       }
     })
   }
 
   _onInputChange (event) {
-    const answer = event.target.value || ''
+    const answerData = event.target.value || ''
     this.setState((prevState, props) => {
       return {
-        answer: answer
+        answerData: answerData
       }
     })
   }
 
   _onInputSubmit (event) {
-    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(this.state.answer)
+    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(this.state.answerData)
   }
 
   _onSelect (event) {
-    const answer = event.target.getAttribute('data-value')
-    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(answer)
+    const answerData = event.target.getAttribute('data-value')
+    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(answerData)
   }
 
   render () {
-    let answerJSX
 
-    let route = {}
-    if (this.state.route) {
-      this.state.route.forEach((entry) => {
-        route[entry.answer] = entry.next
-      })
+    if (!this.state.orderData) {
+      return null
     }
 
-    if (this.state.quiz.type === 'select') {
-      const option = this.state.option
-      if (option) {
-        const optionJSX = Object.keys(option).map((key) => {
-          const item = option[key]
-          const className = this.state.answer === item.value ? 'active' : ''
-          const next = route[item.value]
-            ? route[item.value]
-            : (this.state.order && this.state.order.next ? this.state.order.next
-            : '')
+    let answerDataJSX
+
+    const routeData = this.state.routeData
+
+    if (this.state.quizData.type === 'select') {
+      const optionData = this.state.optionData
+      if (optionData) {
+        const optionDataJSX = optionData.map((item, key) => {
+          const className = this.state.answerData === item.value ? 'active' : ''
+          const next = routeData ? 
+            (routeData[item.value] ? routeData[item.value] : this.state.orderData.next)
+            : this.state.orderData.next
           return (
             <Option
               {...item}
@@ -98,26 +96,27 @@ class QuizView extends Component {
             />
           )
         })
-        answerJSX = (
+        answerDataJSX = (
           <div className='ui vertical fluid basic buttons'>
-            {optionJSX}
+            {optionDataJSX}
           </div>
         )
       }
     }
 
-    if (this.state.quiz.type === 'input') {
-      answerJSX = (
+    if (this.state.quizData.type === 'input') {
+      const link = this.state.orderData.next ? '/quiz/' + this.state.orderData.next : '/answer/'
+      answerDataJSX = (
         <div className='ui action input'>
           <input
             type='text'
-            id={this.state.quiz.id}
-            placeholder={this.state.answer}
-            value={this.state.answer}
+            id={this.state.quizData.id}
+            placeholder={this.state.answerData}
+            value={this.state.answerData}
             onChange={this._onInputChange}
           />
           <Link
-            to={this.state.order.next}
+            to={link}
             className='ui button'
             onClick={this._onInputSubmit}
           >
@@ -131,12 +130,12 @@ class QuizView extends Component {
       <section className='QuizView'>
         <div className='Question ui center aligned basic segment'>
           <h3 className='ui header'>
-            {this.state.quiz.title}
+            {this.state.quizData.title}
           </h3>
           <p>
-            {this.state.quiz.description}
+            {this.state.quizData.description}
           </p>
-          { answerJSX }
+          { answerDataJSX }
         </div>
       </section>
     )

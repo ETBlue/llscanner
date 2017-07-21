@@ -44,15 +44,15 @@ class App extends Component {
 
     this.state = {
       quiz: {},
-
-      step: [],
-      order: {},
       route: {},
       condition: {},
 
+      step: [],
+      order: {},
+      first: null,
+
       law: {},
       answer: {},
-      first: '',
 
       authenticated: false,
       user: {},
@@ -164,10 +164,15 @@ class App extends Component {
 
     })
 
-
     firebase.database().ref('quiz').on('value', snapshot => {
       this.setState((prevState, props) => {
-        prevState.quiz = snapshot.val()
+
+        const quiz = snapshot.val()
+        Object.keys(quiz).forEach((quiz_id) => {
+          prevState.route[ quiz_id ] = quiz[ quiz_id ].route
+          prevState.condition[ quiz_id ] = quiz[ quiz_id ].condition
+        })
+        prevState.quiz = quiz
         return prevState
       })
     })
@@ -175,18 +180,32 @@ class App extends Component {
     firebase.database().ref('step').on('value', snapshot => {
       this.setState((prevState, props) => {
         const step = snapshot.val()
-        const list = Object.keys(step)
-        list.forEach((key, index) => {
-          prevState.order[ step[ key ].quiz ] = {
-            id: key,
-            current: step[ key ].quiz,
-            prev: index > 0 ? step[ list[ index - 1 ] ].quiz : '',
-            next: index < list.length - 1 ? step[ list[ index + 1 ] ].quiz : ''
+        const quiz = prevState.quiz
+        let prev = null
+
+        step.forEach((item, index) => {
+          if (index === step.length - 1) {
+            prevState.order[prev].next = null
           }
-          prevState.route[ step[ key ].quiz ] = step[ key ].route
-          prevState.condition[ step[ key ].quiz ] = step[ key ].condition
+          if (!quiz[item]) {
+            return
+          }
+          if (!prevState.first) {
+            prevState.first = item
+          }
+          if (prev) {
+            prevState.order[prev].next = item
+          }
+          prevState.order[item] = {
+            id: item,
+            current: item,
+            prev: prev
+          }
+          if (index === step.length - 1) {
+            prevState.order[item].next = null
+          }
+          prev = item
         })
-        prevState.first = step[ list[ 0 ] ].quiz
 
         prevState.step = step
         return prevState
@@ -293,21 +312,21 @@ class App extends Component {
 
     const HomePage = () => {
 
-      const id = this.state.first
+      const quiz_id = this.state.first
 
       return (
         <section className='Quiz'>
           <QuizView
-            {...quiz[id]}
-            order={order[id]}
-            route={route[id]}
-            condition={condition[id]}
-            answer={answer[id]}
+            {...quiz[quiz_id]}
+            orderData={order[quiz_id]}
+            routeData={route[quiz_id]}
+            preconditionData={condition[quiz_id]}
+            answerData={answer[quiz_id]}
             answerOwner={answerOwner}
           />
           {authenticated ?
           <EditButton 
-            link={'/quiz/' + id + '/edit'} 
+            link={'/quiz/' + quiz_id + '/edit'} 
           /> : null
           }
         </section>
@@ -509,10 +528,10 @@ class App extends Component {
             <section className='Quiz'>
               <QuizView
                 {...quiz[quiz_id]}
-                order={order[quiz_id]}
-                route={route[quiz_id]}
-                condition={condition[quiz_id]}
-                answer={answer[quiz_id]}
+                orderData={order[quiz_id]}
+                routeData={route[quiz_id]}
+                preconditionData={condition[quiz_id]}
+                answerData={answer[quiz_id]}
                 answerOwner={answerOwner}
               />
               <QuizEdit {...quiz[quiz_id]} />
@@ -523,10 +542,10 @@ class App extends Component {
             <section className='Quiz'>
               <QuizView
                 {...quiz[quiz_id]}
-                order={order[quiz_id]}
-                route={route[quiz_id]}
-                condition={condition[quiz_id]}
-                answer={answer[quiz_id]}
+                orderData={order[quiz_id]}
+                routeData={route[quiz_id]}
+                preconditionData={condition[quiz_id]}
+                answerData={answer[quiz_id]}
                 answerOwner={answerOwner}
               />
               {authenticated ?

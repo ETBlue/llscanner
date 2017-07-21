@@ -2,11 +2,15 @@ import React from 'react'
 
 export default (item) => {
 
-  if (item && item.route && item.route.map) {
-    const listJSX = item.route.map((entry, index) => {
+  if (item && item.route) {
+    const hash = item.route
+    const listJSX = Object.keys(hash).map((key) => {
+      if (!hash[key]) {
+        return null
+      }
       return (
-        <div key={index} className='item'>
-          回答 <code className='code'>{entry.answer}</code> 則導向 <code className='code'>{entry.next}</code>
+        <div key={key} className='item'>
+          回答 <code className='code'>{key}</code> 則導向 <code className='code'>{hash[key]}</code>
         </div>
       )
     })
