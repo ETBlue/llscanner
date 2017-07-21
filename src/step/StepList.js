@@ -16,16 +16,27 @@ class StepList extends Component {
 
       stepListJSX = step.map((item, id) => {
 
+        const titleJSX = quiz[item] ? (
+          <h4 className='ui header'>
+            <Link to={'/quiz/' + item}>
+              <code className='code'>
+                {item}
+              </code>
+            </Link>
+          </h4>
+        ) : (
+          <code className='code'>
+            {item}
+          </code>
+        )
+
         return (
           <tr key={id}>
             <td className='top aligned'>
-              <h4 className='ui header'>
-                <Link to={'/step/' + item}>
-                  <code className='code'>
-                    {item}
-                  </code>
-                </Link>
-              </h4>
+              {id}
+            </td>
+            <td className='top aligned'>
+                {titleJSX}
             </td>
             <td className='top aligned'>
               {_viewPrecondition(quiz[item])}
@@ -44,9 +55,10 @@ class StepList extends Component {
         <table className='ui table'>
           <thead>
             <tr>
+              <th className='two wide'>排序</th>
               <th className='six wide'>題目</th>
-              <th className='five wide'>進入條件</th>
-              <th className='five wide'>離開路徑</th>
+              <th className='four wide'>進入條件</th>
+              <th className='four wide'>離開路徑</th>
             </tr>
           </thead>
           <tbody>
@@ -55,7 +67,7 @@ class StepList extends Component {
           {authenticated ?
           <tfoot>
             <tr>
-              <th colSpan={3} className='right aligned'>
+              <th colSpan={4} className='right aligned'>
                 <div className='ui mini buttons'>
                   <Link to='/step/edit/' className='ui icon labeled button' >
                     <i className='icon pencil' />

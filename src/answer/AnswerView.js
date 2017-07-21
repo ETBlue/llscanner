@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {HashLink as Link} from 'react-router-hash-link'
 
 import ResultView from './ResultView'
 import LawChooser from './LawChooser'
@@ -11,17 +12,29 @@ class AnswerView extends Component {
     const answerData = this.props.answerData
     const laws = this.props.laws
     const lawID = this.props.lawID
+    const quiz = this.props.quiz
 
     let answerDataJSX
     if (answerData) {
       answerDataJSX = Object.keys(answerData).map((key, index) => {
+
+        const titleJSX = quiz[key] ? (
+          <h4 className='ui header'>
+            <Link to={`/quiz/${key}/`}>
+              <code className='code'>
+                {key}
+              </code>
+            </Link>
+          </h4>
+        ) : (
+          <code className='code'>
+            {key}
+          </code>
+        )
+
         return (
           <div key={key} className='item'>
-            <div className='header'>
-              <span className='code'>
-              {key}
-              </span>
-            </div>
+            {titleJSX}
             <div className='right floated content'>
               {answerData[key]}
             </div>

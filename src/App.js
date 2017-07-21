@@ -341,6 +341,7 @@ class App extends Component {
             answerData={answer}
             laws={_laws}
             status='choose_law'
+            quiz={quiz}
           />
         )
       }
@@ -356,6 +357,7 @@ class App extends Component {
           lawObject={lawObject}
           lawID={law_id}
           status='view_result'
+          quiz={quiz}
         />
       )
 
@@ -561,6 +563,7 @@ class App extends Component {
       return (
         <QuizList
           quiz={quiz}
+          step={step}
           authenticated={authenticated}
         />
       )

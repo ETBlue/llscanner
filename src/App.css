@@ -55,8 +55,14 @@
 
 .code {
   padding: 0.1em 0.5em;
-  background-color: rgba(0,100,200, 0.1);
   font-size: 0.8rem;
+  background-color: rgba(0,0,0, 0.07);
+  color: rgba(0,0,0,0.6);
+}
+
+a .code {
+  background-color: rgba(0,100,200, 0.1);
+  color: #4183c4;
 }
 
 .ui.header .sub.header {

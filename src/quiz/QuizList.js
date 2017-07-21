@@ -6,6 +6,7 @@ class QuizList extends Component {
   render () {
     let quizListJSX
     const quiz = this.props.quiz
+    const step = this.props.step
     const authenticated = this.props.authenticated
 
     if (quiz) {
@@ -21,7 +22,12 @@ class QuizList extends Component {
                 </Link>
               </h4>
             </td>
-            <td className='top aligned'><code className='code'>{item.type}</code></td>
+            <td className='top aligned'>
+              <code className='code'>{item.type}</code>
+            </td>
+            <td className='top aligned'>
+              {step ? step.indexOf(id) : null}
+            </td>
           </tr>
         )
       })
@@ -35,6 +41,7 @@ class QuizList extends Component {
             <tr>
               <th>題目</th>
               <th className='two wide'>類型</th>
+              <th className='two wide'>排序</th>
             </tr>
           </thead>
           <tbody>
@@ -43,7 +50,7 @@ class QuizList extends Component {
           {authenticated ?
           <tfoot>
             <tr>
-              <th colSpan={2} className='right aligned'>
+              <th colSpan={3} className='right aligned'>
                 <div className='ui mini buttons'>
                   {/*<Link to='/quiz/new/' className='ui icon labeled green button' >
                                       <i className='icon add' />
