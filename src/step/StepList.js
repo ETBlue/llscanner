@@ -8,35 +8,27 @@ class StepList extends Component {
 
   render () {
     let stepListJSX
-    const quiz = this.props.quiz
     const step = this.props.step
+    const quiz = this.props.quiz
     const authenticated = this.props.authenticated
 
     if (step) {
 
       stepListJSX = step.map((item, id) => {
 
-        const titleJSX = quiz[item] ? (
-          <h4 className='ui header'>
-            <Link to={'/quiz/' + item}>
-              <code className='code'>
-                {item}
-              </code>
-            </Link>
-          </h4>
-        ) : (
-          <code className='code'>
-            {item}
-          </code>
-        )
-
         return (
           <tr key={id}>
             <td className='top aligned'>
-              {id}
+              {quiz[item] ? <i className='green icon checkmark' /> : null}{id}
             </td>
             <td className='top aligned'>
-                {titleJSX}
+              <h4 className='ui header'>
+                <Link to={'/step/' + item}>
+                  <code className='code'>
+                    {item}
+                  </code>
+                </Link>
+              </h4>
             </td>
             <td className='top aligned'>
               {_viewPrecondition(quiz[item])}

@@ -26,7 +26,7 @@ class QuizList extends Component {
               <code className='code'>{item.type}</code>
             </td>
             <td className='top aligned'>
-              {step ? step.indexOf(id) : null}
+              {step && step.indexOf(id) >= 0 ? <i className='green icon checkmark' /> : null}{step ? step.indexOf(id) : null}
             </td>
           </tr>
         )
