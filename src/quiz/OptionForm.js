@@ -12,13 +12,18 @@ class OptionForm extends Component {
     const changeInput = this.props.changeInput
 
     return (
-      <div className='OptionForm' >
-        <h4 className='ui header'>選項 {id}</h4>
+      <div className='OptionForm' data-id={id}>
+        <h4 className='ui header'>
+          <i className='sort icon sortable-handle' />
+          選項 {id}
+        </h4>
         <a className='ui right top floated orange icon mini button'
           data-id={id}
           onClick={deleteOption}
           >
-          <i className='icon trash' />
+          <i className='icon trash' 
+            data-id={id}
+          />
         </a>
         <div className='two fields'>
           <div className={'field' + (title ? '' : ' error')}>
@@ -33,20 +38,6 @@ class OptionForm extends Component {
               placeholder='請輸入字串'
             />
           </div>
-          {/*<div className={'field ' + (this.props.id ? '' : 'error')}>
-                      <label>排序 *</label>
-                      <input
-                        type='text'
-                        data-group='option'
-                        name='id'
-                        data-id={id}
-                        value={this.props.id}
-                        onChange={changeInput}
-                        placeholder='請輸入數字，注意不可以跟其他選項重複喔'
-                        autoFocus={this.props.focus}
-                        data-number={this.props.number}
-                      />
-                    </div>*/}
           <div className='field'>
             <label>設定值</label>
             <input

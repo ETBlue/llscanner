@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
+import ReactSortable from 'react-sortablejs'
 
 import _copyNested from '../_shared/_copyNested'
 import ActionButton from '../_shared/ActionButton'
@@ -29,6 +30,7 @@ class QuizEdit extends Component {
 
     this._changeInput = this._changeInput.bind(this)
     this._selectRadio = this._selectRadio.bind(this)
+    this._changeOptionOrder = this._changeOptionOrder.bind(this)
     this._placeHolder = this._placeHolder.bind(this)
 
     this._validateAll = this._validateAll.bind(this)
@@ -76,8 +78,10 @@ class QuizEdit extends Component {
   }
 
   _deleteOption (event) {
+    const id = event.target.getAttribute('data-id')
+
     this.setState((prevState, props) => {
-      delete prevState.quizData.option[event.target.getAttribute('data-id')]
+      prevState.quizData.option.splice(parseInt(id, 10), 1)
       prevState.valid = this._validateAll(prevState)
       return prevState
     })
@@ -91,7 +95,7 @@ class QuizEdit extends Component {
 
   _refresh () {
     this.setState((prevState, props) => {
-      return this._initailState
+      return _copyNested(this._initailState)
     })
   }
 
@@ -122,6 +126,18 @@ class QuizEdit extends Component {
       }
       prevState.focus = null
       prevState.valid = this._validateAll(prevState)
+
+      return prevState
+    })
+  }
+
+  _changeOptionOrder (order) {
+
+    this.setState((prevState, props) => {
+      const newOption = order.map((id) => {
+        return prevState.quizData.option[id]
+      })
+      prevState.quizData.option = newOption
 
       return prevState
     })
@@ -182,13 +198,27 @@ class QuizEdit extends Component {
               </div>
               <div className='column'>
                 { quizData.type === 'select'
-                  ? (<div className='optionForm'>
-                    {optionFormJSX}
-                    <a onClick={this._addOption} className='ui green icon labeled mini button'>
-                      <i className='icon add' />
-                      新增選項
-                    </a>
-                  </div>
+                  ? (<ReactSortable
+                      tag='div'
+                      className='optionForm'
+                      options={{
+                        handle: '.sortable-handle',
+                        draggable: '.OptionForm',
+                        filter: ".sortable-ignored",
+                        ghostClass: "sortable-ghost",
+                        chosenClass: "sortable-chosen",
+                        dragClass: "sortable-drag",
+                      }}
+                      onChange={(order, sortable, evt) => {
+                        this._changeOptionOrder(order);
+                      }}
+                    >
+                      {optionFormJSX}
+                      <a onClick={this._addOption} className='ui green icon labeled mini button sortable-ignored'>
+                        <i className='icon add' />
+                        新增選項
+                      </a>
+                    </ReactSortable>
                   ) : null
                 }
               </div>
