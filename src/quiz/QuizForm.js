@@ -35,7 +35,7 @@ class QuizForm extends Component {
             data-group='quiz'
             data-id={id}
             name='description'
-            value={this.props.description}
+            value={description}
             onChange={changeInput}
             placeholder='問題的補充說明'
             />
@@ -69,14 +69,14 @@ class QuizForm extends Component {
             <label>input</label>
           </div>
         </div>
-        <div className={'field' + (this.props.id ? '' : ' error')}>
+        <div className={'field' + (id ? '' : ' error')}>
           <label>代號 *</label>
           <input
             type='text'
             data-group='quiz'
             data-id={id}
             name='id'
-            value={this.props.id}
+            value={id}
             onChange={changeInput}
             placeholder='本題的編號'
             disabled

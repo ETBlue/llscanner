@@ -149,10 +149,6 @@ class QuizEdit extends Component {
 
     if (option) {
       optionFormJSX = option.map((item, key) => {
-        let focus = false
-        if (this.state.focus === key) {
-          focus = true
-        }
         return (
           <OptionForm
             key={key}
