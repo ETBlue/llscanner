@@ -8,71 +8,57 @@ class QuizListEdit extends Component {
   constructor (props) {
     super(props)
 
-    // to be rendered
     this.state = {
       quiz: _copyNested(this.props.quiz),
       valid: true,
       focus: ''
     }
 
-    // form control functions
-    this._onInputChange = this._onInputChange.bind(this)
-    this._onQuizDelete = this._onQuizDelete.bind(this)
-    this._validate = this._validate.bind(this)
-    this._refresh = this._refresh.bind(this)
-    this._save = this._save.bind(this)
+    this._addQuiz = this._addQuiz.bind(this)
+    this._deleteQuiz = this._deleteQuiz.bind(this)
+    this._changeInput = this._changeInput.bind(this)
 
-    // data initialization
+    this._validate = this._validate.bind(this)
+    this._validateAll = this._validateAll.bind(this)
+
+    this._save = this._save.bind(this)
+    this._refresh = this._refresh.bind(this)
+
     this._initialQuiz = _copyNested(this.props.quiz)
-    //this._answer = _copyNested(this.props.answer)
-    this._step = _copyNested(this.props.step)
-    this._order = _copyNested(this.props.order)
-    this._initialAnswer = _copyNested(this.props.answer)
-    this._initialStep = _copyNested(this.props.step)
-    this._initialOrder = _copyNested(this.props.order)
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => {
-      // data initialization... again
       this._initialQuiz = _copyNested(nextProps.quiz)
-      //this._answer = _copyNested(nextProps.answer)
-      this._step = _copyNested(nextProps.step)
-      this._order = _copyNested(nextProps.order)
-      //this._initialAnswer = _copyNested(nextProps.answer)
-      this._initialStep = _copyNested(nextProps.step)
-      this._initialOrder = _copyNested(nextProps.order)
-      return {
-        quiz: nextProps.quiz
-      }
+      prevState.quiz = _copyNested(nextProps.quiz)
+      prevState.valid = true
+      prevState.focus = ''
+      return prevState
     })
   }
 
   _refresh () {
     this.setState((prevState, props) => {
-      //this._answer = _copyNested(this._initialAnswer)
-      this._step = _copyNested(this._initialStep)
-      this._order = _copyNested(this._initialOrder)
-
-      return {
-        quiz: _copyNested(this._initialQuiz),
-        valid: true,
-        focus: ''
-      }
+      prevState.quiz = _copyNested(this._initialQuiz)
+      prevState.valid = true
+      prevState.focus = ''
+      return prevState
     })
   }
 
   _save () {
     if (this.state.valid) {
       firebase.database().ref('quiz').set(this.state.quiz)
-      //firebase.database().ref('answer').set(this._answer)
-      firebase.database().ref('step').set(this._step)
     }
   }
 
   _validate (id) {
     let valid = true
-    if (id.length === 0 || id === 'new' || id === 'edit' || id === 'quiz_id') {
+    if (id.length === 0 
+      || id === 'new' 
+      || id === 'edit' 
+      || id === 'quiz_id'
+      || this.state.quiz[id]) {
       valid = false
     }
     return valid
@@ -80,64 +66,67 @@ class QuizListEdit extends Component {
 
   _validateAll (quiz) {
     let valid = true
-    Object.keys(quiz).forEach((key) => {
-      if (!this._validate(key)) {
+    Object.keys(quiz).forEach((id) => {
+      if (id.length === 0 
+        || id === 'new' 
+        || id === 'edit' 
+        || id === 'quiz_id') {
         valid = false
       }
     })
     return valid
   }
 
-  _onQuizDelete (event) {
-    const id = event.target.id
+  _addQuiz () {
+
     this.setState((prevState, props) => {
-      delete prevState.quiz[id]
-      //delete this._answer[id]
-      if (this._order[id]) { delete this._step[this._order[id].id] }
 
-      delete this._order[id]
-
+      prevState.quiz.quiz_id = {
+        id: 'quiz_id',
+        title: '',
+        description: '',
+        type: '',
+        option: [
+          {
+            title: '選項',
+            value: ''
+          }
+        ]
+      }
+      prevState.valid = false
+      prevState.focus = 'quiz_id'
       return prevState
     })
   }
 
-  _onInputChange (event) {
-    const target = event.target
+  _deleteQuiz (event) {
 
-    const id = target.id
-    const name = target.name
-    const value = target.type === 'checkbox' ? target.checked : target.value
+    const id = event.target.getAttribute('data-id')
 
     this.setState((prevState, props) => {
-      if (name === 'id') {
-        if (!this._validate(value)) {
-          prevState.valid = false
-          prevState.quiz[id].id = value
-          prevState.focus = id
-        } else {
-          if (prevState.quiz[value] !== undefined) {
-            prevState.valid = false
-            prevState.quiz[id].id = value
-            prevState.focus = id
-          } else {
-            prevState.quiz[value] = prevState.quiz[id]
-            prevState.quiz[value].id = value
-            prevState.focus = value
-            delete prevState.quiz[id]
+      delete prevState.quiz[id]
+      prevState.valid = this._validateAll(prevState.quiz)
+      return prevState
+    })
+  }
 
-            //this._answer[value] = this._answer[id] || ''
-            //delete this._answer[id]
+  _changeInput (event) {
+    const target = event.target
 
-            if (this._order[id]) {
-              this._step[this._order[id].id].quiz = value
-              this._order[value] = this._order[id]
-              this._order[value].current = value
-              delete this._order[id]
-            }
+    const id = target.getAttribute('data-id')
+    const value = target.value
 
-            prevState.valid = this._validateAll(prevState.quiz)
-          }
-        }
+    this.setState((prevState, props) => {
+      if (!this._validate(value) || prevState.quiz[value]) {
+        prevState.valid = false
+        prevState.quiz[id].id = value
+        prevState.focus = id
+      } else {
+        prevState.quiz[value] = prevState.quiz[id]
+        prevState.quiz[value].id = value
+        prevState.focus = value
+        delete prevState.quiz[id]
+        prevState.valid = this._validateAll(prevState.quiz)
       }
 
       return prevState
@@ -155,29 +144,23 @@ class QuizListEdit extends Component {
 
         return (
           <tr key={id}>
-            <td className='top aligned'>
-              <h4 className='ui header'>
-                <Link to={`/quiz/${id}/`}>{item.title}</Link>
-              </h4>
-            </td>
-            <td className='top aligned'><code className='code'>{item.type}</code></td>
-            <td className='top aligned'>
-              <div className='ui input'>
+            <td className='ten wide top aligned'>
+              <div className='ui fluid input'>
                 <input
                   type='text'
-                  id={id}
+                  data-id={id}
                   name='id'
                   value={item.id}
                   placeholder={id}
-                  onChange={this._onInputChange}
+                  onChange={this._changeInput}
                   autoFocus={this.state.focus === id}
                   />
               </div>
             </td>
             <td className='right aligned'>
-              <a id={id} onClick={this._onQuizDelete} className='ui mini red icon labeled button'>
-                <i className='icon trash' />
-                Delete
+              <a data-id={id} onClick={this._deleteQuiz} className='ui mini red icon labeled button'>
+                <i data-id={id} className='icon trash' />
+                刪除
               </a>
             </td>
           </tr>
@@ -191,10 +174,8 @@ class QuizListEdit extends Component {
         <table className='ui unstackable table'>
           <thead>
             <tr>
-              <th className='five wide'>題目</th>
-              <th className='two wide'>類型</th>
-              <th className='five wide'>代號 *</th>
-              <th className='four wide' />
+              <th>代號 *</th>
+              <th className='three wide' />
             </tr>
           </thead>
           <tbody>
@@ -202,19 +183,23 @@ class QuizListEdit extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <th colSpan={4} className='right aligned'>
+              <th colSpan={2} className='right aligned'>
                 <div className='ui mini buttons'>
                   <Link to='/quiz/' onClick={this._save} className={'ui icon labeled teal button ' + valid} >
                     <i className='icon checkmark' />
-                    Save
+                    儲存
                   </Link>
                   <Link to='/quiz/' className='ui icon labeled button' >
                     <i className='icon cancel' />
-                    Cancel
+                    取消
                   </Link>
                   <a onClick={this._refresh} className='ui icon labeled yellow button' >
                     <i className='icon refresh' />
-                    Refresh
+                    還原
+                  </a>
+                  <a onClick={this._addQuiz} className='ui icon labeled green button' >
+                    <i className='icon add' />
+                    新增測驗題
                   </a>
                 </div>
               </th>

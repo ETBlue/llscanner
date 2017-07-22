@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import firebase from 'firebase'
 import {HashLink as Link} from 'react-router-hash-link'
 
+import _copyNested from '../_shared/_copyNested'
+
 import Option from './Option'
 import './QuizView.css'
 
@@ -10,82 +12,57 @@ class QuizView extends Component {
     super(props)
 
     this.state = {
-      quizData: {
-        id: this.props.id,
-        title: this.props.title,
-        description: this.props.description,
-        type: this.props.type
-      },
-      optionData: this.props.option || (this.props.type === 'select' ? this._basicOptionData : {}),
-      answerData: this.props.answerData || '', // 使用者選擇的答案
-      answerOwner: this.props.answerOwner,
-
-      orderData: this.props.orderData,
-      routeData: this.props.routeData,
-      preconditionData: this.props.preconditionData
+      answerData: this.props.answerData,
     }
 
     this._onInputChange = this._onInputChange.bind(this)
     this._onInputSubmit = this._onInputSubmit.bind(this)
-    this._onSelect = this._onSelect.bind(this) // 根據使用者的選擇設定這題的答案
+    this._onSelect = this._onSelect.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => {
       return {
-        quizData: {
-          id: nextProps.id,
-          title: nextProps.title,
-          description: nextProps.description,
-          type: nextProps.type
-        },
-        optionData: nextProps.option || (nextProps.type === 'select' ? this._basicOptionData : {}),
-        answerData: nextProps.answerData || '', // 使用者選擇的答案
-        answerOwner: nextProps.answerOwner,
-
-        orderData: nextProps.orderData,
-        routeData: nextProps.routeData,
-        preconditionData: nextProps.preconditionData
+        answerData: nextProps.answerData,
       }
     })
   }
 
   _onInputChange (event) {
-    const answerData = event.target.value || ''
+
     this.setState((prevState, props) => {
-      return {
-        answerData: answerData
-      }
+      prevState.answerData = event.target.value || ''
+      return prevState
     })
   }
 
   _onInputSubmit (event) {
-    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(this.state.answerData)
+    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.quizData.id}`).set(this.state.answerData)
   }
 
   _onSelect (event) {
-    const answerData = event.target.getAttribute('data-value')
-    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.id}`).set(answerData)
+    firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.quizData.id}`).set(event.target.getAttribute('data-value'))
   }
 
   render () {
 
-    if (!this.state.orderData) {
-      return null
-    }
+    const orderData = this.props.orderData || {}
+
+    const quizData = this.props.quizData
+    const optionData = quizData.option
+    const routeData = quizData.route
+
+    const answerData = this.state.answerData
 
     let answerDataJSX
 
-    const routeData = this.state.routeData
-
-    if (this.state.quizData.type === 'select') {
-      const optionData = this.state.optionData
+    if (quizData.type === 'select') {
       if (optionData) {
         const optionDataJSX = optionData.map((item, key) => {
-          const className = this.state.answerData === item.value ? 'active' : ''
+          const className = answerData === item.value ? 'active' : ''
           const next = routeData ? 
-            (routeData[item.value] ? routeData[item.value] : this.state.orderData.next)
-            : this.state.orderData.next
+            (routeData[item.value] || orderData.next)
+            : orderData.next
           return (
             <Option
               {...item}
@@ -104,15 +81,15 @@ class QuizView extends Component {
       }
     }
 
-    if (this.state.quizData.type === 'input') {
-      const link = this.state.orderData.next ? '/quiz/' + this.state.orderData.next : '/answer/'
+    if (quizData.type === 'input') {
+      const link = orderData.next ? `/quiz/${orderData.next}/` : '/answer/'
       answerDataJSX = (
         <div className='ui action input'>
           <input
             type='text'
-            id={this.state.quizData.id}
-            placeholder={this.state.answerData}
-            value={this.state.answerData}
+            id={quizData.id}
+            placeholder={answerData}
+            value={answerData}
             onChange={this._onInputChange}
           />
           <Link
@@ -130,10 +107,10 @@ class QuizView extends Component {
       <section className='QuizView'>
         <div className='Question ui center aligned basic segment'>
           <h3 className='ui header'>
-            {this.state.quizData.title}
+            {quizData.title}
           </h3>
           <p>
-            {this.state.quizData.description}
+            {quizData.description}
           </p>
           { answerDataJSX }
         </div>

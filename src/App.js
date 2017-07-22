@@ -484,13 +484,11 @@ class App extends Component {
       return (
         <section className='Quiz'>
           <QuizView
-            {...quiz[quiz_id]}
+            quizData={quiz[quiz_id]}
             orderData={order[quiz_id]}
             routeData={route[quiz_id]}
-            preconditionData={precondition[quiz_id]}
             answerData={answer[quiz_id]}
             answerOwner={answerOwner}
-            answer={answer}
           />
           {authenticated ?
           <EditButton 
@@ -533,15 +531,13 @@ class App extends Component {
           return (
             <section className='Quiz'>
               <QuizView
-                {...quiz[quiz_id]}
+                quizData={quiz[quiz_id]}
                 orderData={order[quiz_id]}
                 routeData={route[quiz_id]}
-                preconditionData={precondition[quiz_id]}
                 answerData={answer[quiz_id]}
                 answerOwner={answerOwner}
-                answer={answer}
               />
-              <QuizEdit {...quiz[quiz_id]} />
+              <QuizEdit quizData={quiz[quiz_id]} />
             </section>
           )
         } else if ( precondition[quiz_id] && _evaluateCondition(precondition[quiz_id], answer).result === 'failed') {
@@ -552,13 +548,11 @@ class App extends Component {
           return (
             <section className='Quiz'>
               <QuizView
-                {...quiz[quiz_id]}
+                quizData={quiz[quiz_id]}
                 orderData={order[quiz_id]}
                 routeData={route[quiz_id]}
-                preconditionData={precondition[quiz_id]}
                 answerData={answer[quiz_id]}
                 answerOwner={answerOwner}
-                answer={answer}
               />
               {authenticated ?
                 <EditButton 
