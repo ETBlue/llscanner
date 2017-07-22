@@ -65,6 +65,10 @@ a .code {
   color: #4183c4;
 }
 
+.sortable-handle {
+  cursor: grabbing;
+}
+
 .ui.header .sub.header {
   margin-top: 0.5em!important;
   line-height: inherit!important;

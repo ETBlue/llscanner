@@ -200,7 +200,6 @@ class QuizEdit extends Component {
                 { quizData.type === 'select'
                   ? (<ReactSortable
                       tag='div'
-                      className='optionForm'
                       options={{
                         handle: '.sortable-handle',
                         draggable: '.OptionForm',

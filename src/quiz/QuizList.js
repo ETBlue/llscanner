@@ -39,7 +39,7 @@ class QuizList extends Component {
         <table className='ui table'>
           <thead>
             <tr>
-              <th>題目</th>
+              <th>代號</th>
               <th className='two wide'>類型</th>
               <th className='two wide'>排序</th>
             </tr>

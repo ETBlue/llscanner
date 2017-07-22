@@ -3,10 +3,6 @@
   text-align: left;
 }
 
-.OptionForm .sortable-handle {
-  cursor: grabbing;
-}
-
 .OptionForm .right.top.floated.icon.button {
   position: absolute;
   right: 0;
