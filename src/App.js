@@ -6,6 +6,7 @@ import {
   NavLink,
   Redirect
 } from 'react-router-dom'
+import {HashLink as Link} from 'react-router-hash-link'
 
 import firebase from 'firebase'
 import firebaseui from 'firebaseui';
@@ -34,11 +35,12 @@ import _evaluateCondition from './answer/_evaluateCondition'
 
 import QuizList from './quiz/QuizList'
 import QuizListEdit from './quiz/QuizListEdit'
-import QuizAdd from './quiz/QuizAdd'
 import QuizView from './quiz/QuizView'
 import QuizEdit from './quiz/QuizEdit'
 
 import logo from './logo.svg'
+import messegerMascot from './g0v-jian.jpg'
+import apologizingMascot from './g0v-jian-jp.jpg'
 import './App.css'
 
 class App extends Component {
@@ -275,30 +277,25 @@ class App extends Component {
   }
 
   render () {
-    const authenticated = this.state.authenticated
-    const user = this.state.user
 
     const quiz = this.state.quiz
-
-    const step = this.state.step
-    const order = this.state.order
     const route = this.state.route
     const precondition = this.state.precondition
 
+    const step = this.state.step
+    const order = this.state.order
+    const first = this.state.first
+
     const law = this.state.law
     const answer = this.state.answer
+
+    const authenticated = this.state.authenticated
+    const user = this.state.user
     const answerOwner = this.state.answerOwner
 
-    // generate new step id, used by both quizadd and stepadd
-
-    const stepIDs = Object.keys(step).map((id) => {
-      return parseInt(id, 10)
-    })
-    const newStepID = Math.max(...stepIDs) + 10
-
-    // collect quiz ids and answer values for step validation
     let quizIDs = []
     let answerValues = []
+
     Object.keys(quiz).forEach((id) => {
       quizIDs.push(id)
       if (quiz[id].type === 'select') {
@@ -313,9 +310,353 @@ class App extends Component {
       }
     })
 
-    const AnswerPage = ({law_id}) => {
+    const profileJSX = !authenticated ? null :
+      <div className='ui inverted grey basic marginless segment'>
+        <div className='ui bordered tiny circular image'
+          style={{border: "2px solid #fff"}}
+        >
+          <img src={user.photoURL} alt='avatar' />
+        </div>
+        <p>
+          {user.displayName}
+        </p>
+        <button className='ui fluid small basic inverted button'
+          onClick={this._signOut}
+        >
+          <i className='icon sign out' />
+          登出
+        </button>
+      </div>
+
+    const loginButtonJSX = authenticated ? null :
+      <div className='ui inverted grey basic marginless segment'>
+        <button className='ui fluid small basic inverted button'
+          onClick={this._showModal}
+        >
+          <i className='icon sign in' />
+          登入
+        </button>
+      </div>
+
+    const bugReportJSX = (
+      <section>
+        <img className='ui centered medium image' src={apologizingMascot} />
+        <p>你看得到這頁，表示我 bug 了！請把目前的網址貼給開發者。。。</p>
+        <p>
+          <a className='ui small icon labeled button'
+            href='https://github.com/ETBlue/llscanner/issues/new'
+            target='_blank'
+          >
+            <i className='icon github' />
+            回報 bug 去（需 GitHub 帳號）
+          </a>
+        </p>
+      </section>
+    )
+
+    const requireAuthJSX = (
+      <section>
+        <img className='ui centered medium image' src={messegerMascot} />
+        <p>哈咤～～你需要登入才能編輯喔！</p>
+        <p>
+          <button className='ui small icon labeled button'
+            onClick={this._showModal}
+          >
+            <i className='icon sign in' />
+            登入
+          </button>
+        </p>
+      </section>
+    )
+
+    const HomePage = () => {
+
+      const quiz_id = first
+
+      return (
+        <section className='Quiz'>
+          <QuizView
+            quizData={quiz[quiz_id]}
+            orderData={order[quiz_id]}
+            routeData={route[quiz_id]}
+            answerData={answer[quiz_id]}
+            answerOwner={answerOwner}
+          />
+          {authenticated ?
+          <EditButton 
+            link={'/quiz/' + quiz_id + '/edit'} 
+          /> : null
+          }
+        </section>
+      )
+    }
+
+    const QuizPage = ({ quiz_id, action }) => {
+
+      if (!quiz_id) {
+        return (
+          <QuizList
+            quiz={quiz}
+            step={step}
+            authenticated={authenticated}
+          />
+        )
+      }
+
+      if (quiz_id === 'edit' && !authenticated) {
+        return requireAuthJSX
+      }
+
+      if (quiz_id === 'edit' && authenticated) {
+        return (
+          <QuizListEdit
+            quiz={quiz}
+          />
+        )
+      }
+
+      if (!quiz[quiz_id]) {
+        return (
+          <section>
+            <img className='ui centered medium image' src={messegerMascot} />
+            <p>哈咤～～題庫裡沒有<span className='code'>{quiz_id}</span>這一筆！</p>
+            <p>
+              <Link className='ui icon labeled mini button' to='/quiz/'>
+                <i className='left arrow icon' />
+                回測驗題列表
+              </Link>
+            </p>
+          </section>
+        )
+      }
+
+      if (!action && 
+        precondition[quiz_id] && 
+        _evaluateCondition(precondition[quiz_id], answer).result === 'failed') {
+        return (
+          <Redirect to={`/quiz/${order[quiz_id].next}/`}/>
+        )
+      }
+
+      if (!action || action !== 'edit') {
+        return (
+          <section className='Quiz'>
+            <QuizView
+              quizData={quiz[quiz_id]}
+              orderData={order[quiz_id]}
+              routeData={route[quiz_id]}
+              answerData={answer[quiz_id]}
+              answerOwner={answerOwner}
+            />
+            {authenticated ?
+              <EditButton 
+                link={'/quiz/' + quiz_id + '/edit'} 
+              /> : null
+            }
+          </section>
+        )
+      }
+
+      if (!authenticated) {
+        return requireAuthJSX
+      }
+
+      if (authenticated) {
+        return (
+          <section className='Quiz'>
+            <QuizView
+              quizData={quiz[quiz_id]}
+              orderData={order[quiz_id]}
+              routeData={route[quiz_id]}
+              answerData={answer[quiz_id]}
+              answerOwner={answerOwner}
+            />
+            <QuizEdit quizData={quiz[quiz_id]} />
+          </section>
+        )
+      }
+
+      return bugReportJSX
+
+    }
+
+    const StepPage = ({ step_id, action }) => {
+
+      if (!step_id) {
+        return (
+          <StepList
+            step={step}
+            quiz={quiz}
+            authenticated={authenticated}
+          />
+        )
+      }
+
+      if (step_id === 'edit' && !authenticated) {
+        return requireAuthJSX
+      }
+
+      if (step_id === 'edit' && authenticated) {
+        return (
+          <StepListEdit
+            step={step}
+            quiz={quiz}
+          />
+        )
+      }
+
+      if (!step[step_id]) {
+        return (
+          <section>
+            <img className='ui centered medium image' src={messegerMascot} />
+            <p>哈咤～～故事線裡沒有<span className='code'>{step_id}</span>這個步驟！</p>
+            <p>
+              <Link className='ui icon labeled mini button' to='/step/'>
+                <i className='left arrow icon' />
+                回故事線
+              </Link>
+            </p>
+          </section>
+        )
+      }
+
+      if (!action || action !== 'edit') {
+        return (
+          <section className='Step'>
+            <StepView
+              stepData={step[step_id]}
+              quizData={quiz[step[step_id].quiz]}
+            />
+            {authenticated ?
+              <EditButton 
+                link={'/step/' + step_id + '/edit'} 
+              /> : null
+            }
+          </section>
+        )
+      }
+
+      if (!authenticated) {
+        return requireAuthJSX
+      }
+
+      if (authenticated) {
+        return (
+          <section className='Step'>
+            <StepView
+              stepData={step[step_id]}
+              quizData={quiz[step[step_id].quiz]}
+            />
+            <StepEdit
+              stepData={step[step_id]}
+              quizIDs={quizIDs}
+              answerValues={answerValues}
+            />
+          </section>
+        )
+      }
+
+      return bugReportJSX
+    }
+
+    const LawPage = ({law_id, article_id, action}) => {
 
       if (!law_id) {
+        return <LawList laws={_laws}/>
+      }
+
+      const lawData = _laws[law_id]
+
+      if (!lawData || !lawData.law_data) {
+        return (
+          <section>
+            <img className='ui centered medium image' src={messegerMascot} />
+            <p>哈咤～～這網站沒有<span className='code'>{law_id}</span>的資料！</p>
+            <p>
+              <Link className='ui icon labeled mini button' to='/law/'>
+                <i className='left arrow icon' />
+                回法規列表
+              </Link>
+            </p>
+          </section>
+        )
+      }
+
+      const lawObject = this._getLawObject(lawData)
+
+      const rulesData = law[law_id] || []
+
+      if (!article_id) {
+        return (
+          <ArticleList 
+            lawData={lawData} 
+            rulesData={rulesData}
+          />
+        )
+      }
+
+      if (!lawObject[article_id]) {
+        return (
+          <section>
+            <img className='ui centered medium image' src={messegerMascot} />
+            <p>哈咤～～<span className='code'>{law_id}</span>裡面沒有<span className='code'>{article_id}</span>這一條！</p>
+            <p>
+              <Link className='ui icon labeled mini button' to={`/law/${law_id}/`}>
+                <i className='left arrow icon' />
+                回{law_id}
+              </Link>
+            </p>
+          </section>
+        )
+      }
+
+      if (!action || action !== 'edit') {
+        return (
+          <section className='Article'>
+            <ArticleView 
+              lawID={law_id} 
+              articleID={article_id} 
+              articleData={lawObject[article_id]}
+              ruleData={rulesData[article_id]} 
+            />
+            {authenticated ?
+              <EditButton 
+                link={'/law/' + law_id + '/' + article_id + '/edit'} 
+              /> : null
+            }
+          </section>
+        )
+      }
+
+      if (!authenticated) {
+        return requireAuthJSX
+      }
+
+      if (authenticated) {
+        return (
+          <section className='Article'>
+            <ArticleView 
+              lawID={law_id} 
+              articleID={article_id} 
+              articleData={lawObject[article_id]}
+              ruleData={rulesData[article_id]} 
+            />
+            <ArticleEdit 
+              lawID={law_id} 
+              articleID={article_id} 
+              ruleData={rulesData[article_id]} 
+              quizIDs={quizIDs}
+            />
+          </section>
+        )
+      }
+
+      return bugReportJSX
+    }
+
+    const AnswerPage = ({law_id}) => {
+
+      if (!law_id || !_laws[law_id]) {
         return (
           <AnswerView
             answerData={answer}
@@ -342,262 +683,6 @@ class App extends Component {
       )
 
     }
-
-    const LawPage = ({law_id, article_id, action}) => {
-
-      const lawData = _laws[law_id]
-      if (!law_id || !lawData || !lawData.law_data) {
-        return <LawList laws={_laws}/>
-      }
-
-      const lawObject = this._getLawObject(lawData)
-
-      const rulesData = law[law_id] || []
-
-      if (!article_id) {
-        return (
-          <ArticleList 
-            lawData={lawData} 
-            rulesData={rulesData}
-          />
-        )
-      }
-
-      if (article_id && !action) {
-        return (
-          <section className='Article'>
-            <ArticleView 
-              lawID={law_id} 
-              articleID={article_id} 
-              articleData={lawObject[article_id]}
-              ruleData={rulesData[article_id]} 
-            />
-            {authenticated ?
-              <EditButton 
-                link={'/law/' + law_id + '/' + article_id + '/edit'} 
-              /> : null
-            }
-          </section>
-        )
-      }
-
-      if (article_id && action === 'edit' && authenticated) {
-        return (
-          <section className='Article'>
-            <ArticleView 
-              lawID={law_id} 
-              articleID={article_id} 
-              articleData={lawObject[article_id]}
-              ruleData={rulesData[article_id]} 
-            />
-            <ArticleEdit 
-              lawID={law_id} 
-              articleID={article_id} 
-              ruleData={rulesData[article_id]} 
-              quizIDs={quizIDs}
-            />
-          </section>
-        )
-      }
-
-      return <LawList laws={_laws}/>
-
-    }
-
-    const StepPage = ({ step_id, action }) => {
-
-      if (!step_id) {
-        return (
-          <StepList
-            step={step}
-            quiz={quiz}
-            authenticated={authenticated}
-          />
-        )
-      }
-
-      if (step_id === 'edit' && authenticated) {
-        return (
-          <StepListEdit
-            step={step}
-            quiz={quiz}
-          />
-        )
-      }
-
-      if (step_id === 'new' && authenticated) {
-        return (
-          <StepAdd
-            step={step}
-            quiz={quiz}
-            stepID={newStepID}
-            quizIDs={quizIDs}
-          />
-        )
-      }
-
-      if (step[step_id] && !action) {
-        return (
-          <section className='Step'>
-            <StepView
-              stepData={step[step_id]}
-              quizData={quiz[step[step_id].quiz]}
-            />
-            {authenticated ?
-              <EditButton 
-                link={'/step/' + step_id + '/edit'} 
-              /> : null
-            }
-          </section>
-        )
-      }
-
-      if (step[step_id] && action === 'edit' && authenticated) {
-        return (
-          <section className='Step'>
-            <StepView
-              stepData={step[step_id]}
-              quizData={quiz[step[step_id].quiz]}
-            />
-            <StepEdit
-              stepData={step[step_id]}
-              quizIDs={quizIDs}
-              answerValues={answerValues}
-            />
-          </section>
-        )
-      }
-
-      return (
-        <StepList
-          step={step}
-          quiz={quiz}
-          authenticated={authenticated}
-        />
-      )
-    }
-
-    const HomePage = () => {
-
-      const quiz_id = this.state.first
-
-      return (
-        <section className='Quiz'>
-          <QuizView
-            quizData={quiz[quiz_id]}
-            orderData={order[quiz_id]}
-            routeData={route[quiz_id]}
-            answerData={answer[quiz_id]}
-            answerOwner={answerOwner}
-          />
-          {authenticated ?
-          <EditButton 
-            link={'/quiz/' + quiz_id + '/edit'} 
-          /> : null
-          }
-        </section>
-      )
-    }
-
-    const QuizPage = ({ quiz_id, action }) => {
-
-      if (quiz_id === 'new' && authenticated) {
-        return (
-          <section className='Quiz'>
-            <div className='ui marginless basic segment'>
-              <h2 className='ui header'>新增測驗題</h2>
-            </div>
-            <QuizAdd
-              quiz={quiz}
-              stepID={newStepID}
-            />
-          </section>
-        )
-      }
-
-      if (quiz_id === 'edit' && authenticated) {
-        return (
-          <QuizListEdit
-            quiz={quiz}
-            answer={answer}
-            step={step}
-            order={order}
-          />
-        )
-      }
-
-      if (quiz[quiz_id]) {
-        if (action === 'edit' && authenticated) {
-          return (
-            <section className='Quiz'>
-              <QuizView
-                quizData={quiz[quiz_id]}
-                orderData={order[quiz_id]}
-                routeData={route[quiz_id]}
-                answerData={answer[quiz_id]}
-                answerOwner={answerOwner}
-              />
-              <QuizEdit quizData={quiz[quiz_id]} />
-            </section>
-          )
-        } else if ( precondition[quiz_id] && _evaluateCondition(precondition[quiz_id], answer).result === 'failed') {
-          return (
-            <Redirect to={`/quiz/${order[quiz_id].next}/`}/>
-          )
-        } else {
-          return (
-            <section className='Quiz'>
-              <QuizView
-                quizData={quiz[quiz_id]}
-                orderData={order[quiz_id]}
-                routeData={route[quiz_id]}
-                answerData={answer[quiz_id]}
-                answerOwner={answerOwner}
-              />
-              {authenticated ?
-                <EditButton 
-                  link={'/quiz/' + quiz_id + '/edit'} 
-                /> : null
-              }
-            </section>
-          )
-        }
-      }
-
-      return (
-        <QuizList
-          quiz={quiz}
-          step={step}
-          authenticated={authenticated}
-        />
-      )
-    }
-
-    const profileJSX = !authenticated ? null :
-      <div className='ui inverted grey basic marginless segment'>
-        <div className='ui bordered tiny circular image'
-          style={{border: "2px solid #fff"}}
-        >
-          <img src={user.photoURL} alt='avatar' />
-        </div>
-        <p>
-          {user.displayName}
-        </p>
-        <button className='ui fluid small basic inverted button'
-          onClick={this._signOut}
-        >
-          登出
-        </button>
-      </div>
-
-    const loginButtonJSX = authenticated ? null :
-      <div className='ui inverted grey basic marginless segment'>
-        <button className='ui fluid small basic inverted button'
-          onClick={this._showModal}
-        >
-          登入
-        </button>
-      </div>
 
     return (
 
