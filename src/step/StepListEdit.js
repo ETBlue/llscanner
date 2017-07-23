@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import {HashLink as Link} from 'react-router-hash-link'
+import ReactSortable from 'react-sortablejs'
 
 import _copyNested from '../_shared/_copyNested'
 
@@ -11,59 +12,48 @@ class StepListEdit extends Component {
     // to be rendered
     this.state = {
       step: _copyNested(this.props.step),
-      quiz: _copyNested(this.props.quiz),
       valid: true,
-      focus: ''
     }
 
-    // form control functions
-    this._onInputChange = this._onInputChange.bind(this)
-    this._onStepDelete = this._onStepDelete.bind(this)
+    this._initialState = _copyNested(this.state)
+
+    this._changeInput = this._changeInput.bind(this)
+    this._changeStepOrder = this._changeStepOrder.bind(this)
+    this._deleteStep = this._deleteStep.bind(this)
+    this._addStep = this._addStep.bind(this)
+
     this._validate = this._validate.bind(this)
+    this._validateAll = this._validateAll.bind(this)
+
     this._refresh = this._refresh.bind(this)
     this._save = this._save.bind(this)
-
-    // data initialization
-    this._initialStep = _copyNested(this.props.step)
-    this._initialQuiz = _copyNested(this.props.quiz)
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState((prevState, props) => {
-      // data initialization... again
-      this._initialStep = _copyNested(nextProps.step)
-      this._initialQuiz = _copyNested(nextProps.quiz)
-
-      return {
-        step: _copyNested(nextProps.step),
-        quiz: _copyNested(nextProps.quiz),
-        valid: true,
-        focus: ''
-      }
+      prevState.step = _copyNested(nextProps.step)
+      prevState.valid = true
+      this._initialState = _copyNested(prevState)
+      return prevState
     })
   }
 
   _refresh () {
     this.setState((prevState, props) => {
-      return {
-        step: _copyNested(this._initialStep),
-        quiz: _copyNested(this._initialQuiz),
-        valid: true,
-        focus: ''
-      }
+      prevState = _copyNested(this._initialState)
+      return prevState
     })
   }
 
   _save () {
     if (this.state.valid) {
       firebase.database().ref('step').set(this.state.step)
-      firebase.database().ref('quiz').set(this.state.quiz)
     }
   }
 
-  _validate (id) {
+  _validate (quiz_id) {
     let valid = true
-    if (id.length === 0 || !parseInt(id, 10)) {
+    if (quiz_id.length === 0) {
       valid = false
     }
     return valid
@@ -71,217 +61,135 @@ class StepListEdit extends Component {
 
   _validateAll (step) {
     let valid = true
-    Object.keys(step).forEach((key) => {
-      if (step[key] && !this._validate(key)) {
+    step.forEach((quiz_id) => {
+      if (!this._validate(quiz_id)) {
         valid = false
       }
     })
     return valid
   }
 
-  _onStepDelete (event) {
-    const id = event.target.id
+  _deleteStep (event) {
+    const id = event.target.getAttribute('data-id')
     this.setState((prevState, props) => {
-      delete prevState.step[id]
+      prevState.step.splice(parseInt(id, 10), 1)
       return prevState
     })
   }
 
-  _onInputChange (event) {
-    const target = event.target
+  _addStep () {
+    this.setState((prevState, props) => {
+      prevState.step.push('')
+      return prevState
+    })
+  }
 
-    const id = target.id
-    const name = target.name
-    const value = target.type === 'checkbox' ? target.checked : target.value
+  _changeInput (event) {
+
+    const target = event.target
+    const id = target.getAttribute('data-id')
+    const value = target.value
 
     this.setState((prevState, props) => {
-      if (name === 'id') {
-        if (!this._validate(value)) {
-          prevState.valid = false
-          prevState.step[id].id = value
-          prevState.focus = id
-        } else {
-          if (prevState.step[value] !== undefined) {
-            prevState.valid = false
-            prevState.step[id].id = value
-            prevState.focus = id
-          } else {
-            prevState.step[value] = prevState.step[id]
-            prevState.step[value].id = value
-            prevState.focus = value
-            delete prevState.step[id]
+      prevState.step[parseInt(id, 10)] = value
+      prevState.valid = this._validateAll(prevState.step)
+      return prevState
+    })
+  }
 
-            prevState.valid = this._validateAll(prevState.step)
-          }
-        }
-      }
+  _changeStepOrder (order) {
+
+    this.setState((prevState, props) => {
+      const newStep = order.map((id) => {
+        return prevState.step[id]
+      })
+      prevState.step = newStep
 
       return prevState
     })
   }
 
   render () {
-    let stepListJSX
-    const valid = this.state.valid ? '' : 'disabled'
+
     const step = this.state.step
+    const valid = this.state.valid ? '' : 'disabled'
 
-    if (step) {
-      stepListJSX = Object.keys(step).map((id) => {
-        const item = step[id]
+    const stepListJSX = step.map((item, id) => {
 
-        if (item) {
-          let conditionJSX
-          let routeJSX
-
-          if (item.condition) {
-            conditionJSX = Object.keys(item.condition).map((key) => {
-              if (item.condition[key]) {
-                const listJSX = Object.keys(item.condition[key]).map((id) => {
-                  const rule = item.condition[key][id]
-                  const answer = rule.answer.split(',').map((str, index, arr) => {
-                    return (
-                      <span key={str}>
-                        <code className='code'>{str.trim()}</code>
-                        {index < arr.length - 1 ? ', ' : '' }
-                      </span>
-                    )
-                  })
-
-                  return (
-                    <div key={id} className='ui vertical segment'>
-                      <div className='ui list'>
-                        <div className='item'>
-                          <i className='icon flag' />
-                          <span className='content'>
-                            <code className='code'>{rule.id}</code>
-                          </span>
-                        </div>
-                        <div className='item'>
-                          <i className='icon setting' />
-                          <span className='content'>
-                            <code className='code'>{rule.condition}</code>
-                          </span>
-                        </div>
-                        <div className='item'>
-                          <i className='icon tags' />
-                          <span className='content'>
-                            {answer}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-                return (
-                  <div key={key} className='Condition'>
-                    <h5 className='ui dividing header'>
-                      進入條件 {key}
-                    </h5>
-                    {listJSX}
-                  </div>
-                )
-              } else {
-                return null
-              }
-            })
-          }
-
-          if (item.route) {
-            const listJSX = Object.keys(item.route).map((key) => {
-              return (
-                <div key={key} className='item'>
-                  <i className='icon random' />
-                  <span className='content'>
-                    <code className='code'>{item.route[key].id}</code>
-                  →
-                  <code className='code'>{item.route[key].quiz}</code>
-                  </span>
-                </div>
-              )
-            })
-            routeJSX = (
-              <div>
-                <h5 className='ui dividing header'>
-              離開路徑
-              </h5>
-                <div className='ui divided relaxed list'>
-                  {listJSX}
-                </div>
-              </div>
-          )
-          }
-
-          return (
-            <tr key={id}>
-              <td className='top aligned'>
-                <h4 className='ui header'>
-                  <Link to={'/step/' + item.id}>
-                    <code>
-                      {item.quiz}
-                    </code>
-                  </Link>
-                  <div className='sub header'>
-                    {this.state.quiz[item.quiz].title}
-                  </div>
-                </h4>
-              </td>
-              <td className='top aligned'>
-                <div className='ui input'>
-                  <input
-                    type='text'
-                    size='3'
-                    id={id}
-                    name='id'
-                    value={item.id}
-                    placeholder={id}
-                    onChange={this._onInputChange}
-                    autoFocus={this.state.focus === id}
-                  />
-                </div>
-              </td>
-              <td className='top aligned'>{conditionJSX}{routeJSX}</td>
-              <td className='right aligned'>
-                <a id={id} onClick={this._onStepDelete} className='ui mini red icon labeled button'>
-                  <i className='icon trash' />
-                Delete
-              </a>
-              </td>
-            </tr>
-          )
-        } else { return null }
-      })
-    }
+      return (
+        <tr key={id} data-id={id} className='sortable-item' >
+          <td className='top aligned'>
+            <i className='sort icon sortable-handle' />
+            {id}
+          </td>
+          <td className='top aligned'>
+            <div className='ui fluid input'>
+              <input
+                type='text'
+                data-id={id}
+                value={item}
+                placeholder={item}
+                onChange={this._changeInput}
+              />
+            </div>
+          </td>
+          <td className='right aligned'>
+            <a className='ui mini red icon button'
+              data-id={id} onClick={this._deleteStep} 
+            >
+              <i data-id={id} className='icon trash' />
+          </a>
+          </td>
+        </tr>
+      )
+    })
 
     return (
       <div className='StepListEdit ui basic segment'>
-        <h2 className='ui header'>編輯步驟列表</h2>
+        <h2 className='ui header'>編輯故事線</h2>
         <table className='ui unstackable table'>
           <thead>
             <tr>
-              <th className='four wide'>題目</th>
-              <th className='two wide'>排序 *</th>
-              <th className='six wide'>進出規則</th>
-              <th className='four wide' />
+              <th className='two wide'>排序</th>
+              <th className=''>測驗題</th>
+              <th className='two wide' />
             </tr>
           </thead>
-          <tbody>
-            { stepListJSX }
-          </tbody>
+          <ReactSortable
+            tag='tbody'
+            options={{
+              handle: '.sortable-handle',
+              draggable: '.sortable-item',
+              filter: ".sortable-ignored",
+              ghostClass: "sortable-ghost",
+              chosenClass: "sortable-chosen",
+              dragClass: "sortable-drag",
+            }}
+            onChange={(order, sortable, evt) => {
+              this._changeStepOrder(order);
+            }}
+          >
+            {stepListJSX}
+          </ReactSortable>
           <tfoot>
             <tr>
-              <th colSpan={4} className='right aligned'>
+              <th colSpan={3} className='right aligned'>
                 <div className='ui mini buttons'>
                   <Link to='/step/' onClick={this._save} className={'ui icon labeled teal button ' + valid} >
                     <i className='icon checkmark' />
-                    Save
+                    儲存
                   </Link>
                   <Link to='/step/' className='ui icon labeled button' >
                     <i className='icon cancel' />
-                    Cancel
+                    取消
                   </Link>
                   <a onClick={this._refresh} className='ui icon labeled yellow button' >
                     <i className='icon refresh' />
-                    Refresh
+                    還原
+                  </a>
+                  <a onClick={this._addStep} className='ui icon labeled green button' >
+                    <i className='icon add' />
+                    新增
                   </a>
                 </div>
               </th>

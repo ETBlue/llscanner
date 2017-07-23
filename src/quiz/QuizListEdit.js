@@ -158,9 +158,10 @@ class QuizListEdit extends Component {
               </div>
             </td>
             <td className='right aligned'>
-              <a data-id={id} onClick={this._deleteQuiz} className='ui mini red icon labeled button'>
+              <a className='ui mini red icon button'
+                data-id={id} onClick={this._deleteQuiz}
+              >
                 <i data-id={id} className='icon trash' />
-                刪除
               </a>
             </td>
           </tr>
@@ -199,7 +200,7 @@ class QuizListEdit extends Component {
                   </a>
                   <a onClick={this._addQuiz} className='ui icon labeled green button' >
                     <i className='icon add' />
-                    新增測驗題
+                    新增
                   </a>
                 </div>
               </th>
