@@ -136,6 +136,7 @@ class QuizListEdit extends Component {
   render () {
     const valid = this.state.valid ? '' : 'disabled'
     const quiz = this.state.quiz
+    const focus = this.state.focus
 
     let quizListJSX
     if (quiz) {
@@ -153,7 +154,7 @@ class QuizListEdit extends Component {
                   value={item.id}
                   placeholder={id}
                   onChange={this._changeInput}
-                  autoFocus={this.state.focus === id}
+                  autoFocus={focus === id ? true : false}
                   />
               </div>
             </td>
