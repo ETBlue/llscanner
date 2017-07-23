@@ -12,7 +12,7 @@ class StepList extends Component {
     const quiz = this.props.quiz
     const authenticated = this.props.authenticated
 
-    if (step) {
+    if (step && quiz) {
 
       stepListJSX = step.map((item, id) => {
 

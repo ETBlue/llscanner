@@ -4,7 +4,11 @@ import _viewRule from '../_shared/_viewRule'
 
 export default (item) => {
 
-  if (!item || !item.precondition || !item.precondition.rule) {
+  if (!item) {
+    return null
+  }
+
+  if (!item.precondition || !item.precondition.rule) {
     return '無'
   }
 

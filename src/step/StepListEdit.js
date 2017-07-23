@@ -73,6 +73,7 @@ class StepListEdit extends Component {
     const id = event.target.getAttribute('data-id')
     this.setState((prevState, props) => {
       prevState.step.splice(parseInt(id, 10), 1)
+      prevState.valid = this._validateAll(prevState.step)
       return prevState
     })
   }
@@ -80,6 +81,7 @@ class StepListEdit extends Component {
   _addStep () {
     this.setState((prevState, props) => {
       prevState.step.push('')
+      prevState.valid = this._validateAll(prevState.step)
       return prevState
     })
   }

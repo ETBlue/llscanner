@@ -8,33 +8,31 @@ class StepView extends Component {
 
   render () {
 
-    const step = this.props.stepData
-    const quiz = this.props.quizData
+    const stepIndex = this.props.stepIndex
+    const quizID = this.props.quizID
+    const quizData = this.props.quizData
+
+    if (!quizData) {
+      return null
+    }
 
     return (
       <section className='StepView ui basic segment'>
         <h3 className='ui header'>
           <span className='ui horizontal label'>
-          步驟 {step.id}
+          步驟 {stepIndex}
           </span>
-          <code>
-            {step.quiz}
-          </code>
+          {quizID}
         </h3>
-        <p>
-          <Link to={'/quiz/' + step.quiz} >
-            {quiz.title}
-          </Link>
-        </p>
         <hr className='ui hidden divider' />
         <div className='ui two column stackable grid'>
           <div className='left aligned column'>
             <h4 className='ui dividing header'>進入條件</h4>
-            {_viewPrecondition(step.precondition)}
+            {_viewPrecondition(quizData.precondition)}
           </div>
           <div className='left aligned column'>
             <h4 className='ui dividing header'>離開路徑</h4>
-            {_viewRoute(step.route)}
+            {_viewRoute(quizData.route)}
           </div>
         </div>
       </section>

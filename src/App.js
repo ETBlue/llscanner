@@ -499,12 +499,11 @@ class App extends Component {
         return (
           <StepListEdit
             step={step}
-            quiz={quiz}
           />
         )
       }
 
-      if (!step[step_id]) {
+      if (!step.includes(step_id)) {
         return (
           <section>
             <img className='ui centered medium image' src={messegerMascot} />
@@ -519,16 +518,29 @@ class App extends Component {
         )
       }
 
+      const stepIndex = step.indexOf(step_id)
+
+      if (quiz && !quiz[step_id]) {
+        firebase.database().ref(`quiz/${step_id}`).set({
+          id: step_id,
+          title: '',
+          description: '',
+          type: '',
+        })
+        return null
+      }
+
       if (!action || action !== 'edit') {
         return (
           <section className='Step'>
             <StepView
-              stepData={step[step_id]}
-              quizData={quiz[step[step_id].quiz]}
+              quizData={quiz[step_id]}
+              quizID={step_id}
+              stepIndex={stepIndex}
             />
             {authenticated ?
               <EditButton 
-                link={'/step/' + step_id + '/edit'} 
+                link={`/step/${step_id}/edit`} 
               /> : null
             }
           </section>
@@ -543,11 +555,12 @@ class App extends Component {
         return (
           <section className='Step'>
             <StepView
-              stepData={step[step_id]}
-              quizData={quiz[step[step_id].quiz]}
+              quizData={quiz[step_id]}
+              quizID={step_id}
+              stepIndex={stepIndex}
             />
             <StepEdit
-              stepData={step[step_id]}
+              quizData={quiz[step_id]}
               quizIDs={quizIDs}
               answerValues={answerValues}
             />
