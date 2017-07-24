@@ -23,7 +23,7 @@ class StepList extends Component {
             </td>
             <td className='top aligned'>
               <h4 className='ui header'>
-                <Link to={'/step/' + item}>
+                <Link to={`/step/${item}/`}>
                   <code className='code'>
                     {item}
                   </code>

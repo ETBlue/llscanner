@@ -561,6 +561,7 @@ class App extends Component {
             />
             <StepEdit
               quizData={quiz[step_id]}
+              quizID={step_id}
               quizIDs={quizIDs}
               answerValues={answerValues}
             />

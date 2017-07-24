@@ -4,21 +4,14 @@ class RouteForm extends Component {
 
   render () {
 
-    const routeID = this.props.routeID
-    const answer = this.props.answer
-    const next = this.props.next
+    const group = this.props.group
+    const id = this.props.id
+    const value = this.props.value
 
     const quizIDs = this.props.quizIDs
-    const answerValues = this.props.answerValues
 
     const changeInput = this.props.changeInput
     const deleteRoute = this.props.deleteRoute
-
-    const answerOptionJSX = !answerValues ? [] : answerValues.map((answer, index) => {
-      return (
-        <option key={index} value={answer} />
-      )
-    })
 
     const quizOptionJSX = !quizIDs ? [] : quizIDs.map((quizID, index) => {
       return (
@@ -29,37 +22,17 @@ class RouteForm extends Component {
     return (
       <div className='RouteForm' >
         <header className='_header'>
-          <h5 className='ui header'>路徑 {routeID}</h5>
-          <a className='ui _rightTopFloated red icon labeled mini button'
-            data-routeID={routeID}
-            onClick={deleteRoute}
-          >
-            <i className='icon trash' />
-            刪除路徑 {routeID}
-          </a>
+          <h5 className='ui header'></h5>
         </header>
-        <div className={'field ' + (answer ? '' : 'error')}>
-          <label>答案值 *</label>
-          <input
-            type='text'
-            data-routeID={routeID}
-            value={answer}
-            onChange={changeInput}
-            placeholder='此題的答案值'
-            list='answerValues'
-          />
-          <datalist id='answerValues'>
-            { answerOptionJSX }
-          </datalist>
-        </div>
         <div className='field'>
-          <label>題目代號</label>
+          <label>回答<span className='code'>{id}</span>則導向</label>
           <input
             type='text'
-            data-routeID={routeID}
-            value={next}
+            data-group={group}
+            data-id={id}
+            value={value}
             onChange={changeInput}
-            placeholder='將前往的下一題代號'
+            placeholder='下一題代號，留空則採用預設'
             list='quizIDs'
           />
           <datalist id='quizIDs'>

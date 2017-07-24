@@ -264,7 +264,7 @@ class ArticleEdit extends Component {
 
     const actionJSX = (
       <ActionButton
-        link={'/law/' + lawID + '/' + articleID}
+        link={`/law/${lawID}/${articleID}/`}
         save={this._save}
         className={valid ? '' : ' disabled'}
         refresh={this._refresh}

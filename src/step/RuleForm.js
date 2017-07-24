@@ -6,7 +6,8 @@ import _viewLogic from '../_shared/_viewLogic'
 class RuleForm extends Component {
   render () {
 
-    const ruleID = this.props.ruleID
+    const id = this.props.id
+    const group = this.props.group
     const logic = this.props.logic || ''
     const target = this.props.target || ''
     const value = this.props.value || ''
@@ -23,7 +24,8 @@ class RuleForm extends Component {
           <span className='ui radio checkbox'>
             <input
               type='radio'
-              data-ruleID={ruleID}
+              data-group={group}
+              data-id={id}
               value={logicOption}
               checked={logicOption === logic}
               onClick={selectRadio}
@@ -46,21 +48,21 @@ class RuleForm extends Component {
     return (
       <div className='RuleForm'>
         <header className='_header'>
-          <h5 className='ui header'>條件 {ruleID}</h5>
-          <a className='ui _rightTopFloated red icon labeled mini button'
-            data-ruleID={ruleID}
+          <h5 className='ui header'>條件 {id}</h5>
+          <a className='ui _rightTopFloated red icon mini button'
+            data-id={id}
             onClick={deleteRule}
           >
-            <i className='icon trash' />
-            刪除條件 {ruleID}
+            <i data-id={id} className='icon trash' />
           </a>
         </header>
         <div className={'field ' + (target.length > 0 ? '' : 'error')}>
           <label>標的 *</label>
           <input
             type='text'
-            data-ruleID={ruleID}
-            data-fieldID='target'
+            data-group={group}
+            data-id={id}
+            name='target'
             value={target}
             onChange={changeInput}
             placeholder='目標問題的代號'
@@ -78,8 +80,9 @@ class RuleForm extends Component {
           <label>答案值</label>
           <input
             type='text'
-            data-ruleID={ruleID}
-            data-fieldID='value'
+            data-group={group}
+            data-id={id}
+            name='value'
             value={value}
             onChange={changeInput}
             placeholder='若有多個以 , 隔開'

@@ -16,41 +16,29 @@ class StepEdit extends Component {
 
     this.state = {
       valid: true,
-      stepData: _copyNested(this.props.stepData),
+      quizData: _copyNested(this.props.quizData),
     }
 
-    this._initial = {
-      stepData: _copyNested(this.props.stepData),
-    }
+    this._initialState = _copyNested(this.state)
 
     this._basic = {
-      condition: {
-        logic: 'and',
-        rule: [],
-      },
       rule: {
         target: '',
         logic: 'equal_to',
         value: '',
       },
-      route: {
-        answer: '',
-        next: '',
+      condition: {
+        logic: 'and',
+        rule: [],
       },
-      stepData: {
-        id: '',
-        quiz: '',
-      }
     }
 
     this._addRule = this._addRule.bind(this)
     this._deleteRule = this._deleteRule.bind(this)
-    this._addRoute = this._addRoute.bind(this)
-    this._deleteRoute = this._deleteRoute.bind(this)
 
     this._changeInput = this._changeInput.bind(this)
     this._selectRadio = this._selectRadio.bind(this)
-    this._changeRadio = this._changeRadio.bind(this)
+    this._placeHolder = this._placeHolder.bind(this)
 
     this._validateRequired = this._validateRequired.bind(this)
     this._validate = this._validate.bind(this)
@@ -61,8 +49,8 @@ class StepEdit extends Component {
   componentWillReceiveProps (nextProps) {
 
     this.setState((prevState, props) => {
-      prevState.stepData = _copyNested(nextProps.stepData)
-      this._initial.stepData = _copyNested(nextProps.stepData)
+      prevState.quizData = _copyNested(nextProps.quizData)
+      this._initialState = _copyNested(prevState)
       return prevState
     })
 
@@ -71,121 +59,81 @@ class StepEdit extends Component {
   _addRule () {
 
     this.setState((prevState, props) => {
-      if (!prevState.stepData.precondition) {
-        prevState.stepData.precondition = _copyNested(this._basic.condition)
+      if (!prevState.quizData.precondition) {
+        prevState.quizData.precondition = _copyNested(this._basic.condition)
       }
-      if (!prevState.stepData.precondition.rule) {
-        prevState.stepData.precondition.rule = []
+      if (!prevState.quizData.precondition.rule) {
+        prevState.quizData.precondition.rule = []
       }
-      prevState.stepData.precondition.rule.push(_copyNested(this._basic.rule))
-      return {
-        valid: this._validate(prevState.stepData),
-        stepData: prevState.stepData,
-      }
+      prevState.quizData.precondition.rule.push(_copyNested(this._basic.rule))
+      prevState.valid = this._validate(prevState.quizData)
+      return prevState
     })
 
   }
 
   _deleteRule (event) {
 
-    const ruleID = event.target.getAttribute('data-ruleID')
+    const id = event.target.getAttribute('data-id')
 
     this.setState((prevState, props) => {
-      delete prevState.stepData.precondition.rule[ruleID]
-      return {
-        valid: this._validate(prevState.stepData),
-        stepData: prevState.stepData,
-      }
+      prevState.quizData.precondition.rule.splice(parseInt(id, 10), 1)
+      prevState.valid = this._validate(prevState.quizData)
+      return prevState
     })
 
-  }
-
-  _addRoute () {
-
-    this.setState((prevState, props) => {
-      if (!prevState.stepData.route) {
-        prevState.stepData.route = []
-      }
-      prevState.stepData.route.push(_copyNested(this._basic.route))
-      return {
-        valid: this._validate(prevState.stepData),
-        stepData: prevState.stepData,
-      }
-    })
-
-  }
-
-  _deleteRoute (event) {
-
-    const routeID = event.target.getAttribute('data-routeID')
-
-    this.setState((prevState, props) => {
-      delete prevState.stepData.route[routeID]
-      return {
-        valid: this._validate(prevState.stepData),
-        stepData: prevState.stepData,
-      }
-    })
   }
 
   _selectRadio (event) {
 
-    const ruleID = event.target.getAttribute('data-ruleID')
+    const group = event.target.getAttribute('data-group')
+    const id = event.target.getAttribute('data-id')
     const value = event.target.value
 
-    if (!ruleID) {
+    if (group === 'precondition') {
 
       this.setState((prevState, props) => {
-        prevState.stepData.precondition.logic = value
-        return {
-          valid: this._validate(prevState.stepData),
-          stepData: prevState.stepData,
-        }
+        prevState.quizData.precondition.logic = value
+        return prevState
       })
 
-    } else {
+    }
+
+    if (group === 'rule') {
 
       this.setState((prevState, props) => {
-        prevState.stepData.precondition.rule[ruleID].logic = value
-        prevState.valid = this._validate(prevState.stepData)
-        return {
-          valid: this._validate(prevState.stepData),
-          stepData: prevState.stepData,
-        }
+        prevState.quizData.precondition.rule[id].logic = value
+        return prevState
       })
 
     }
 
   }
 
-  _changeRadio (event) {
+  _placeHolder (event) {
 
   }
 
   _changeInput (event) {
 
-    const ruleID = event.target.getAttribute('data-ruleID')
-    const routeID = event.target.getAttribute('data-routeID')
-    const fieldID = event.target.getAttribute('data-fieldID')
+    const group = event.target.getAttribute('data-group')
+    const id = event.target.getAttribute('data-id')
+    const name = event.target.name
     const value = event.target.value
 
-    if (ruleID) {
+    if (group === 'rule') {
       this.setState((prevState, props) => {
-        prevState.stepData.precondition.rule[ruleID][fieldID] = value
-        return {
-          valid: this._validate(prevState.stepData),
-          stepData: prevState.stepData,
-        }
+        prevState.quizData.precondition.rule[id][name] = value
+        prevState.valid = this._validate(prevState.quizData)
+        return prevState
       })
     }
 
-    if (routeID) {
+    if (group === 'route') {
       this.setState((prevState, props) => {
-        prevState.stepData.route[routeID][fieldID] = value
-        return {
-          valid: this._validate(prevState.stepData),
-          stepData: prevState.stepData,
-        }
+        prevState.quizData.route[id] = value
+        prevState.valid = this._validate(prevState.quizData)
+        return prevState
       })
     }
 
@@ -193,28 +141,21 @@ class StepEdit extends Component {
 
   _validateRequired (value) {
 
-    if (value.length > 0) {
-      return true
-    } else {
-      return false
-    }
+    return value.length > 0 ? true : false
 
   }
 
-  _validate (stepData) {
+  _validate (quizData) {
 
     let valid = true
 
-    if (!stepData) {
+    if (!quizData) {
       return valid
     }
 
-    if (!this._validateRequired(stepData.id) || !this._validateRequired(stepData.quiz)) {
-      return false
-    }
+    if (quizData.precondition && quizData.precondition.rule) {
 
-    if (stepData.precondition) {
-      stepData.precondition.rule.forEach((entry, index) => {
+      quizData.precondition.rule.forEach((entry, index) => {
         if (!entry) {
           return
         }
@@ -222,17 +163,7 @@ class StepEdit extends Component {
           valid = false
         }
       })
-    }
 
-    if (stepData.route) {
-      stepData.route.forEach((entry, index) => {
-        if (!entry) {
-          return
-        }
-        if (!this._validateRequired(entry.answer) || !this._validateRequired(entry.next)) {
-          valid = false
-        }
-      })
     }
 
     return valid
@@ -241,10 +172,10 @@ class StepEdit extends Component {
 
   _save () {
 
-    const stepData = _compactStepData(this.state.stepData)
+    const quizData = this.state.quizData
 
-    if (this._validate(stepData)) {
-      firebase.database().ref('step/' + this.props.stepData.id).set(this.state.stepData)
+    if (this._validate(quizData)) {
+      firebase.database().ref(`quiz/${quizData.id}`).set(quizData)
     }
 
   }
@@ -252,74 +183,77 @@ class StepEdit extends Component {
   _refresh () {
 
     this.setState((prevState, props) => {
-      return {
-        valid: true,
-        stepData: _copyNested(this._initial.stepData)
-      }
+      return _copyNested(this._initialState)
     })
 
   }
 
   render () {
 
-    const valid = this.state.valid
-    let stepData = this.state.stepData
-
+    const quizID = this.props.quizID
     const quizIDs = this.props.quizIDs
     const answerValues = this.props.answerValues
 
+    let quizData = this.state.quizData
+    const valid = this.state.valid
+
+    if (!quizData) {
+      return null
+    }
+
     const actionJSX = (
       <ActionButton
-        link={'/step/' + this.state.stepData.id}
+        link={`/step/${quizID}/`}
         save={this._save}
         className={valid ? '' : ' disabled'}
         refresh={this._refresh}
       />
     )
 
-    if (!stepData) {
-      stepData = _copyNested(this._basic.stepData)
-    }
-
     let ruleFormJSX
 
-    if (stepData.precondition && stepData.precondition.rule) {
-
-      ruleFormJSX = stepData.precondition.rule.map((ruleContent, ruleID) => {
-        if (!ruleContent) {
-          return false
-        }
-        return (
-          <RuleForm
-            key={ruleID}
-            ruleID={ruleID}
-            {...ruleContent}
-            quizIDs={quizIDs}
-            changeInput={this._changeInput}
-            changeRadio={this._changeRadio}
-            selectRadio={this._selectRadio}
-            deleteRule={this._deleteRule}
-          />
-        )
-      })
-
+    if (!quizData.precondition) {
+      quizData.precondition = {
+        logic: 'and',
+        rule: []
+      }
     }
+
+    if (!quizData.precondition.rule) {
+      quizData.precondition.rule = []
+    }
+
+    ruleFormJSX = quizData.precondition.rule.map((ruleContent, id) => {
+      if (!ruleContent) {
+        return false
+      }
+      return (
+        <RuleForm
+          key={id}
+          group='rule'
+          id={id}
+          {...ruleContent}
+          quizIDs={quizIDs}
+          changeInput={this._changeInput}
+          changeRadio={this._placeHolder}
+          selectRadio={this._selectRadio}
+          deleteRule={this._deleteRule}
+        />
+      )
+    })
 
     let routeFormJSX
 
-    if (stepData.route) {
+    if (quizData.type === 'select') {
 
-      routeFormJSX = stepData.route.map((routeContent, routeID) => {
-        if (!routeContent) {
-          return false
-        }
+      routeFormJSX = quizData.option.map((item, key) => {
         return (
           <RouteForm
-            key={routeID}
-            routeID={routeID}
-            {...routeContent}
+            key={key}
+            group='route'
+            id={item.value}
+            value={quizData.route ? quizData.route[item.value] : null}
             quizIDs={quizIDs}
-            answerValues={answerValues}
             changeInput={this._changeInput}
             deleteRoute={this._deleteRoute}
           />
@@ -344,9 +278,9 @@ class StepEdit extends Component {
                       <input
                         type='radio'
                         value='and'
-                        checked={stepData.precondition.logic === 'and'}
+                        checked={quizData.precondition.logic === 'and'}
                         onClick={this._selectRadio}
-                        onChange={this._changeRadio}
+                        onChange={this._placeHolder}
                       />
                       <label>
                         同時
@@ -358,9 +292,9 @@ class StepEdit extends Component {
                       <input
                         type='radio'
                         value='or'
-                        checked={stepData.precondition.logic === 'or'}
+                        checked={quizData.precondition.logic === 'or'}
                         onClick={this._selectRadio}
-                        onChange={this._changeRadio}
+                        onChange={this._placeHolder}
                       />
                       <label>
                         擇一

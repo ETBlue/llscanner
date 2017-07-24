@@ -65,7 +65,10 @@ class QuizView extends Component {
         const optionDataJSX = optionData.map((item, key) => {
           const className = answerData === item.value ? 'active' : ''
           const next = routeData ? 
-            (routeData[item.value] || orderData.next)
+            (routeData[item.value] && routeData[item.value].length > 0
+              ? routeData[item.value]
+              : orderData.next
+            )
             : orderData.next
           return (
             <Option

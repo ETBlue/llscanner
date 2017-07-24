@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {HashLink as Link} from 'react-router-hash-link'
 
 import _viewRoute from './_viewRoute'
 import _viewPrecondition from './_viewPrecondition'
@@ -28,11 +27,11 @@ class StepView extends Component {
         <div className='ui two column stackable grid'>
           <div className='left aligned column'>
             <h4 className='ui dividing header'>進入條件</h4>
-            {_viewPrecondition(quizData.precondition)}
+            {_viewPrecondition(quizData)}
           </div>
           <div className='left aligned column'>
             <h4 className='ui dividing header'>離開路徑</h4>
-            {_viewRoute(quizData.route)}
+            {_viewRoute(quizData)}
           </div>
         </div>
       </section>
