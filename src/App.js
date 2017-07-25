@@ -68,6 +68,7 @@ class App extends Component {
 
     this.ui =  new firebaseui.auth.AuthUI(firebase.auth())
 
+    this._compileStep = this._compileStep.bind(this)
     this._getLawObject = this._getLawObject.bind(this)
     this._toggleSidebar = this._toggleSidebar.bind(this)
     this._signOut = this._signOut.bind(this)
@@ -129,6 +130,8 @@ class App extends Component {
             } else {
               firebase.database().ref(`answer/${user.uid}`).set({placeholder: 'true'})
             }
+
+            prevState = this._compileStep(prevState)
             return prevState
           })
 
@@ -158,6 +161,8 @@ class App extends Component {
             } else {
               firebase.database().ref(`answer/public`).set({placeholder: 'true'})
             }
+
+            prevState = this._compileStep(prevState)
             return prevState
           })
 
@@ -177,41 +182,16 @@ class App extends Component {
           prevState.precondition[ quiz_id ] = quiz[ quiz_id ].precondition
         })
         prevState.quiz = quiz
+
         return prevState
       })
     })
 
     firebase.database().ref('step').on('value', snapshot => {
       this.setState((prevState, props) => {
-        const step = snapshot.val()
-        const quiz = prevState.quiz
-        let prev = null
+        prevState.step = snapshot.val()
 
-        step.forEach((item, index) => {
-          if (index === step.length - 1) {
-            prevState.order[prev].next = null
-          }
-          if (!quiz[item]) {
-            return
-          }
-          if (!prevState.first) {
-            prevState.first = item
-          }
-          if (prev) {
-            prevState.order[prev].next = item
-          }
-          prevState.order[item] = {
-            id: item,
-            current: item,
-            prev: prev
-          }
-          if (index === step.length - 1) {
-            prevState.order[item].next = null
-          }
-          prev = item
-        })
-
-        prevState.step = step
+        prevState = this._compileStep(prevState)
         return prevState
       })
     })
@@ -222,6 +202,51 @@ class App extends Component {
         return prevState
       })
     })
+
+  }
+
+  _compileStep (prevState) {
+
+    prevState.first = null
+
+    const quiz = prevState.quiz
+    const step = prevState.step
+
+    let prev = null
+
+    step.forEach((item, index) => {
+      if (quiz[item]) {
+
+        if (!prevState.precondition[item] || (prevState.precondition[item] && _evaluateCondition(prevState.precondition[item], prevState.answer).result !== 'failed')) {
+
+          if (!prevState.first) {
+            prevState.first = item
+          }
+          if (prev) {
+            prevState.order[prev].next = item
+          }
+          prevState.order[item] = {
+            prev: prev
+          }
+          if (index === step.length - 1) {
+            prevState.order[item].next = null
+          }
+          prev = item
+
+        } else {
+          if (index === step.length - 1) {
+            prevState.order[prev].next = null
+          }
+        }
+
+      } else {
+        if (index === step.length - 1) {
+          prevState.order[prev].next = null
+        }
+      }
+    })
+
+    return prevState
 
   }
 
@@ -383,7 +408,7 @@ class App extends Component {
           />
           {authenticated ?
           <EditButton 
-            link={'/quiz/' + quiz_id + '/edit'} 
+            link={`/quiz/${quiz_id}/edit`} 
           /> : null
           }
         </section>
@@ -432,9 +457,15 @@ class App extends Component {
       if (!action && 
         precondition[quiz_id] && 
         _evaluateCondition(precondition[quiz_id], answer).result === 'failed') {
-        return (
-          <Redirect to={`/quiz/${order[quiz_id].next}/`}/>
-        )
+        if (order[quiz_id] && order[quiz_id].next) {
+          return (
+            <Redirect to={`/quiz/${order[quiz_id].next}/`}/>
+          )
+        } else {
+          return (
+            <Redirect to={`/answer/`}/>
+          )
+        }
       }
 
       if (!action || action !== 'edit') {
@@ -449,7 +480,7 @@ class App extends Component {
             />
             {authenticated ?
               <EditButton 
-                link={'/quiz/' + quiz_id + '/edit'} 
+                link={`/quiz/${quiz_id}/edit`} 
               /> : null
             }
           </section>
