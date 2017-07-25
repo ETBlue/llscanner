@@ -156,13 +156,14 @@ class ResultView extends Component {
                   </span>
                 </header>
                 <div className='meta'>
-                  期望
-                  <span className='code'>
-                    {item.target}
-                  </span>
+                  這個參數應該
                   {_viewLogic(item.logic)}
                   <span className='code'>
                     {item.value}
+                  </span>
+                  ，而您的答案是
+                  <span className='code'>
+                    {item.target}
                   </span>
                 </div>
               </div>
