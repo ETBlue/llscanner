@@ -17,7 +17,7 @@ class QuizList extends Component {
           <tr key={id}>
             <td className='top aligned'>
               <h4 className='ui header'>
-                <Link to={'/quiz/' + id}>
+                <Link to={`/quiz/${id}/edit`}>
                   <code className='code'>{item.id}</code>
                 </Link>
               </h4>

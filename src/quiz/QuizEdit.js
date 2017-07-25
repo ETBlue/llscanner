@@ -73,6 +73,8 @@ class QuizEdit extends Component {
       }
       prevState.quizData.option.push(_copyNested(this._basicOptionData))
       prevState.valid = false
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
       return prevState
     })
   }
@@ -83,6 +85,8 @@ class QuizEdit extends Component {
     this.setState((prevState, props) => {
       prevState.quizData.option.splice(parseInt(id, 10), 1)
       prevState.valid = this._validateAll(prevState)
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
       return prevState
     })
   }
@@ -105,6 +109,8 @@ class QuizEdit extends Component {
     this.setState((prevState, props) => {
       prevState.focus = null
       prevState.quizData.type = value
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
       return prevState
     })
   }
@@ -127,6 +133,7 @@ class QuizEdit extends Component {
       prevState.focus = null
       prevState.valid = this._validateAll(prevState)
 
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
       return prevState
     })
   }
@@ -139,6 +146,7 @@ class QuizEdit extends Component {
       })
       prevState.quizData.option = newOption
 
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
       return prevState
     })
   }

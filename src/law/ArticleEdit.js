@@ -4,7 +4,6 @@ import firebase from 'firebase'
 import _copyNested from '../_shared/_copyNested'
 import ActionButton from '../_shared/ActionButton'
 
-import _compactRuleData from './_compactRuleData'
 import RuleForm from './RuleForm'
 
 class ArticleEdit extends Component {
@@ -13,7 +12,7 @@ class ArticleEdit extends Component {
 
     this.state = {
       valid: true,
-      ruleData: _compactRuleData(this.props.ruleData),
+      ruleData: this.props.ruleData,
     }
 
     this._initial = {
@@ -54,7 +53,7 @@ class ArticleEdit extends Component {
   componentWillReceiveProps (nextProps) {
 
     this.setState((prevState, props) => {
-      prevState.ruleData = _compactRuleData(nextProps.ruleData)
+      prevState.ruleData = nextProps.ruleData
       this._initial.ruleData = _copyNested(prevState.ruleData)
 
       return prevState
@@ -69,6 +68,8 @@ class ArticleEdit extends Component {
         precondition: _copyNested(this._basic.condition),
         reference: _copyNested(this._basic.reference)
       })
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
       return prevState
     })
 
@@ -79,11 +80,11 @@ class ArticleEdit extends Component {
     const ruleSetID = event.target.getAttribute('data-ruleSetID')
 
     this.setState((prevState, props) => {
-      delete prevState.ruleData[ruleSetID]
-      return {
-        valid: this._validate(prevState.ruleData),
-        ruleData: prevState.ruleData,
-      }
+      prevState.ruleData.splice(parseInt(ruleSetID, 10), 1)
+      prevState.valid = this._validate(prevState.ruleData)
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
+      return prevState
     })
 
   }
@@ -102,6 +103,8 @@ class ArticleEdit extends Component {
       }
       prevState.ruleData[ruleSetID][position].rule.push(_copyNested(this._basic.rule))
       prevState.valid = this._validate(prevState.ruleData)
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
       return prevState
     })
 
@@ -114,11 +117,11 @@ class ArticleEdit extends Component {
     const ruleID = event.target.getAttribute('data-ruleID')
 
     this.setState((prevState, props) => {
-      delete prevState.ruleData[ruleSetID][position].rule[ruleID]
-      return {
-        valid: this._validate(prevState.ruleData),
-        ruleData: prevState.ruleData,
-      }
+      prevState.ruleData[ruleSetID][position].rule.splice(parseInt(ruleID, 10), 1)
+      prevState.valid = this._validate(prevState.ruleData)
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
+      return prevState
     })
 
   }
@@ -139,6 +142,8 @@ class ArticleEdit extends Component {
       this.setState((prevState, props) => {
         prevState.ruleData[ruleSetID][position].logic = value
         prevState.valid = this._validate(prevState.ruleData)
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
         return prevState
       })
 
@@ -147,6 +152,8 @@ class ArticleEdit extends Component {
       this.setState((prevState, props) => {
         prevState.ruleData[ruleSetID][position].rule[ruleID].logic = value
         prevState.valid = this._validate(prevState.ruleData)
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
         return prevState
       })
 
@@ -164,6 +171,8 @@ class ArticleEdit extends Component {
     if (position === 'reference') {
       this.setState((prevState, props) => {
         prevState.ruleData[ruleSetID].reference[fieldID] = value
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
         return prevState
       })
     }
@@ -172,6 +181,8 @@ class ArticleEdit extends Component {
       this.setState((prevState, props) => {
         prevState.ruleData[ruleSetID][position].rule[ruleID][fieldID] = value
         prevState.valid = this._validate(prevState.ruleData)
+
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(prevState.ruleData)
         return prevState
       })
     }
@@ -234,10 +245,8 @@ class ArticleEdit extends Component {
 
   _save () {
 
-    const ruleData = _compactRuleData(this.state.ruleData)
-
-    if (this._validate(ruleData)) {
-      firebase.database().ref('law/' + this.props.lawID + '/' + this.props.articleID).set(ruleData)
+    if (this._validate(this.state.ruleData)) {
+      firebase.database().ref(`law/${this.props.lawID}/${this.props.articleID}`).set(this.state.ruleData)
     }
 
   }

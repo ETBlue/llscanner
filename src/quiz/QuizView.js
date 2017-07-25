@@ -50,6 +50,7 @@ class QuizView extends Component {
     const orderData = this.props.orderData || {}
 
     const quizData = this.props.quizData
+
     if (!quizData) {
       return null
     }

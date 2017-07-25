@@ -67,6 +67,9 @@ class StepEdit extends Component {
       }
       prevState.quizData.precondition.rule.push(_copyNested(this._basic.rule))
       prevState.valid = this._validate(prevState.quizData)
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
+
       return prevState
     })
 
@@ -79,6 +82,8 @@ class StepEdit extends Component {
     this.setState((prevState, props) => {
       prevState.quizData.precondition.rule.splice(parseInt(id, 10), 1)
       prevState.valid = this._validate(prevState.quizData)
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
       return prevState
     })
 
@@ -94,6 +99,8 @@ class StepEdit extends Component {
 
       this.setState((prevState, props) => {
         prevState.quizData.precondition.logic = value
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
         return prevState
       })
 
@@ -103,6 +110,8 @@ class StepEdit extends Component {
 
       this.setState((prevState, props) => {
         prevState.quizData.precondition.rule[id].logic = value
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
         return prevState
       })
 
@@ -125,6 +134,8 @@ class StepEdit extends Component {
       this.setState((prevState, props) => {
         prevState.quizData.precondition.rule[id][name] = value
         prevState.valid = this._validate(prevState.quizData)
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
         return prevState
       })
     }
@@ -133,6 +144,8 @@ class StepEdit extends Component {
       this.setState((prevState, props) => {
         prevState.quizData.route[id] = value
         prevState.valid = this._validate(prevState.quizData)
+
+      firebase.database().ref(`quiz/${prevState.quizData.id}`).set(prevState.quizData)
         return prevState
       })
     }
