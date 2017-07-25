@@ -71,7 +71,7 @@ class QuizEdit extends Component {
       if (!prevState.quizData.option) {
         prevState.quizData.option = []
       }
-      prevState.quizData.option.push(this._basicOptionData)
+      prevState.quizData.option.push(_copyNested(this._basicOptionData))
       prevState.valid = false
       return prevState
     })

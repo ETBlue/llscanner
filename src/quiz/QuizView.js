@@ -15,9 +15,9 @@ class QuizView extends Component {
       answerData: this.props.answerData,
     }
 
-    this._onInputChange = this._onInputChange.bind(this)
-    this._onInputSubmit = this._onInputSubmit.bind(this)
-    this._onSelect = this._onSelect.bind(this)
+    this._changeInput = this._changeInput.bind(this)
+    this._submitInput = this._submitInput.bind(this)
+    this._selectOption = this._selectOption.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -28,19 +28,20 @@ class QuizView extends Component {
     })
   }
 
-  _onInputChange (event) {
+  _changeInput (event) {
+    const value = event.target.value
 
     this.setState((prevState, props) => {
-      prevState.answerData = event.target.value || ''
+      prevState.answerData = value
       return prevState
     })
   }
 
-  _onInputSubmit (event) {
+  _submitInput (event) {
     firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.quizData.id}`).set(this.state.answerData)
   }
 
-  _onSelect (event) {
+  _selectOption (event) {
     firebase.database().ref(`answer/${this.props.answerOwner}/${this.props.quizData.id}`).set(event.target.getAttribute('data-value'))
   }
 
@@ -76,7 +77,7 @@ class QuizView extends Component {
               key={key}
               next={next}
               className={className}
-              onClick={this._onSelect}
+              onClick={this._selectOption}
             />
           )
         })
@@ -94,15 +95,14 @@ class QuizView extends Component {
         <div className='ui action input'>
           <input
             type='text'
-            id={quizData.id}
             placeholder={answerData}
             value={answerData}
-            onChange={this._onInputChange}
+            onChange={this._changeInput}
           />
           <Link
             to={link}
             className='ui button'
-            onClick={this._onInputSubmit}
+            onClick={this._submitInput}
           >
             Submit
           </Link>
