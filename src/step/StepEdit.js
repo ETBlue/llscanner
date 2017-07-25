@@ -192,7 +192,6 @@ class StepEdit extends Component {
 
     const quizID = this.props.quizID
     const quizIDs = this.props.quizIDs
-    const answerValues = this.props.answerValues
 
     let quizData = this.state.quizData
     const valid = this.state.valid
@@ -246,16 +245,22 @@ class StepEdit extends Component {
 
     if (quizData.type === 'select') {
 
+      if (!quizData.route) {
+        quizData.route = {}
+        quizData.option.forEach((item, key) => {
+          quizData.route[item.value] = ''
+        })
+      }
+
       routeFormJSX = quizData.option.map((item, key) => {
         return (
           <RouteForm
             key={key}
             group='route'
             id={item.value}
-            value={quizData.route ? quizData.route[item.value] : null}
+            value={quizData.route ? quizData.route[item.value] : ''}
             quizIDs={quizIDs}
             changeInput={this._changeInput}
-            deleteRoute={this._deleteRoute}
           />
         )
       })
@@ -314,10 +319,6 @@ class StepEdit extends Component {
               <div className='left aligned column'>
                 <h4 className='ui header'>離開路徑</h4>
                 { routeFormJSX }
-                <a onClick={this._addRoute} className='ui green icon labeled mini button'>
-                  <i className='icon add' />
-                  新增離開路徑
-                </a>
               </div>
             </div>
           </form>
