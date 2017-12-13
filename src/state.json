@@ -1,12 +1,93 @@
 {
-  "user": "unknown",
-  "answer": {},
-  "quiz": {},
-  "step": {},
-  "rule": {},
-  "display": "home",
-  "quizid": "unknown",
-  "stepid": "unknown",
-  "lawid": "unknown",
-  "ruleid": "unknown"
+  "//": "state",
+  "display": "home / quiz / step / law / rule",
+  "quizId": "_quizId / unknown",
+  "stepIndex": "_stepIndex / unknown",
+  "lawId": "_lawId / unknown",
+  "paragraghId": "_paragraghId / unknown",
+
+  "//": "user state",
+  "userId": "_userId / unknown",
+  "answer": {
+    "_quizId": "_answerId",
+    "_quizId": "_answerId"
+  },
+},
+{
+  "//": "api data",
+  "quiz": {
+    "_quizId": {
+      "quizId": "_quizId",
+      "title": "",
+      "description": "",
+      "type": "",
+      "opiton": [
+        "_answerId",
+        "_answerId"
+      ],
+      "answer": {
+        "_answerId": {
+          "title": "",
+          "route": "_quizId"
+        }
+      },
+      "precondition": {
+        "logic": "_logicId",
+        "rule": [
+          {
+            "target": "_quizId",
+            "logic": "_logicId",
+            "value": "_answerId / {answerValue}"
+          }
+        ]
+      },
+    },
+  },
+  "step": [
+    "_quizId",
+    "_quizId"
+  ],
+  "law": {
+    "_lawId": {
+      "_paragraghId": [
+        {
+          "precondition": {
+            "logic": "_logicId",
+            "rule": [
+              {
+                "target": "_quizId",
+                "logic": "_logicId",
+                "value": "_answerId / {answerValue}"
+              }
+            ]
+          },
+          "condition": {
+            "logic": "_logicId",
+            "rule": [
+              {
+                "target": "_quizId",
+                "logic": "_logicId",
+                "value": "_answerId / {answerValue}"
+              }
+            ]
+          },
+          "reference": {
+            "subParagraghId": "_subParagraghId",
+            "itemId": "_itemId"
+          }
+        }
+      ]
+    }
+  }
+},{
+  "//": "static data",
+  "logic": {
+    "_logicId": {
+      "logicId": "_logicId",
+      "title": ""
+    }
+  },
+  "law": {
+    "_lawId": "{json}"
+  }
 }
