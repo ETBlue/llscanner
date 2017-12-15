@@ -1,51 +1,85 @@
+// user actions
 const LOGIN = "LOGIN"
 const LOGOUT = "LOGOUT"
+const SET_ANSWER = "SET_ANSWER"
 
-const VIEW_REPORT = "VIEW_REPORT"
+// ui actions
+const SET_VIEW = "SET_VIEW"
 
-const VIEW_QUIZLIST = "VIEW_QUIZLIST"
-const VIEW_QUIZ = "VIEW_QUIZ"
-const UPDATE_QUIZ = "UPDATE_QUIZ"
-const ADD_QUIZ = "ADD_QUIZ"
-const DELETE_QUIZ = "DELETE_QUIZ"
+// data acitons
+const SET_DATA = "SET_DATA"
 
-const VIEW_STEPLIST = "VIEW_STEPLIST"
-const VIEW_STEP = "VIEW_STEP"
-const UPDATE_STEP = "UPDATE_STEP"
-const ADD_STEP = "ADD_STEP"
-const DELETE_STEP = "DELETE_STEP"
+// settings
+export const ViewTypes: {
+  HOME: "HOME",
+  QUIZLIST: "QUIZLIST",
+  STEPLIST: "STEPLIST",
+  LAWLIST: "LAWLIST",
+  QUIZ: "QUIZ",
+  STEP: "STEP",
+  LAW: "LAW",
+  RULE: "RULE",
+  REPORT: "REPORT",
+}
+export const DataTypes: {
+  QUIZ: "QUIZ",
+  STEP: "STEP",
+  RULE: "RULE",
+}
+export const EditTypes: {
+  UPDATE: "UPDATE",
+  ADD: "ADD",
+  DELETE: "DELETE",
+}
 
-const VIEW_LAWLIST = "VIEW_LAWLIST"
-const VIEW_LAW = "VIEW_LAW"
-const VIEW_RULE = "VIEW_RULE"
-const UPDATE_RULE = "UPDATE_RULE"
-const ADD_RULE = "ADD_RULE"
-const DELETE_RULE = "DELETE_RULE"
-
-const UPDATE_ANSWER = "UPDATE_ANSWER"
-
-export function login(userId) {return { type: LOGIN, userId }}
-export function logout() {return { type: LOGOUT }}
-
-export function viewReport() {return { type: VIEW_REPORT }}
-
-export function viewQuizList() {return { type: VIEW_QUIZLIST }}
-export function viewQuiz(quizId) {return { type: VIEW_QUIZ, quizId }}
-export function updateQuiz(quizId, content) {return { type: UPDATE_QUIZ, quizId, content }}
-export function addQuiz(quizId) {return { type: ADD_QUIZ, quizId }}
-export function deleteQuiz(quizId) {return { type: DELETE_QUIZ, quizId }}
-
-export function viewStepList() {return { type: VIEW_STEPLIST }}
-export function viewStep(stepId) {return { type: VIEW_STEP, stepId }}
-export function updateStep(stepId, content) {return { type: UPDATE_STEP, stepId, content }}
-export function addStep() {return { type: ADD_STEP }}
-export function deleteStep(stepId) {return { type: DELETE_STEP, stepId }}
-
-export function viewLawList() {return { type: VIEW_LAWLIST }}
-export function viewLaw(lawId) {return { type: VIEW_LAW, lawId }}
-export function viewRule(lawId, ruleId) {return { type: VIEW_RULE, lawId, ruleId }}
-export function updateRule(lawId, ruleId, content) {return { type: UPDATE_RULE, lawId, ruleId, content }}
-export function addRule(lawId, ruleId, content) {return { type: ADD_RULE, lawId, ruleId, content }}
-export function deleteRule(lawId, ruleId, content) {return { type: DELETE_RULE, lawId, ruleId, content }}
-
-export function updateAnswer(quizId, content) {return { type: UPDATE_ANSWER, quizId, content }}
+// aciton creators
+export function login(userId) {
+  return {
+    type: LOGIN, 
+    userId
+  }
+}
+export function logout() {
+  return {
+    type: LOGOUT
+  }
+}
+export function setAnswer(
+contentId = undefined, 
+content = undefined) {
+  return {
+    type: SET_ANSWER, 
+    contentId, 
+    content
+  }
+}
+export function setView(
+viewType = undefined, 
+contentId = undefined, 
+contentSubId = undefined, 
+contentSubSubId = undefined) {
+  return {
+    type: SET_VIEW, 
+    viewType, 
+    contentId, 
+    contentSubId, 
+    contentSubSubId
+  }
+}
+export function editData(
+dataType = undefined, 
+editType = undefined, 
+contentId = undefined, 
+contentSubId = undefined, 
+contentSubSubId = undefined, 
+content = undefined) {
+  return {
+    type: SET_DATA, 
+    dataType, 
+    editType, 
+    contentId, 
+    contentSubId, 
+    contentSubSubId, 
+    content
+  }
+}
