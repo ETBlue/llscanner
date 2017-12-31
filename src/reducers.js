@@ -1,3 +1,5 @@
+import { combineReducers } from 'redux'
+
 import {
   // actions
   LOGIN,
@@ -93,16 +95,15 @@ function answer(state = {}, action) {
   }
 }
 
-function app(state = {}, action) {
-  return {
-    viewType: view(state.viewType, action),
-    dataType: data(state.dataType, action),
-    contentId: id(state.contentId, action),
-    contentSubId: subId(state.contentSubId, action),
-    contentSubSubId: subSubId(state.contentSubSubId, action),
-    content: content(state.content, action),
-    userId: user(state.userId, action),
-    answer: answer(state.answer, action),
-  }
-}
+const app = combineReducers({
+  viewType: view,
+  dataType: data,
+  contentId: id,
+  contentSubId: subId,
+  contentSubSubId: subSubId,
+  content: content,
+  userId: user,
+  answer: answer,
+})
 
+export default app
