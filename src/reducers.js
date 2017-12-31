@@ -11,19 +11,6 @@ import {
   EditTypes,
 } from './actions'
 
-const initialState = {
-  // ui state
-  "viewType": ViewTypes.HOME,
-  "dataType": undefined,
-  "contentId": undefined,
-  "contentSubId": undefined,
-  "contentSubSubId": undefined,
-  "content": undefined,
-  // user state
-  "userId": undefined,
-  "answer": undefined, 
-}
-
 function view(state = ViewTypes.HOME, action) {
   switch (action.type) {
     case SET_VIEW:
@@ -106,7 +93,7 @@ function answer(state = {}, action) {
   }
 }
 
-function app(state = initialState, action) {
+function app(state = {}, action) {
   return {
     viewType: view(state.viewType, action),
     dataType: data(state.dataType, action),
