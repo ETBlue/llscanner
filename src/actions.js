@@ -1,16 +1,16 @@
 // user actions
-const LOGIN = "LOGIN"
-const LOGOUT = "LOGOUT"
-const SET_ANSWER = "SET_ANSWER"
+export const LOGIN = "LOGIN"
+export const LOGOUT = "LOGOUT"
+export const SET_ANSWER = "SET_ANSWER"
 
 // ui actions
-const SET_VIEW = "SET_VIEW"
+export const SET_VIEW = "SET_VIEW"
 
 // data acitons
-const SET_DATA = "SET_DATA"
+export const SET_DATA = "SET_DATA"
 
 // settings
-export const ViewTypes: {
+export const ViewTypes = {
   HOME: "HOME",
   QUIZLIST: "QUIZLIST",
   STEPLIST: "STEPLIST",
@@ -21,12 +21,12 @@ export const ViewTypes: {
   RULE: "RULE",
   REPORT: "REPORT",
 }
-export const DataTypes: {
+export const DataTypes = {
   QUIZ: "QUIZ",
   STEP: "STEP",
   RULE: "RULE",
 }
-export const EditTypes: {
+export const EditTypes = {
   UPDATE: "UPDATE",
   ADD: "ADD",
   DELETE: "DELETE",
@@ -45,8 +45,8 @@ export function logout() {
   }
 }
 export function setAnswer(
-contentId = undefined, 
-content = undefined) {
+contentId = null, 
+content = null) {
   return {
     type: SET_ANSWER, 
     contentId, 
@@ -54,10 +54,10 @@ content = undefined) {
   }
 }
 export function setView(
-viewType = undefined, 
-contentId = undefined, 
-contentSubId = undefined, 
-contentSubSubId = undefined) {
+viewType = null, 
+contentId = null, 
+contentSubId = null, 
+contentSubSubId = null) {
   return {
     type: SET_VIEW, 
     viewType, 
@@ -67,12 +67,12 @@ contentSubSubId = undefined) {
   }
 }
 export function editData(
-dataType = undefined, 
-editType = undefined, 
-contentId = undefined, 
-contentSubId = undefined, 
-contentSubSubId = undefined, 
-content = undefined) {
+dataType = null, 
+editType = null, 
+contentId = null, 
+contentSubId = null, 
+contentSubSubId = null, 
+content = null) {
   return {
     type: SET_DATA, 
     dataType, 

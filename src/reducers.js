@@ -13,72 +13,12 @@ import {
   EditTypes,
 } from './actions'
 
-function view(state = ViewTypes.HOME, action) {
-  switch (action.type) {
-    case SET_VIEW:
-      return action.viewType
-    default:
-      return state
-  }
-}
-
-function data(state = undefined, action) {
-  switch (action.type) {
-    case SET_DATA:
-      return action.dataType
-    default:
-      return state
-  }
-}
-
-function id(state = undefined, action) {
-  switch (action.type) {
-    case SET_VIEW:
-      return action.contentId
-    case SET_DATA:
-      return action.contentId
-    default:
-      return state
-  }
-}
-
-function subId(state = undefined, action) {
-  switch (action.type) {
-    case SET_VIEW:
-      return action.contentSubId
-    case SET_DATA:
-      return action.contentSubId
-    default:
-      return state
-  }
-}
-
-function subSubId(state = undefined, action) {
-  switch (action.type) {
-    case SET_VIEW:
-      return action.contentSubSubId
-    case SET_DATA:
-      return action.contentSubSubId
-    default:
-      return state
-  }
-}
-
-function content(state = undefined, action) {
-  switch (action.type) {
-    case SET_DATA:
-      return action.content
-    default:
-      return state
-  }
-}
-
-function user(state = undefined, action) {
+function user(state = null, action) {
   switch (action.type) {
     case LOGIN:
       return action.userId
     case LOGOUT:
-      return undefined
+      return null
     default:
       return state
   }
@@ -90,6 +30,66 @@ function answer(state = {}, action) {
       return Object.assign({}, state, {
         [action.contentId]: action.content
       })
+    default:
+      return state
+  }
+}
+
+function view(state = ViewTypes.HOME, action) {
+  switch (action.type) {
+    case SET_VIEW:
+      return action.viewType
+    default:
+      return state
+  }
+}
+
+function data(state = null, action) {
+  switch (action.type) {
+    case SET_DATA:
+      return action.dataType
+    default:
+      return state
+  }
+}
+
+function id(state = null, action) {
+  switch (action.type) {
+    case SET_VIEW:
+      return action.contentId
+    case SET_DATA:
+      return action.contentId
+    default:
+      return state
+  }
+}
+
+function subId(state = null, action) {
+  switch (action.type) {
+    case SET_VIEW:
+      return action.contentSubId
+    case SET_DATA:
+      return action.contentSubId
+    default:
+      return state
+  }
+}
+
+function subSubId(state = null, action) {
+  switch (action.type) {
+    case SET_VIEW:
+      return action.contentSubSubId
+    case SET_DATA:
+      return action.contentSubSubId
+    default:
+      return state
+  }
+}
+
+function content(state = null, action) {
+  switch (action.type) {
+    case SET_DATA:
+      return action.content
     default:
       return state
   }
