@@ -12,14 +12,13 @@ export const SET_DATA = "SET_DATA"
 // settings
 export const ViewTypes = {
   HOME: "HOME",
-  QUIZLIST: "QUIZLIST",
-  STEPLIST: "STEPLIST",
-  LAWLIST: "LAWLIST",
   QUIZ: "QUIZ",
-  STEP: "STEP",
-  LAW: "LAW",
-  RULE: "RULE",
   REPORT: "REPORT",
+  ADMIN: "ADMIN",
+  ADMIN_QUIZ: "ADMIN_QUIZ",
+  ADMIN_STEP: "ADMIN_STEP",
+  ADMIN_RULE_LIST: "ADMIN_RULE_LIST",
+  ADMIN_RULE: "ADMIN_RULE",
 }
 export const DataTypes = {
   QUIZ: "QUIZ",
