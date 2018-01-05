@@ -40,7 +40,7 @@ const mapStateToProps = state => {
   return {
     quizID: (state.contentID).toString(),
     quiz: quiz[state.contentID],
-    nextStep: (step.indexOf(state.contentID) + 1).toString(),
+    nextStep: (step[step.indexOf(state.contentID) + 1]).toString(),
   }
 }
 
