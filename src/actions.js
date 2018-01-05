@@ -32,10 +32,10 @@ export const EditTypes = {
 }
 
 // aciton creators
-export function login(userId) {
+export function login(userID) {
   return {
     type: LOGIN, 
-    userId
+    userID
   }
 }
 export function logout() {
@@ -44,41 +44,41 @@ export function logout() {
   }
 }
 export function setAnswer(
-contentId = null, 
+contentID = null, 
 content = null) {
   return {
     type: SET_ANSWER, 
-    contentId, 
+    contentID, 
     content
   }
 }
 export function setView(
 viewType = null, 
-contentId = null, 
-contentSubId = null, 
-contentSubSubId = null) {
+contentID = null, 
+contentSubID = null, 
+contentSubSubID = null) {
   return {
     type: SET_VIEW, 
     viewType, 
-    contentId, 
-    contentSubId, 
-    contentSubSubId
+    contentID, 
+    contentSubID, 
+    contentSubSubID
   }
 }
 export function editData(
 dataType = null, 
 editType = null, 
-contentId = null, 
-contentSubId = null, 
-contentSubSubId = null, 
+contentID = null, 
+contentSubID = null, 
+contentSubSubID = null, 
 content = null) {
   return {
     type: SET_DATA, 
     dataType, 
     editType, 
-    contentId, 
-    contentSubId, 
-    contentSubSubId, 
+    contentID, 
+    contentSubID, 
+    contentSubSubID, 
     content
   }
 }

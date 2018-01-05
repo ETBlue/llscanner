@@ -16,7 +16,7 @@ import {
 function user(state = null, action) {
   switch (action.type) {
     case LOGIN:
-      return action.userId
+      return action.userID
     case LOGOUT:
       return null
     default:
@@ -28,7 +28,7 @@ function answer(state = {}, action) {
   switch (action.type) {
     case SET_ANSWER:
       return Object.assign({}, state, {
-        [action.contentId]: action.content
+        [action.contentID]: action.content
       })
     default:
       return state
@@ -56,31 +56,28 @@ function data(state = null, action) {
 function id(state = null, action) {
   switch (action.type) {
     case SET_VIEW:
-      return action.contentId
     case SET_DATA:
-      return action.contentId
+      return action.contentID
     default:
       return state
   }
 }
 
-function subId(state = null, action) {
+function subID(state = null, action) {
   switch (action.type) {
     case SET_VIEW:
-      return action.contentSubId
     case SET_DATA:
-      return action.contentSubId
+      return action.contentSubID
     default:
       return state
   }
 }
 
-function subSubId(state = null, action) {
+function subSubID(state = null, action) {
   switch (action.type) {
     case SET_VIEW:
-      return action.contentSubSubId
     case SET_DATA:
-      return action.contentSubSubId
+      return action.contentSubSubID
     default:
       return state
   }
@@ -98,11 +95,11 @@ function content(state = null, action) {
 const app = combineReducers({
   viewType: view,
   dataType: data,
-  contentId: id,
-  contentSubId: subId,
-  contentSubSubId: subSubId,
+  contentID: id,
+  contentSubID: subID,
+  contentSubSubID: subSubID,
   content: content,
-  userId: user,
+  userID: user,
   answer: answer,
 })
 

@@ -1,7 +1,10 @@
-//import React from 'react'
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+
 //import ReactDOM from 'react-dom'
 //import App from './App'
-//import 'semantic-ui-css/semantic.min.css'
+import 'semantic-ui-css/semantic.min.css'
 //import './index.css'
 //import * as firebase from 'firebase'
 
@@ -21,25 +24,26 @@
 
 import { createStore } from 'redux'
 import app from './reducers'
+import App from './App'
 
 import {
-  login,
-  logout,
-  setAnswer,
+//  login,
+//  logout,
+//  setAnswer,
   setView,
-  editData,
+//  editData,
 } from './actions'
 
 let store = createStore(app)
 
-const unsubscribe = store.subscribe(() =>
+store.subscribe(() =>
   console.log(store.getState())
 )
+store.dispatch(setView('quiz', 0))
 
-store.dispatch(login('ET'))
-store.dispatch(setView('quiz', '001'))
-store.dispatch(setAnswer('001', 'val'))
-
-
-
-unsubscribe()
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
