@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {HashLink as Link} from 'react-router-hash-link'
 
 import {
   RuleSetLogicID,
@@ -34,7 +35,9 @@ const Quiz = ({quizID, quiz, onOptionClick, onButtonClick, nextStep}) => {
     )
   } else if (quiz.type === 'input') {
     answer = (
-      <p>TODO</p>
+      <Link to={`/${nextStep}`} className='ui button'>
+      next
+      </Link>
     )
   }
 

@@ -6,11 +6,20 @@ import {
   NavLink,
   Redirect
 } from 'react-router-dom'
+import {HashLink as Link} from 'react-router-hash-link'
 
+import StepData from './data/StepData'
 import QuizPage from './containers/QuizPage'
 import Header from './components/Header'
 
-const HomePage = () => (<p>welcome</p>)
+const HomePage = () => (
+  <section>
+    <p>welcome</p>
+    <Link to={`/${StepData[0]}`} className='ui button'>
+    start
+    </Link>
+  </section>
+)
 
 const ReportPage = () => (<p>report</p>)
 

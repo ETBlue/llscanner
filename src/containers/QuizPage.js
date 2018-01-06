@@ -17,7 +17,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     quizID: ownProps.quizID,
     quiz: quizObj[ownProps.quizID],
-    nextStep: StepData[StepData.indexOf(ownProps.quizID) + 1],
+    nextStep: StepData[StepData.indexOf(ownProps.quizID) + 1] || 'report',
   }
 }
 
