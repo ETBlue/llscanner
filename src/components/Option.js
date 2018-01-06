@@ -3,9 +3,9 @@ import {HashLink as Link} from 'react-router-hash-link'
 import PropTypes from 'prop-types'
 
 const Option = ({item, link, onClick}) => (
-<Link to={link} className='Option ui button' onClick={onClick}>
-  {item.title}
-</Link>
+  <Link to={link} className='Option ui button' onClick={onClick}>
+    {item.title}
+  </Link>
 )
 
 Option.proptypes = {

@@ -31,16 +31,22 @@ const quiz = [
   },
 ]
 
+let quizObj = {}
+quiz.forEach((item, index) => {
+  quizObj[item.id] = item
+  quizObj[item.id].index = index
+})
+
 const step = [
-  0,
-  2,
+  "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？",
+  "個案：",
 ]
 
 const mapStateToProps = state => {
   return {
-    quizID: (state.contentID).toString(),
-    quiz: quiz[state.contentID],
-    nextStep: (step[step.indexOf(state.contentID) + 1]).toString(),
+    quizID: state.contentID,
+    quiz: quizObj[state.contentID],
+    nextStep: step[step.indexOf(state.contentID) + 1],
   }
 }
 

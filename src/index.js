@@ -1,6 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import app from './reducers'
 
 //import ReactDOM from 'react-dom'
 //import App from './App'
@@ -21,11 +23,6 @@ import 'semantic-ui-css/semantic.min.css'
 //  <App />,
 //  document.getElementById('root')
 //)
-
-import { createStore } from 'redux'
-import app from './reducers'
-import App from './App'
-
 import {
 //  login,
 //  logout,
@@ -34,16 +31,20 @@ import {
 //  editData,
 } from './actions'
 
+import Root from './Root'
+
 let store = createStore(app)
 
 store.subscribe(() =>
   console.log(store.getState())
 )
-store.dispatch(setView('quiz', 0))
+store.dispatch(setView('quiz', "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？"))
+
 
 render(
   <Provider store={store}>
-    <App />
-  </Provider>,
+    <Root />
+  </Provider>
+  ,
   document.getElementById('root')
 )
