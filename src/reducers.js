@@ -5,10 +5,10 @@ import {
   LOGIN,
   LOGOUT,
   SET_ANSWER,
-  SET_VIEW,
+//  SET_VIEW,
   SET_DATA,
   // constants
-  ViewTypes,
+//  ViewTypes,
   DataTypes,
   EditTypes,
 } from './actions'
@@ -35,14 +35,14 @@ function answer(state = {}, action) {
   }
 }
 
-function view(state = ViewTypes.HOME, action) {
-  switch (action.type) {
-    case SET_VIEW:
-      return action.viewType
-    default:
-      return state
-  }
-}
+//function view(state = ViewTypes.HOME, action) {
+//  switch (action.type) {
+//    case SET_VIEW:
+//      return action.viewType
+//    default:
+//      return state
+//  }
+//}
 
 function data(state = null, action) {
   switch (action.type) {
@@ -55,7 +55,7 @@ function data(state = null, action) {
 
 function id(state = null, action) {
   switch (action.type) {
-    case SET_VIEW:
+//    case SET_VIEW:
     case SET_DATA:
       return action.contentID
     default:
@@ -65,7 +65,7 @@ function id(state = null, action) {
 
 function subID(state = null, action) {
   switch (action.type) {
-    case SET_VIEW:
+//    case SET_VIEW:
     case SET_DATA:
       return action.contentSubID
     default:
@@ -75,7 +75,7 @@ function subID(state = null, action) {
 
 function subSubID(state = null, action) {
   switch (action.type) {
-    case SET_VIEW:
+//    case SET_VIEW:
     case SET_DATA:
       return action.contentSubSubID
     default:
@@ -93,7 +93,7 @@ function content(state = null, action) {
 }
 
 const app = combineReducers({
-  viewType: view,
+//  viewType: view,
   dataType: data,
   contentID: id,
   contentSubID: subID,

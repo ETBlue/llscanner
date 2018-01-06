@@ -9,6 +9,7 @@ import {
   QuizTypeID,
   QuizID,
 } from '../settings/Quiz'
+import * as options from '../settings/Option'
 
 import Option from './Option'
 
@@ -20,12 +21,12 @@ const Quiz = ({quizID, quiz, onOptionClick, onButtonClick, nextStep}) => {
     answer = (
       <div className='ui buttons'>
         {
-          quiz.option.map((item, index) => (
+          Object.keys(options[quiz.option]).map((key, index) => (
           <Option
             key={index}
-            item={item}
-            link={item.route || nextStep}
-            onClick={() => onOptionClick(quizID, item.value)}
+            title={options[quiz.option][key]}
+            link={quiz.route[key] || nextStep}
+            onClick={() => onOptionClick(quizID, key, quiz.route[key] || nextStep)}
           />
           ))
         }
@@ -58,11 +59,7 @@ Quiz.proptypes = {
     id: PropTypes.oneOf(QuizID).isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string,
-    option: PropTypes.arrayOf({
-      title: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      route: PropTypes.string,
-    }),
+    option: PropTypes.string,
     precondition: PropTypes.shape({
       logic: PropTypes.oneOf(RuleSetLogicID),
       rule: PropTypes.arrayOf({

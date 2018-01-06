@@ -4,53 +4,24 @@ import PropTypes from 'prop-types'
 
 import { setAnswer } from '../actions'
 import Quiz from '../components/Quiz'
-
-const quiz = [
-  {
-    "id" : "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？",
-    "type" : "select",
-    "title" : "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？",
-    "description" : "...",
-    "option" : [ {
-      "title" : "是",
-      "value" : "true",
-      "route": null,
-    }, {
-      "title" : "否",
-      "value" : "false",
-      "route": null,
-    }, {
-      "title" : "我不確定",
-      "value" : "unsure",
-      "route": null,
-    } ],
-    "precondition" : {
-      "logic" : "and",
-      "rule": [],
-    },
-  },
-]
+import QuizData from '../data/QuizData'
+import StepData from '../data/StepData'
 
 let quizObj = {}
-quiz.forEach((item, index) => {
+QuizData.forEach((item, index) => {
   quizObj[item.id] = item
   quizObj[item.id].index = index
 })
 
-const step = [
-  "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？",
-  "個案：",
-]
-
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    quizID: state.contentID,
-    quiz: quizObj[state.contentID],
-    nextStep: step[step.indexOf(state.contentID) + 1],
+    quizID: ownProps.quizID,
+    quiz: quizObj[ownProps.quizID],
+    nextStep: StepData[StepData.indexOf(ownProps.quizID) + 1],
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onOptionClick: (quizID, content) => {
       dispatch(setAnswer(quizID, content))

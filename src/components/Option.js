@@ -2,9 +2,9 @@ import React from 'react'
 import {HashLink as Link} from 'react-router-hash-link'
 import PropTypes from 'prop-types'
 
-const Option = ({item, link, onClick}) => (
-  <Link to={link} className='Option ui button' onClick={onClick}>
-    {item.title}
+const Option = ({title, link, onClick}) => (
+  <Link to={`/${link}`} className='Option ui button' onClick={onClick}>
+    {title}
   </Link>
 )
 

@@ -19,18 +19,6 @@ import 'semantic-ui-css/semantic.min.css'
 //}
 //firebase.initializeApp(config)
 
-//ReactDOM.render(
-//  <App />,
-//  document.getElementById('root')
-//)
-import {
-//  login,
-//  logout,
-//  setAnswer,
-  setView,
-//  editData,
-} from './actions'
-
 import Root from './Root'
 
 let store = createStore(app)
@@ -38,8 +26,6 @@ let store = createStore(app)
 store.subscribe(() =>
   console.log(store.getState())
 )
-store.dispatch(setView('quiz', "個案：不定期契約停止履行：另訂新約：前後工作年資合併計算？"))
-
 
 render(
   <Provider store={store}>
