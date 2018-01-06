@@ -1,8 +1,8 @@
 import { getID } from './tool'
 
 export const boolean = {
-  'yes': '是',
-  'no': '否',
+  'true': '是',
+  'false': '否',
   'unsure': '我不確定',
 }
 
