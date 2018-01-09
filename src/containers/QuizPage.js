@@ -5,13 +5,14 @@ import PropTypes from 'prop-types'
 import { setAnswer } from '../actions'
 import Quiz from '../components/Quiz'
 import QuizData from '../data/QuizData'
-import StepData from '../data/StepData'
+import * as StepData from '../data/StepData'
 
 let quizObj = {}
 QuizData.forEach((item, index) => {
   quizObj[item.id] = item
   quizObj[item.id].index = index
 })
+const step = StepData.basic
 
 const mapStateToProps = (state, ownProps) => {
   return {
