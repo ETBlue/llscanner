@@ -4,14 +4,18 @@ import { HashLink as Link } from 'react-router-hash-link'
 import PropTypes from 'prop-types'
 
 const Header = ({view, userID, userName, userRole}) => (
-  <div className='Header ui secondary menu'>
+  <nav className='Header ui secondary menu' style={{marginBottom: '0'}}>
     <NavLink exact to='/' className='item'>
-      LLScanner {view === 'admin' ? 'Dashboard': ''}
+      勞基法掃描器
+      <span className='ui olive label' >
+      alpha
+      </span>
+      {view === 'admin' ? 'Dashboard': ''}
     </NavLink>
     <div className='right floated item'>
-      {userID ? userName : 'login'}
+      {userID ? userName : <span><i className="icon sign in"></i>登入</span>}
     </div>
-  </div>
+  </nav>
 )
 
 Header.proptypes = {
