@@ -1,6 +1,8 @@
 import React from 'react'
+import { Redirect } from 'react-router'
+import { HashLink as Link } from 'react-router-hash-link'
+import { Progress } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
-import {HashLink as Link} from 'react-router-hash-link'
 
 import {
   RuleSetLogicID,
@@ -14,28 +16,37 @@ import * as options from '../settings/Option'
 
 import Option from './Option'
 
-const Quiz = ({quizID, quiz, onOptionClick, onButtonClick, nextStep}) => {
+const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, onOptionClick, onButtonClick}) => {
 
-  let answer
+  if (quizID === 'report') {
+    return (<Redirect to='/report' push />)
+  }
+  if (quizID !== rawQuizID) {
+    return (<Redirect to={`/${quizID}`} push />)
+  }
 
+  const next = quiz.next.length > 0 ? quiz.next : nextStep
+
+  let userInput
   if (quiz.type === 'select') {
-    answer = (
-      <div className='ui buttons'>
+    const routes = quiz.route.split(';')
+    userInput = (
+      <div>
         {
           Object.keys(options[quiz.option]).map((key, index) => (
           <Option
-            key={index}
+            key={key}
             title={options[quiz.option][key]}
-            link={quiz.route[key] || nextStep}
-            onClick={() => onOptionClick(quizID, key, quiz.route[key] || nextStep)}
+            link={routes[index] || next}
+            onClick={() => onOptionClick(quizID, key)}
           />
           ))
         }
       </div>
     )
   } else if (quiz.type === 'input') {
-    answer = (
-      <Link to={`/${nextStep}`} className='ui button'>
+    userInput = (
+      <Link to={`/${next}`} className='ui button'>
       next
       </Link>
     )
@@ -43,14 +54,21 @@ const Quiz = ({quizID, quiz, onOptionClick, onButtonClick, nextStep}) => {
 
   return (
     <section className='Quiz'>
-      <h2 className='ui icon header'>
-        <i className='icon question'></i>
-        {quiz.title}
-      </h2>
-      <p>
-        {quiz.description}
-      </p>
-      {answer}
+      <Progress value={quizIndex + 1} total={totalStep} size='tiny' color='teal' />
+      <div className='ui two column stackable grid'>
+        <div className='four wide column'>
+          <p style={{fontSize: '5rem', fontFamily: 'serif', lineHeight: '1', textAlign: 'right', paddingRight: '1rem', borderRight: '4px #ccc solid'}}>Q</p>
+        </div>
+        <div className='eight wide column'>
+          <h2 className='ui header' style={{marginTop: '1rem'}} >
+            {quiz.title.length > 0 ? quiz.title : quiz.id}
+          </h2>
+          <p>
+            {quiz.description}
+          </p>
+          {userInput}
+        </div>
+      </div>
     </section>
   )
 }
@@ -58,18 +76,18 @@ const Quiz = ({quizID, quiz, onOptionClick, onButtonClick, nextStep}) => {
 Quiz.proptypes = {
   quizID: PropTypes.string.isRequired,
   quiz: PropTypes.shape({
-    type: PropTypes.oneOf(QuizTypeID).isRequired,
     id: PropTypes.oneOf(QuizID).isRequired,
+    type: PropTypes.oneOf(QuizTypeID).isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string,
     option: PropTypes.string,
-    precondition: PropTypes.shape({
-      logic: PropTypes.oneOf(RuleSetLogicID),
-      rule: PropTypes.arrayOf({
-        logic: PropTypes.oneOf(RuleLogicID).isRequired,
-        target: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired,
-      }),
+    next: PropTypes.string,
+    route: PropTypes.arrayOf(PropTypes.string),
+    logic: PropTypes.oneOf(RuleSetLogicID),
+    rule: PropTypes.arrayOf({
+      logic: PropTypes.oneOf(RuleLogicID).isRequired,
+      target: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
     }),
   }),
   onOptionClick: PropTypes.func.isRequired,

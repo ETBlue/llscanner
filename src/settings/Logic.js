@@ -1,12 +1,12 @@
 import { getID } from './tool'
 
 export const RuleSetLogic = {
-  '&&': '且',
+  '&&': '且', // default
   '||': '或',
 }
 
 export const RuleLogic = {
-  '==': '等於',
+  '==': '等於', // default
   '!=': '不等於',
   '>': '大於',
   '<=': '不超過',

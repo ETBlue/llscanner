@@ -1,13 +1,15 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import app from './reducers'
+import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
+
+import * as reducers from './reducers'
 
 //import ReactDOM from 'react-dom'
-//import App from './App'
 import 'semantic-ui-css/semantic.min.css'
-//import './index.css'
+import './index.css'
 //import * as firebase from 'firebase'
 
 //const config = {
@@ -21,15 +23,25 @@ import 'semantic-ui-css/semantic.min.css'
 
 import Root from './Root'
 
-let store = createStore(app)
-
-store.subscribe(() =>
-  console.log(store.getState())
+const history = createHistory()
+const middleware = routerMiddleware(history)
+const store = createStore(
+  combineReducers({
+    ...reducers,
+    router: routerReducer
+  }),
+  applyMiddleware(middleware)
 )
+
+//store.subscribe(() =>
+//  console.log(store.getState())
+//)
 
 render(
   <Provider store={store}>
-    <Root />
+    <ConnectedRouter history={history}>
+      <Root />
+    </ConnectedRouter>
   </Provider>
   ,
   document.getElementById('root')

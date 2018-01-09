@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux'
-
 import {
   // actions
   LOGIN,
@@ -9,11 +7,11 @@ import {
   SET_DATA,
   // constants
 //  ViewTypes,
-  DataTypes,
-  EditTypes,
+//  DataTypes,
+//  EditTypes,
 } from './actions'
 
-function user(state = null, action) {
+export function userID(state = null, action) {
   switch (action.type) {
     case LOGIN:
       return action.userID
@@ -24,7 +22,7 @@ function user(state = null, action) {
   }
 }
 
-function answer(state = {}, action) {
+export function answer(state = {}, action) {
   switch (action.type) {
     case SET_ANSWER:
       return Object.assign({}, state, {
@@ -35,7 +33,7 @@ function answer(state = {}, action) {
   }
 }
 
-//function view(state = ViewTypes.HOME, action) {
+//export function view(state = ViewTypes.HOME, action) {
 //  switch (action.type) {
 //    case SET_VIEW:
 //      return action.viewType
@@ -44,7 +42,7 @@ function answer(state = {}, action) {
 //  }
 //}
 
-function data(state = null, action) {
+export function dataType(state = null, action) {
   switch (action.type) {
     case SET_DATA:
       return action.dataType
@@ -53,7 +51,7 @@ function data(state = null, action) {
   }
 }
 
-function id(state = null, action) {
+export function contentID(state = null, action) {
   switch (action.type) {
 //    case SET_VIEW:
     case SET_DATA:
@@ -63,7 +61,7 @@ function id(state = null, action) {
   }
 }
 
-function subID(state = null, action) {
+export function contentSubID(state = null, action) {
   switch (action.type) {
 //    case SET_VIEW:
     case SET_DATA:
@@ -73,7 +71,7 @@ function subID(state = null, action) {
   }
 }
 
-function subSubID(state = null, action) {
+export function contentSubSubID(state = null, action) {
   switch (action.type) {
 //    case SET_VIEW:
     case SET_DATA:
@@ -83,7 +81,7 @@ function subSubID(state = null, action) {
   }
 }
 
-function content(state = null, action) {
+export function content(state = null, action) {
   switch (action.type) {
     case SET_DATA:
       return action.content
@@ -91,16 +89,3 @@ function content(state = null, action) {
       return state
   }
 }
-
-const app = combineReducers({
-//  viewType: view,
-  dataType: data,
-  contentID: id,
-  contentSubID: subID,
-  contentSubSubID: subSubID,
-  content: content,
-  userID: user,
-  answer: answer,
-})
-
-export default app
