@@ -38,6 +38,7 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
             key={key}
             title={options[quiz.option][key]}
             link={routes[index] || next}
+            status={localStorage.getItem(quizID) === key ? 'teal' : ''}
             onClick={() => onOptionClick(quizID, key)}
           />
           ))
