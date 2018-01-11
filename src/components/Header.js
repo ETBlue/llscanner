@@ -12,9 +12,14 @@ const Header = ({view, userID, userName, userRole}) => (
       </span>
       {view === 'admin' ? 'Dashboard': ''}
     </NavLink>
+    <NavLink exact to='/report' className='right floated item'>
+      報告
+    </NavLink>
+    {/*
     <div className='right floated item'>
       {userID ? userName : <span><i className="icon sign in"></i>登入</span>}
     </div>
+    */}
   </nav>
 )
 
