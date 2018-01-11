@@ -27,7 +27,7 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
 
   const next = quiz.next.length > 0 ? quiz.next : nextStep
 
-  let userInput
+  let userInput, inputValue
   if (quiz.type === 'select') {
     const routes = quiz.route.split(';')
     userInput = (
@@ -46,9 +46,12 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
     )
   } else if (quiz.type === 'input') {
     userInput = (
-      <Link to={`/${next}`} className='ui button'>
-      next
+      <div className='ui action input' key={quizID}>
+      <input type='text' placeholder={localStorage.getItem(quizID) ? localStorage.getItem(quizID) : 'number...'} onChange={(e) => {inputValue = e.target.value}} />
+      <Link to={`/${next}`} className='ui icon button' onClick={() => {inputValue = inputValue || localStorage.getItem(quizID); onOptionClick(quizID, inputValue)}}>
+      <i className='icon check'></i>
       </Link>
+      </div>
     )
   }
 

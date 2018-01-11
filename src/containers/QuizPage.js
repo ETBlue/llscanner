@@ -55,6 +55,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onOptionClick: (id, content) => {
       dispatch(setAnswer(id, content))
+      localStorage.setItem(id, content)
     }
   }
 }
