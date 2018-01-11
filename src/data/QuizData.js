@@ -1,4 +1,4 @@
-const QuizData = [
+export const QuizData = [
   {
     "id": "工作所屬產業",
     "set": "basic",
@@ -1469,5 +1469,3 @@ const QuizData = [
     "rule": ""
   }
 ]
-
-export default QuizData

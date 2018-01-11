@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { setAnswer } from '../actions'
 import Quiz from '../components/Quiz'
-import QuizData from '../data/QuizData'
+import { QuizData } from '../data/QuizData'
 import * as StepData from '../data/StepData'
 import { evalCondition } from '../settings/tool'
 
@@ -28,7 +28,7 @@ const mapStateToProps = (state, ownProps) => {
   setQuiz(ownProps.quizID)
 
   const quizJump = () => {
-    if (quiz.rule.length === 0 || evalCondition(quiz.logic, quiz.rule, state.answer)) {
+    if (quiz.rule.length === 0 || evalCondition(quiz.logic, quiz.rule, state.answer).result === true) {
     // render current quiz
       result = {
         rawQuizID: ownProps.quizID,

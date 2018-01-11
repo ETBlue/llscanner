@@ -10,6 +10,7 @@ import {HashLink as Link} from 'react-router-hash-link'
 
 import * as StepData from './data/StepData'
 import QuizPage from './containers/QuizPage'
+import ReportPage from './containers/ReportPage'
 import Header from './components/Header'
 
 const HomePage = () => (
@@ -19,18 +20,6 @@ const HomePage = () => (
     <hr className='ui hidden divider' />
     <Link to={`/${StepData.basic[0]}`} className='ui icon labeled right button'>
       開始
-      <i className='icon right chevron'></i>
-    </Link>
-  </section>
-)
-
-const ReportPage = () => (
-  <section className='ui basic center aligned segment'>
-    <h1 className='ui header'>掃描報告</h1>
-    <p>某段敘述文字</p>
-    <hr className='ui hidden divider' />
-    <Link to={`/${StepData.basic[0]}`} className='ui icon labeled right button'>
-      再玩一次
       <i className='icon right chevron'></i>
     </Link>
   </section>
