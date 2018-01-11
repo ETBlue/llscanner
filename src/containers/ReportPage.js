@@ -33,6 +33,7 @@ const mapStateToProps = (state, ownProps) => {
       case true:
         const conditionEval = evalCondition(rule.conditionLogic, rule.condition, answer)
         rule.conditionMsg = conditionEval.messages
+        rule.result = conditionEval.result
         switch (conditionEval.result) {
           case false:
             report.failed.push(rule)
