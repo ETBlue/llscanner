@@ -3,20 +3,11 @@ import { Redirect } from 'react-router'
 import { HashLink as Link } from 'react-router-hash-link'
 import { Progress } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
-
-import {
-  RuleSetLogicID,
-  RuleLogicID,
-} from '../settings/Logic'
-import {
-  QuizTypeID,
-  QuizID,
-} from '../settings/Quiz'
 import * as options from '../settings/Option'
-
 import Option from './Option'
 
-const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, onOptionClick, onButtonClick}) => {
+
+const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, onOptionClick}) => {
 
   if (quizID === 'report') {
     return (<Redirect to='/report' push />)
@@ -78,25 +69,6 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
 }
 
 Quiz.proptypes = {
-  quizID: PropTypes.string.isRequired,
-  quiz: PropTypes.shape({
-    id: PropTypes.oneOf(QuizID).isRequired,
-    type: PropTypes.oneOf(QuizTypeID).isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    option: PropTypes.string,
-    next: PropTypes.string,
-    route: PropTypes.arrayOf(PropTypes.string),
-    logic: PropTypes.oneOf(RuleSetLogicID),
-    rule: PropTypes.arrayOf({
-      logic: PropTypes.oneOf(RuleLogicID).isRequired,
-      target: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-    }),
-  }),
-  onOptionClick: PropTypes.func.isRequired,
-  onButtonClick: PropTypes.func.isRequired,
-  nextStep: PropTypes.string.isRequired,
 }
 
 export default Quiz

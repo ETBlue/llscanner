@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 //import { push } from 'react-router-redux'
 import PropTypes from 'prop-types'
 
+import { QuizID } from '../settings/Quiz'
 import { RuleData } from '../data/RuleData'
 import { AnswerData } from '../data/AnswerData'
 import Report from '../components/Report'
@@ -17,8 +18,14 @@ const mapStateToProps = (state, ownProps) => {
     'passed': [],
   }
 
-  //const answer = state.answer
-  const answer = AnswerData
+  let answer = state.answer
+  //const answer = AnswerData
+
+  Object.keys(localStorage).forEach((key) => {
+    if (QuizID.includes(key) && !answer.key) {
+      answer[key] = localStorage.getItem(key)
+    }
+  })
 
   RuleData.forEach((rule, index) => {
     const preconditionEval = evalCondition(rule.preconditionLogic, rule.precondition, answer)

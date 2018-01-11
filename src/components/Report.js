@@ -1,10 +1,25 @@
 import React from 'react'
 import { HashLink as Link } from 'react-router-hash-link'
 import PropTypes from 'prop-types'
+import { StepSet } from '../settings/Step'
 
 const Detail = ({data}) => {
   const detail = data.map((entry, index) => {
-    const parsed = entry.conditionMsg.map((msg, key) => {
+    const parsed = entry.conditionMsg && entry.conditionMsg.map((msg, key) => {
+      const preparsed = entry.preconditionMsg && entry.preconditionMsg.map((premsg, prekey) => {
+        return (`${premsg.target} ${premsg.logic} ${premsg.ideal}`)
+      }).join(` ${entry.preconditionLogic} `)
+      let precondition = ''
+      if (preparsed) {
+        precondition = (
+          <p style={{fontSize: '0.8em', opacity: '0.8', lineHeight: '1.2em', margin: '0.5em 0', color: 'rgba(0,0,0,0.8)'}}>
+          <span className='ui horizontal divider' style={{fontSize: '1em'}} >
+          本規則啟動條件
+          </span>
+          {preparsed}
+          </p>
+        )
+      }
       let result, rowStyle
       switch (msg.result) {
         case 'unsure':
@@ -23,20 +38,23 @@ const Detail = ({data}) => {
           result = msg.result
       }
       return (
-        <tr key={key} className={rowStyle} >
+        <tr key={key} className={`${rowStyle} top aligned`} >
           <td>
+          <Link to={msg.target}>
           {msg.target}
+          </Link>
           </td>
-          <td>
-          {msg.logic} {msg.ideal}<br />
-          <span style={{fontSize: '0.8em', opacity: '0.8'}}>
+          <td className='center aligned'>
+          {msg.logic} {msg.ideal}
+          <p style={{fontSize: '0.8em', opacity: '0.8', lineHeight: '1.2em', margin: '0.5em 0'}}>
           {msg.formula}
-          </span>
+          </p>
+          {precondition}
           </td>
-          <td>
+          <td className='center aligned'>
           {msg.reality}
           </td>
-          <td>
+          <td className='right aligned'>
           {result}
           </td>
         </tr>
@@ -53,7 +71,7 @@ const Detail = ({data}) => {
       default:
     }
     const paragraph = entry.paragraph && entry.paragraph.toString()
-    const subParagraph = entry.subParagraph && entry.subParagraph.toString()
+    const subParagraph = entry.subparagraph && entry.subparagraph.toString()
     const item = entry.item && entry.item.toString()
     let description = (
       <th colSpan='4' >
@@ -64,45 +82,48 @@ const Detail = ({data}) => {
       ，需{logic}通過以下規則：
       </th>
     )
-    let result
+    let result, color
     switch (entry.result) {
       case 'unsure':
-        result = '不確定'
+        result = (<span><i className='icon help circle'></i>不確定</span>)
+        color = 'yellow'
         break
       case true:
-        result = '通過'
+        result = (<span><i className='icon green check square'></i>通過</span>)
+        color = 'green'
         break
       case false:
-        result = '不通過'
+        result = (<span><i className='icon red warning sign'></i>不通過</span>)
+        color = 'red'
         break
       default:
     }
     return (
-      <table key={index} className='ui table' >
+      <table key={index} className={`ui very basic very compact ${color} table`} >
         <thead>
-          <tr>
+          <tr className='center aligned'>
             {description}
-          </tr>
-          <tr>
-            <th className='five wide'>
-            規則
-            </th>
-            <th className='five wide'>
-            理想
-            </th>
-            <th className='three wide'>
-            現實
-            </th>
-            <th className='three wide'>
-            結果
-            </th>
           </tr>
         </thead>
         <tbody>
+          <tr style={{fontSize: '0.8rem', fontWeight: 'bold'}} >
+            <td className='five wide'>
+            規則
+            </td>
+            <td className='five wide center aligned'>
+            理想
+            </td>
+            <td className='three wide center aligned'>
+            現實
+            </td>
+            <td className='three wide right aligned'>
+            結果
+            </td>
+          </tr>
         {parsed}
         </tbody>
         <tfoot>
-          <tr>
+          <tr className='center aligned'>
             <th colSpan='4'>
             掃描結果：{result}
             </th>
@@ -118,24 +139,45 @@ const Detail = ({data}) => {
     )
 }
 
+const stepset = Object.keys(StepSet).map((set) => {
+  let color = '', icon = 'remove'
+  if (set === 'basic') {
+    color = 'black'
+    icon = 'check'
+  }
+  return (
+    <span key={set} className={`ui horizontal ${color} label`} style={{margin: '0 0.5em'}} >
+      <i className={`icon ${icon}`}></i>
+      {StepSet[set]}
+    </span>
+  )
+})
+
 const Report = ({report}) => {
-  console.log(report)
   return (
     <section className='Report ui basic center aligned segment'>
+      <header style={{background: '#f6fdff', padding: '2rem 0', margin: '-2rem -1rem -1rem -1rem', border: '4px solid #00b5ad', borderWidth: '3px 0'}}>
       <h1 className='ui header'>掃描結果</h1>
-      <p>你的工作規定共有
-        <span className='ui large horizontal red label' style={{margin: '0 0.5rem'}} >
+      <p>
+        掃描
+        {stepset}
+        後發現：
+      </p>
+      <p>
+        你的工作規定共有
+        <span className='ui horizontal red label' style={{margin: '0 0.5rem'}} >
         {report.failed.length}
         </span>
-        項不合格，
-        <span className='ui large horizontal green label' style={{margin: '0 0.5rem'}} >
+        項不合格、
+        <span className='ui horizontal green label' style={{margin: '0 0.5rem'}} >
         {report.passed.length}
         </span>
         項合格
       </p>
       <p>
-        另有 {report.unsure.length} 項目前無法判斷
+        另有 {report.unsure.length} 項目前無法判斷、{report.maybeNa.length} 項可能不適用、以及 {report.na.length} 項確定不適用
       </p>
+      </header>
       <hr className='ui hidden divider' />
       <h2 className='ui icon header'>
         <i className='icon red warning sign'></i>
@@ -143,7 +185,7 @@ const Report = ({report}) => {
       </h2>
       {<Detail data={report.failed} />}
       <h2 className='ui icon header'>
-        <i className='icon green check square'></i>
+        <i className='icon green check square' style={{fontSize: '4.5rem'}}></i>
         合格
       </h2>
       {<Detail data={report.passed} />}
