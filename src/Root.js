@@ -16,12 +16,13 @@ import Footer from './components/Footer'
 
 const HomePage = () => (
   <section className='ui basic center aligned segment'>
+    <hr className='ui hidden divider' />
     <h1 className='ui header'>某段歡迎標題</h1>
     <p>某段歡迎文字</p>
     <hr className='ui hidden divider' />
-    <Link to={`/${StepData.basic[0]}`} className='ui teal icon labeled right button'>
+    <Link to={`/${StepData.basic[0]}`} className='ui teal button'>
       開始
-      <i className='icon right chevron'></i>
+      <i className='icon right chevron' style={{marginLeft: '1rem', marginRight: '-0.5rem'}} ></i>
     </Link>
   </section>
 )

@@ -7,7 +7,7 @@ const Header = ({view, userID, userName, userRole}) => (
   <nav className='Header ui secondary menu' style={{marginBottom: '0'}}>
     <NavLink exact to='/' className='item'>
       勞基法掃描器
-      <span className='ui olive label' >
+      <span className='ui olive label' style={{marginTop: '-0.5em', marginBottom: '-0.5em'}} >
       alpha
       </span>
       {view === 'admin' ? 'Dashboard': ''}

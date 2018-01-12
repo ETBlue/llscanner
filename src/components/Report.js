@@ -172,10 +172,10 @@ const Report = ({report}) => {
         <span className='ui horizontal green label' style={{margin: '0 0.5rem'}} >
         {report.passed.length}
         </span>
-        項合格
+        項合格、{report.unsure.length} 項目前無法判斷
       </p>
       <p>
-        另有 {report.unsure.length} 項目前無法判斷、{report.maybeNa.length} 項可能不適用、以及 {report.na.length} 項確定不適用
+        其他掃描規則中另有 {report.na.length} 項確定不適用、以及 {report.maybeNa.length} 項可能不適用
       </p>
       </header>
       <hr className='ui hidden divider' />
@@ -195,9 +195,9 @@ const Report = ({report}) => {
       </h2>
       {<Detail data={report.unsure} />}
       <hr className='ui hidden divider' />
-      <Link to='/' className='ui icon labeled right button'>
-        重來
-        <i className='icon right chevron'></i>
+      <Link to='/' className='ui button'>
+        重來一次
+        <i className='icon right chevron' style={{marginLeft: '1rem', marginRight: '-0.5rem'}} ></i>
       </Link>
     </section>
   )
