@@ -93,7 +93,7 @@ const evalLogic = (conditionArray, answer) => {
     target: conditionArray[0],
     logic: conditionArray[1],
     formula: '',
-    reality: userInput,
+    reality: userInput && userInput.length > 0 ? userInput : '無資料',
     ideal: standard,
     result: ''
   }
