@@ -98,6 +98,10 @@ const evalLogic = (conditionArray, answer) => {
     result: ''
   }
 
+  if (conditionArray[1] === '==') {
+    message.logic = ''
+  }
+
   // 沒資料的話，就說不知道
   if (!standard) {
     message.result = 'unsure'
@@ -139,9 +143,6 @@ const evalLogic = (conditionArray, answer) => {
   }
 
   // 走到這裡的，有確定的使用者答案、確定的標準答案，且兩者型別一致
-  if (conditionArray[1] === '==') {
-    message.logic = ''
-  }
   switch (conditionArray[1]) {
     case '==':
       message.result = userInput === standard
