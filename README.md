@@ -2,6 +2,16 @@
 
 A web application which examines user input data and check up if an employer is breaking laws or not.
 
+online demo: https://etblue.github.io/llscanner/
+
+quiz data: https://docs.google.com/spreadsheets/d/1Qp_U-zGJmvaXO0WA8LWRKh3Npsq5nitMxnQ7JE1KuHQ/edit#gid=1325518353
+
+rule data: https://docs.google.com/spreadsheets/d/1Qp_U-zGJmvaXO0WA8LWRKh3Npsq5nitMxnQ7JE1KuHQ/edit#gid=1483281254
+
+dev log: https://www.facebook.com/ETBlue/media_set?set=a.10209533675351463.1073741859.1014354995&type=3
+
+detail (blog post): TODO
+
 
 # Automatically Generated
 
