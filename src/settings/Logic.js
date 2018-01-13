@@ -1,5 +1,3 @@
-import { getID } from './tool'
-
 export const RuleSetLogic = {
   '&&': '且', // default
   '||': '或',
@@ -18,5 +16,8 @@ export const RuleLogic = {
   '!include': '不包含',
 }
 
-export const RuleSetLogicID = getID(RuleSetLogic)
-export const RuleLogicID = getID(RuleLogic)
+export const EvalResult = {
+  'true': '通過',
+  'false': '不通過',
+  'unsure': '不確定',
+}

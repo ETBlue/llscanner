@@ -3,6 +3,7 @@ import { HashLink as Link } from 'react-router-hash-link'
 import { Progress } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import { StepSet } from '../settings/Step'
+import { EvalResult } from '../settings/Logic'
 
 const Detail = ({data}) => {
   const detail = data.map((entry, index) => {
@@ -21,22 +22,19 @@ const Detail = ({data}) => {
           </p>
         )
       }
-      let result, rowStyle
+      const result = EvalResult[msg.result]
+      let rowStyle
       switch (msg.result) {
         case 'unsure':
-          result = 'unsure'
           rowStyle = 'warning'
           break
         case true:
-          result = 'true'
           rowStyle = 'positive'
           break
         case false:
-          result = 'false'
           rowStyle = 'negative'
           break
         default:
-          result = msg.result
       }
       return (
         <tr key={key} className={`${rowStyle} top aligned`} >
@@ -86,15 +84,15 @@ const Detail = ({data}) => {
     let result, color
     switch (entry.result) {
       case 'unsure':
-        result = (<span><i className='icon help circle'></i>不確定</span>)
+        result = (<span><i className='icon help circle'></i>無法判斷</span>)
         color = 'yellow'
         break
       case true:
-        result = (<span><i className='icon green check square'></i>通過</span>)
+        result = (<span><i className='icon green check square'></i>合格</span>)
         color = 'green'
         break
       case false:
-        result = (<span><i className='icon red warning sign'></i>不通過</span>)
+        result = (<span><i className='icon red warning sign'></i>不合格</span>)
         color = 'red'
         break
       default:
