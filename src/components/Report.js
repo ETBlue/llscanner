@@ -77,9 +77,9 @@ const Detail = ({data}) => {
     let description = (
       <th colSpan='4' >
       根據{entry.law}（{entry.version} 版）
-      {paragraph && paragraph.length > 0 ? `第 ${paragraph} 條` : '' }
-      {subParagraph && subParagraph.length > 0 ? `第 ${subParagraph} 項` : ''}
-      {item && item.length > 0 ? `第 ${item} 款` : ''}
+      {paragraph && paragraph.length > 0 ? `第 ${paragraph.split(';').join('、')} 條` : '' }
+      {subParagraph && subParagraph.length > 0 ? `第 ${subParagraph.split(';').join('、')} 項` : ''}
+      {item && item.length > 0 ? `第 ${item.split(';').join('、')} 款` : ''}
       ，需{logic}通過以下規則：
       </th>
     )
