@@ -1,5 +1,6 @@
 import React from 'react'
 import { HashLink as Link } from 'react-router-hash-link'
+import { Progress } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import { StepSet } from '../settings/Step'
 
@@ -155,50 +156,58 @@ const stepset = Object.keys(StepSet).map((set) => {
 
 const Report = ({report}) => {
   return (
-    <section className='Report ui basic center aligned segment'>
-      <header style={{background: '#f6fdff', padding: '2rem 0', margin: '-2rem -1rem -1rem -1rem', border: '4px solid #00b5ad', borderWidth: '3px 0'}}>
-      <h1 className='ui header'>掃描結果</h1>
-      <p>
-        掃描
-        {stepset}
-        後發現：
-      </p>
-      <p>
-        你的工作規定共有
-        <span className='ui horizontal red label' style={{margin: '0 0.5rem'}} >
-        {report.failed.length}
-        </span>
-        項不合格、
-        <span className='ui horizontal green label' style={{margin: '0 0.5rem'}} >
-        {report.passed.length}
-        </span>
-        項合格、{report.unsure.length} 項目前無法判斷
-      </p>
-      <p>
-        其他掃描規則中另有 {report.na.length} 項確定不適用、以及 {report.maybeNa.length} 項可能不適用
-      </p>
+    <section className='Report' style={{textAlign: 'center'}} >
+      <header style={{backgroundImage: 'linear-gradient(#e5fffe, rgba(229,255,254,0))'}}>
+        <Progress value={1} total={1} size='tiny' color='teal' />
+        <h1 className='ui header'>掃描結果</h1>
+        <hr className='ui hidden divider' />
+        <p>
+          掃描
+          {stepset}
+          後發現：
+        </p>
+        <p>
+          你的工作規定共有
+          <span className='ui horizontal red label' style={{margin: '0 0.5rem'}} >
+          {report.failed.length}
+          </span>
+          項不合格、
+          <span className='ui horizontal green label' style={{margin: '0 0.5rem'}} >
+          {report.passed.length}
+          </span>
+          項合格、{report.unsure.length} 項目前無法判斷
+        </p>
+        <p>
+          其他掃描規則中另有 {report.na.length} 項確定不適用、以及 {report.maybeNa.length} 項可能不適用
+        </p>
+        <hr className='ui hidden divider' />
       </header>
-      <hr className='ui hidden divider' />
       <h2 className='ui icon header'>
         <i className='icon red warning sign'></i>
         不合格
       </h2>
+      <hr className='ui hidden divider' />
       {<Detail data={report.failed} />}
+      <hr className='ui hidden divider' />
       <h2 className='ui icon header'>
         <i className='icon green check square' style={{fontSize: '4.5rem'}}></i>
         合格
       </h2>
+      <hr className='ui hidden divider' />
       {<Detail data={report.passed} />}
+      <hr className='ui hidden divider' />
       <h2 className='ui icon header'>
         <i className='icon help circle'></i>
         無法判斷
       </h2>
-      {<Detail data={report.unsure} />}
       <hr className='ui hidden divider' />
+      {<Detail data={report.unsure} />}
+      <hr className='ui hidden section divider' />
       <Link to='/' className='ui button'>
         重來一次
         <i className='icon right chevron' style={{marginLeft: '1rem', marginRight: '-0.5rem'}} ></i>
       </Link>
+      <hr className='ui hidden divider' />
     </section>
   )
 }

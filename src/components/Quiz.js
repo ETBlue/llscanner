@@ -64,6 +64,7 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
           {userInput}
         </div>
       </div>
+      <hr className='ui hidden divider' />
     </section>
   )
 }

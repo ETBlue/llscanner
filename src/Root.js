@@ -15,10 +15,12 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 
 const HomePage = () => (
-  <section className='ui basic center aligned segment'>
+  <section className='ui basic center aligned very padded segment'>
+    <h1 className='ui header'>我的公司合法嗎？趕快來看 ᕕ ( ᐛ ) ᕗ</h1>
     <hr className='ui hidden divider' />
-    <h1 className='ui header'>某段歡迎標題</h1>
-    <p>某段歡迎文字</p>
+    <p>大公司人資、小公司老闆、廣大的勞工、所有站在勞資關係第一線的苦主～</p>
+    <p>勞基法一下改過來、一下改過去，搞得你暈頭轉向嗎？不知道算白話文還文言文的法條文字，讓你無所適從嗎？歷經一年多開發，法律麻瓜的救星——勞基法掃描器——終於姍姍來遲了！ㄜ... 坦白說，這種工程師悶著頭自幹的外行狗食，也沒什麼好讓人放心的 =.= 但就加減參考看看吧，聊勝於無啦 :Q</p>
+    <hr className='ui hidden divider' />
     <hr className='ui hidden divider' />
     <Link to={`/${StepData.basic[0]}`} className='ui teal button'>
       開始
