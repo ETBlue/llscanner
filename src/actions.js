@@ -1,42 +1,44 @@
 // user actions
-const LOGIN = "LOGIN"
-const LOGOUT = "LOGOUT"
-const SET_ANSWER = "SET_ANSWER"
+export const LOGIN = "LOGIN"
+export const LOGOUT = "LOGOUT"
+export const SET_ANSWER = "SET_ANSWER"
 
 // ui actions
-const SET_VIEW = "SET_VIEW"
+//export const SET_VIEW = "SET_VIEW"
 
 // data acitons
-const SET_DATA = "SET_DATA"
+export const REQUEST_DATA = "REQUEST_DATA"
+export const RECIEVE_DATA = "RECIEVE_DATA"
+export const FAILURE_DATA = "FAILURE_DATA"
+export const SET_DATA = "SET_DATA"
 
 // settings
-export const ViewTypes: {
-  HOME: "HOME",
-  QUIZLIST: "QUIZLIST",
-  STEPLIST: "STEPLIST",
-  LAWLIST: "LAWLIST",
+//export const ViewTypes = {
+//  HOME: "HOME",
+//  QUIZ: "QUIZ",
+//  REPORT: "REPORT",
+//  ADMIN: "ADMIN",
+//  ADMIN_QUIZ: "ADMIN_QUIZ",
+//  ADMIN_STEP: "ADMIN_STEP",
+//  ADMIN_RULE_LIST: "ADMIN_RULE_LIST",
+//  ADMIN_RULE: "ADMIN_RULE",
+//}
+export const DataTypes = {
   QUIZ: "QUIZ",
   STEP: "STEP",
-  LAW: "LAW",
-  RULE: "RULE",
-  REPORT: "REPORT",
-}
-export const DataTypes: {
-  QUIZ: "QUIZ",
-  STEP: "STEP",
   RULE: "RULE",
 }
-export const EditTypes: {
+export const EditTypes = {
   UPDATE: "UPDATE",
   ADD: "ADD",
   DELETE: "DELETE",
 }
 
 // aciton creators
-export function login(userId) {
+export function login(userID) {
   return {
     type: LOGIN, 
-    userId
+    userID
   }
 }
 export function logout() {
@@ -45,41 +47,41 @@ export function logout() {
   }
 }
 export function setAnswer(
-contentId = undefined, 
-content = undefined) {
+contentID = null, 
+content = null) {
   return {
     type: SET_ANSWER, 
-    contentId, 
+    contentID, 
     content
   }
 }
-export function setView(
-viewType = undefined, 
-contentId = undefined, 
-contentSubId = undefined, 
-contentSubSubId = undefined) {
-  return {
-    type: SET_VIEW, 
-    viewType, 
-    contentId, 
-    contentSubId, 
-    contentSubSubId
-  }
-}
+//export function setView(
+//viewType = null, 
+//contentID = null, 
+//contentSubID = null, 
+//contentSubSubID = null) {
+//  return {
+//    type: SET_VIEW, 
+//    viewType, 
+//    contentID, 
+//    contentSubID, 
+//    contentSubSubID
+//  }
+//}
 export function editData(
-dataType = undefined, 
-editType = undefined, 
-contentId = undefined, 
-contentSubId = undefined, 
-contentSubSubId = undefined, 
-content = undefined) {
+dataType = null, 
+editType = null, 
+contentID = null, 
+contentSubID = null, 
+contentSubSubID = null, 
+content = null) {
   return {
     type: SET_DATA, 
     dataType, 
     editType, 
-    contentId, 
-    contentSubId, 
-    contentSubSubId, 
+    contentID, 
+    contentSubID, 
+    contentSubSubID, 
     content
   }
 }
