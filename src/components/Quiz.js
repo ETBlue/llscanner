@@ -26,7 +26,7 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
         {
           Object.keys(options[quiz.option]).map((key, index) => (
           <Option
-            key={key}
+            key={`${quizID}-${key}`}
             title={options[quiz.option][key]}
             link={routes[index] || next}
             status={localStorage.getItem(quizID) === key ? 'teal' : ''}
