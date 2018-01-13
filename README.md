@@ -1,16 +1,20 @@
 # Labor Laws Scanner
 
-A web application which examines user input data and check up if an employer is breaking laws or not.
+Yet another open data experiment by ETBlue, trying to turn labor laws into structured formula data so we can scan for illegal working rules automatically. Users need to answer a couple of questions before they find out if an employer is breaking labor laws or not.
 
-online demo: https://etblue.github.io/llscanner/
+[online demo](https://etblue.github.io/llscanner/)
 
-quiz data: https://docs.google.com/spreadsheets/d/1Qp_U-zGJmvaXO0WA8LWRKh3Npsq5nitMxnQ7JE1KuHQ/edit#gid=1325518353
+[theme music 1](https://blend.io/etblue/loud)
 
-rule data: https://docs.google.com/spreadsheets/d/1Qp_U-zGJmvaXO0WA8LWRKh3Npsq5nitMxnQ7JE1KuHQ/edit#gid=1483281254
+[theme music 2](https://blend.io/etblue/scanner)
 
-dev log: https://www.facebook.com/ETBlue/media_set?set=a.10209533675351463.1073741859.1014354995&type=3
+[quiz data editor (gsheet)](https://docs.google.com/spreadsheets/d/1Qp_U-zGJmvaXO0WA8LWRKh3Npsq5nitMxnQ7JE1KuHQ/edit#gid=1325518353)
 
-detail (blog post): TODO
+[rule data editor (gsheet)](https://docs.google.com/spreadsheets/d/1Qp_U-zGJmvaXO0WA8LWRKh3Npsq5nitMxnQ7JE1KuHQ/edit#gid=1483281254)
+
+[dev log (facebook album)](https://www.facebook.com/ETBlue/media_set?set=a.10209533675351463.1073741859.1014354995&type=3)
+
+dev detail (blog post): TODO
 
 
 # Automatically Generated
