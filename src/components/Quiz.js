@@ -37,9 +37,13 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
       </div>
     )
   } else if (quiz.type === 'input') {
+    let placeholder = 'number...'
+    if (localStorage.getItem(quizID) && localStorage.getItem(quizID).length > 0 && localStorage.getItem(quizID) !== 'null') {
+      placeholder = localStorage.getItem(quizID)
+    } 
     userInput = (
       <div className='ui action input' key={quizID}>
-      <input type='text' placeholder={localStorage.getItem(quizID) ? localStorage.getItem(quizID) : 'number...'} onChange={(e) => {inputValue = e.target.value}} />
+      <input type='text' placeholder={placeholder} onChange={(e) => {inputValue = e.target.value}} />
       <Link to={`/${next}`} className='ui icon button' onClick={() => {inputValue = inputValue || localStorage.getItem(quizID); onOptionClick(quizID, inputValue)}}>
       <i className='icon check'></i>
       </Link>
