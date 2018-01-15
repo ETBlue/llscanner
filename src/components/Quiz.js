@@ -49,8 +49,13 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
         inputValue = null
         break
       default:
-        placeholder = previousVal
-        inputValue = previousVal
+        if (isNaN(parseFloat(previousVal))) {
+          placeholder = 'number...'
+          inputValue = null
+        } else {
+          placeholder = previousVal
+          inputValue = previousVal
+        }
     }
     userInputJSX = (
       <div className='ui action input' key={quizID}>
