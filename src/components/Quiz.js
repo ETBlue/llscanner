@@ -17,11 +17,12 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
   }
 
   const next = quiz.next.length > 0 ? quiz.next : nextStep
+  const previousVal = localStorage.getItem(quizID)
+  let userInputJSX
 
-  let userInput, inputValue
   if (quiz.type === 'select') {
     const routes = quiz.route.split(';')
-    userInput = (
+    userInputJSX = (
       <div>
         {
           Object.keys(options[quiz.option]).map((key, index) => (
@@ -29,7 +30,7 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
             key={`${quizID}-${key}`}
             title={options[quiz.option][key]}
             link={routes[index] || next}
-            status={localStorage.getItem(quizID) === key ? 'teal' : ''}
+            status={previousVal === key ? 'teal' : ''}
             onClick={() => onOptionClick(quizID, key)}
           />
           ))
@@ -37,14 +38,24 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
       </div>
     )
   } else if (quiz.type === 'input') {
-    let placeholder = 'number...'
-    if (localStorage.getItem(quizID) && localStorage.getItem(quizID).length > 0 && localStorage.getItem(quizID) !== 'null') {
-      placeholder = localStorage.getItem(quizID)
-    } 
-    userInput = (
+    let inputChanged = false
+    let inputValue, placeholder
+    switch (previousVal) {
+      case undefined:
+      case null:
+      case '':
+      case 'null':
+        placeholder = 'number...'
+        inputValue = null
+        break
+      default:
+        placeholder = previousVal
+        inputValue = previousVal
+    }
+    userInputJSX = (
       <div className='ui action input' key={quizID}>
-      <input type='text' placeholder={placeholder} onChange={(e) => {inputValue = e.target.value}} />
-      <Link to={`/${next}`} className='ui icon button' onClick={() => {inputValue = inputValue || localStorage.getItem(quizID); onOptionClick(quizID, inputValue)}}>
+      <input type='text' placeholder={placeholder} onChange={(e) => {inputValue = e.target.value; inputChanged = true }} />
+      <Link to={`/${next}`} className='ui icon button' onClick={() => {inputValue = inputChanged ? inputValue : previousVal; onOptionClick(quizID, inputValue)}}>
       <i className='icon check'></i>
       </Link>
       </div>
@@ -65,7 +76,7 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
           <p>
             {quiz.description}
           </p>
-          {userInput}
+          {userInputJSX}
         </div>
       </div>
       <hr className='ui hidden divider' />
