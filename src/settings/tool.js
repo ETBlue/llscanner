@@ -87,7 +87,18 @@ const evalMath = (mathString, answer) => {
 
 const evalLogic = (conditionArray, answer) => {
 
-  let userInput = answer[conditionArray[0]]
+  let userInput
+  switch (answer[conditionArray[0]]) {
+    case '':
+    case 'null':
+    case null:
+    case undefined:
+      userInput = null
+      break
+    default:
+      userInput = answer[conditionArray[0]]
+  }
+
   let standard = conditionArray[2]
   let message = {
     target: conditionArray[0],

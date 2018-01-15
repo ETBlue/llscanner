@@ -38,7 +38,6 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
       </div>
     )
   } else if (quiz.type === 'input') {
-    let inputChanged = false
     let inputValue, placeholder
     switch (previousVal) {
       case undefined:
@@ -59,8 +58,8 @@ const Quiz = ({rawQuizID, quizID, quiz, nextStep, quizIndex, totalStep, answer, 
     }
     userInputJSX = (
       <div className='ui action input' key={quizID}>
-      <input type='text' placeholder={placeholder} onChange={(e) => {inputValue = e.target.value; inputChanged = true }} />
-      <Link to={`/${next}`} className='ui icon button' onClick={() => {inputValue = inputChanged ? inputValue : previousVal; onOptionClick(quizID, inputValue)}}>
+      <input type='text' placeholder={placeholder} onChange={(e) => {inputValue = e.target.value; onOptionClick(quizID, inputValue) }} />
+      <Link to={`/${next}`} className='ui icon button' >
       <i className='icon check'></i>
       </Link>
       </div>
