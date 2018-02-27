@@ -23,9 +23,14 @@ const Footer = () => (
     Dev log
     </a>
 
+    <a href='https://etblue.blogspot.tw/2018/02/experiment-labor-laws-scanner.html' target='_blank' style={{margin: '0 0.5rem'}} >
+    <i className='icon text file'></i>
+    Release note
+    </a>
+
     <a href='https://etblue.blogspot.tw/2017/09/new-song-labor-laws-scanner-theme-music.html' target='_blank' style={{margin: '0 0.5rem'}} >
     <i className='icon music'></i>
-    Theme Music
+    Theme music
     </a>
   </p>
   </section>
